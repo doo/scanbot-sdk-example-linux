@@ -1,0 +1,5 @@
+cmake-build-*/
+compile_commands.json
+.vscode/
+result.jpg
+build/
