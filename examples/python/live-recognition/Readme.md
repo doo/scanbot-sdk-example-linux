@@ -43,11 +43,11 @@ The example can be run as follows from the terminal:
 
 Using mipi camera device:
 
-    python ./detect_barcodes --input mipi [--use-display]
+    python ./detect_barcodes.py --input mipi [--use-display]
 
 Using usb-webcam device:
 
-    python ./detect_barcodes --input usb [--use-display]
+    python ./detect_barcodes.py --input usb [--use-display]
 
 
 _Note that the webcam is expected to be /dev/video1 in the system. In case the camera is mounted on another device, please update the gstreamer_pipeline string accordingly in main.cpp._
