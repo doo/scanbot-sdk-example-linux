@@ -26,8 +26,9 @@ void print_help(){
     std::cout << "Options:" << std::endl;
     std::cout << " -h, --help" << std::endl;
     std::cout << "     Print this usage information." << std::endl;
-    std::cout << " -i, --input <jetson_csi|jetson_usb|libcamera>" << std::endl;
+    std::cout << " -i, --input <a number|jetson_csi|jetson_usb|libcamera>" << std::endl;
     std::cout << "     Specify the device name for live recognition:" << std::endl;
+    std::cout << "     - a number - 0, 1, etc.: connect to /dev/video0, /dev/video1, etc., using V4L2" << std::endl;
     std::cout << "     - jetson_csi - NVidia Jetson: connect to the CSI camera using nvarguscamerasrc" << std::endl;
     std::cout << "     - jetson_usb - NVidia Jetson: connect to a USB webcam" << std::endl;
     std::cout << "     - libcamera - Raspberry Pi (bullseye): connect to the CSI camera using libcamerasrc." << std::endl;
@@ -144,8 +145,18 @@ int recognizeLive(const std::string& device, bool use_display){
     sigIntHandler.sa_flags = 0;
     sigaction(SIGINT, &sigIntHandler, NULL);
 
+    cv::VideoCapture cap;
+    try {
+        int deviceId = std::stoi(device);
+        cap.open(deviceId, cv::CAP_V4L2);
+        cap.set(cv::CAP_PROP_FRAME_WIDTH, DEVICE_CAPTURE_WIDTH);
+        cap.set(cv::CAP_PROP_FRAME_HEIGHT, DEVICE_CAPTURE_HEIGHT);
+        cap.set(cv::CAP_PROP_FPS, DEVICE_CAPTURE_FRAMERATE);
+    } catch (std::invalid_argument) {
     std::string pipeline = gstreamer_pipeline(device);
-    cv::VideoCapture cap(pipeline, cv::CAP_GSTREAMER);
+        cap.open(pipeline, cv::CAP_GSTREAMER);
+    }
+
     if (!cap.isOpened()) {
         std::cout << "Failed to open camera. Aborting recognition." << std::endl;
         return (-1);
