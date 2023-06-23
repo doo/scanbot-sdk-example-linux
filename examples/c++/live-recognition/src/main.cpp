@@ -22,11 +22,19 @@ const int DISPLAY_HEIGHT=640;
 
 void print_help(){
     // option to switch betwwn usb and mipi
-    std::cout << "Usage: barcode_recognition [options]" << std::endl;
+    std::cout << "Usage: detect_barcodes [options]" << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << "\t -h, --help\t\t\t\tPrint this usage information." << std::endl;
-    std::cout << "\t -i, --input\t\t\t\tSpecify the device name - \"usb\" or \"mipi\" for live recognition" << std::endl;
-    std::cout << "\t --use-display\t\t\t\tDisplay the results on the screen" << std::endl;
+    std::cout << " -h, --help" << std::endl;
+    std::cout << "     Print this usage information." << std::endl;
+    std::cout << " -i, --input <jetson_csi|jetson_usb|libcamera>" << std::endl;
+    std::cout << "     Specify the device name for live recognition:" << std::endl;
+    std::cout << "     - jetson_csi - NVidia Jetson: connect to the CSI camera using nvarguscamerasrc" << std::endl;
+    std::cout << "     - jetson_usb - NVidia Jetson: connect to a USB webcam" << std::endl;
+    std::cout << "     - libcamera - Raspberry Pi (bullseye): connect to the CSI camera using libcamerasrc." << std::endl;
+    std::cout << "                   If your camera supports autofocus, run libcamera-hello once" << std::endl;
+    std::cout << "                   to trigger focusing, then run the example." << std::endl;
+    std::cout << " --use-display" << std::endl;
+    std::cout << "     Display live results in a window" << std::endl;
 }
 
 
@@ -67,18 +75,25 @@ std::pair<std::string, bool> parse_args(int argc, char** argv){
 
 
 std::string gstreamer_pipeline(const std::string& device) {
-    if (device == "mipi") { 
+    if (device == "jetson_csi") { 
     return "nvarguscamerasrc ! video/x-raw(memory:NVMM), width=(int)" + 
             std::to_string(DEVICE_CAPTURE_WIDTH) + ", height=(int)" + std::to_string(DEVICE_CAPTURE_HEIGHT) + 
             ",  framerate=(fraction)" + std::to_string(DEVICE_CAPTURE_FRAMERATE) + "/1" +
            " ! nvvidconv flip-method=0 ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink drop=1";
     }
-    else if(device == "usb") {
+    else if(device == "jetson_usb") {
         std::cout << "Using USB camera" << std::endl;
         return "v4l2src device=/dev/video1 ! image/jpeg,format=MJPG, width=(int)" + 
         std::to_string(DEVICE_CAPTURE_WIDTH) + ", height=(int)" + std::to_string(DEVICE_CAPTURE_HEIGHT) + 
         ",  framerate=(fraction)" + std::to_string(DEVICE_CAPTURE_FRAMERATE) + "/1" +
         "! nvv4l2decoder mjpeg=1 ! nvvidconv ! video/x-raw, format=BGRx ! videoconvert ! video/x-raw,format=BGR ! appsink drop=1";
+    }
+    else if(device == "libcamera") {
+        return " libcamerasrc ! video/x-raw, format=BGR, "
+            " width=(int)" + std::to_string(DEVICE_CAPTURE_WIDTH) + ","
+            " height=(int)" + std::to_string(DEVICE_CAPTURE_HEIGHT) + ","
+            " framerate=(fraction)" + std::to_string(DEVICE_CAPTURE_FRAMERATE) +"/1 "
+            " ! appsink";
     }
     else{
         std::cout << "Invalid device type: " << device << std::endl;
@@ -158,7 +173,7 @@ int recognizeLive(const std::string& device, bool use_display){
             }
 
             // Recognize barcodes
-            auto barcodes = recognizer.recognize(scanbotsdk::toScanbotSDKImage(image));
+            auto barcodes = recognizer.recognize(scanbotsdk::toImage(image));
             
             // Print the results
             parseBarcodes(barcodes, image);
