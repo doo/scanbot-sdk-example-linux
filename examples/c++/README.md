@@ -1,3 +1,8 @@
+# API Documentation
+The API documentation are acessible here: 
+* [C](https://scanbotsdk.github.io/documentation/barcode-scanner-sdk/linux/ScanbotSDK_8h.html)
+* [C++](https://scanbotsdk.github.io/documentation/barcode-scanner-sdk/linux/ScanbotSDK_8hpp.html)
+
 # Installation
 
 ## Raspberry Pi and Ubuntu

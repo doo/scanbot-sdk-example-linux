@@ -1,4 +1,5 @@
-# Installation
+# API Documentation
+The Python API documentation is available [here](https://scanbotsdk.github.io/documentation/barcode-scanner-sdk/linux/scanbotsdk_8py.html). 
 
 ## Raspberry Pi and Ubuntu
 
