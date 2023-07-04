@@ -21,7 +21,6 @@ const int DEVICE_CAPTURE_FRAMERATE=30;
 const int DISPLAY_HEIGHT=640;
 
 void print_help(){
-    // option to switch betwwn usb and mipi
     std::cout << "Usage: detect_barcodes [options]" << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << " -h, --help" << std::endl;
@@ -139,7 +138,7 @@ void exit_program(int s){
 
 int recognizeLive(const InputArgs& args ){
     
-    // Lets add a signal handler to gracefully exit the program
+    // Let's add a signal handler to gracefully exit the program
     // on receiving a Ctrl + C and not hang the camera
     struct sigaction sigIntHandler;
     sigIntHandler.sa_handler = exit_program;

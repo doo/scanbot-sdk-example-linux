@@ -4,9 +4,6 @@
 #include <opencv2/imgcodecs.hpp>
 #include <iostream>
 
-// Uncomment the following line to use TensorRT for barcode recognition.
-//#define USE_TENSORRT 1
-
 const std::string LICENSE_KEY = "<Put license key here>";
 
 
@@ -27,9 +24,8 @@ int main(int argc, char** argv) {
     // In case of very high-res images with tiny barcodes, BEST mode is recommended.
     params.engineMode = SCANBOTSDK_BARCODE_ENGINE_MODE_BALANCED;
 
-#ifdef USE_TENSORRT
-    params.useTensorRT = true;
-#endif
+    // Uncomment the following line to use TensorRT for barcode recognition.
+    // params.useTensorRT = true;
 
     // Create a barcode recognizer
     scanbotsdk::BarcodeRecognizer recognizer(params);
