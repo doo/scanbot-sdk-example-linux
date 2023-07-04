@@ -19,8 +19,6 @@ Please update the license key in `detect_barcodes.py` before running the example
 
 The example will connect to the selected camera and begin looking for barcodes. It will print any detected barcodes to the terminal.
 
-Pass the `--use-display` flag to also display a window that shows the found barcodes live. The found barcodes will be indicated with a green border overlaid on top.
-
 The example can be run as follows from the terminal:
 
 * Using a CSI camera on an NVidia Jetson:
@@ -28,6 +26,7 @@ The example can be run as follows from the terminal:
 ```bash
 python detect_barcodes.py --input jetson_csi
 ```
+
 
 * Using a CSI camera with libcamera on PiOS:
     
@@ -40,3 +39,9 @@ python detect_barcodes.py --input libcamera
 ```bash
 python detect_barcodes.py --input 1
 ```
+
+### Optional flags
+
+* --use-display: Display a window that shows the found barcodes live. The found barcodes will be indicated with a green border overlaid on top.
+
+* --use-tensorrt: Enable TensorRT acceleration (Jetson only).

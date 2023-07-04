@@ -31,8 +31,6 @@ _Note that the scanbotsdk library will be downloaded and placed at libs/scanbots
 
 The example will connect to the selected camera and begin looking for barcodes. It will print any detected barcodes to the terminal.
 
-Pass the `--use-display` flag to also display a window that shows the found barcodes live. The found barcodes will be indicated with a green border overlaid on top.
-
 The example can be run as follows from the terminal:
 
 * Using a CSI camera on the Jetson Nano:
@@ -52,3 +50,9 @@ The example can be run as follows from the terminal:
 ```bash
 ./detect_barcodes -i 1
 ```
+
+### Optional flags
+
+* --use-display: Display a window that shows the found barcodes live. The found barcodes will be indicated with a green border overlaid on top.
+
+* --use-tensorrt: Enable TensorRT acceleration (Jetson only).
