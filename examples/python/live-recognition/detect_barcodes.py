@@ -77,9 +77,7 @@ def recognize_live(recognizer:scanbotsdk.BarcodeRecognizer, device:str, use_disp
 
             if cv.getWindowProperty("BarcodeRecognizer", cv.WND_PROP_AUTOSIZE) == -1:
                 break
-        else:
-            cv.imwrite("result.jpg", image)
-        
+                    
     cap.release()
 
 
