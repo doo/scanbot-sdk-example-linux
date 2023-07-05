@@ -29,7 +29,7 @@ pip install --upgrade pip setuptools wheel
 * Install the Scanbot SDK package
 
 ```bash
-pip install https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/HZMdMdpCxVuaro3GE4G2gMmt/scanbotsdk-0.0.1-py3-none-linux_aarch64.whl
+pip install https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/HZMdMdpCxVuaro3GE4G2gMmt/scanbotsdk-0.0.392-py3-none-linux_aarch64.whl
 ```
 
 * Test that the scanbotsdk package has been installed correctly:
@@ -61,13 +61,13 @@ pip install --upgrade pip setuptools wheel
 * Only on ARM64: Install the ARM64 Scanbot SDK package:
 
 ```bash
-pip install https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/HZMdMdpCxVuaro3GE4G2gMmt/scanbotsdk-0.0.1-py3-none-linux_aarch64.whl
+pip install https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/HZMdMdpCxVuaro3GE4G2gMmt/scanbotsdk-0.0.392-py3-none-linux_aarch64.whl
 ```
 
 * Only on x64: Install the x86_64 Scanbot SDK package:
 
 ```bash
-pip install https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/HZMdMdpCxVuaro3GE4G2gMmt/scanbotsdk-0.0.1-py3-none-linux_x86_64.whl
+pip install https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/HZMdMdpCxVuaro3GE4G2gMmt/scanbotsdk-0.0.392-py3-none-linux_x86_64.whl
 ```
 
 * Test that the scanbotsdk package has been installed correctly:

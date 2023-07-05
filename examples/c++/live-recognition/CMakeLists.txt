@@ -4,7 +4,7 @@ project(barcode_recognizer_minimal)
 # Find or download Scanbot SDK
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 set(SCANBOTSDK_DIR "${CMAKE_BINARY_DIR}/scanbotsdk")
-set(SCANBOTSDK_VERSION "0.0.1")
+set(SCANBOTSDK_VERSION "0.0.392")
 find_package(ScanbotSDK REQUIRED)
 include_directories(${ScanbotSDK_INCLUDE_DIRS})
 
