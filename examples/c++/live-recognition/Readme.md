@@ -53,6 +53,6 @@ The example can be run as follows from the terminal:
 
 ### Optional flags
 
-* --use-display: Display a window that shows the found barcodes live. The found barcodes will be indicated with a green border overlaid on top.
+* ```--use-display```: Display a window that shows the found barcodes live. The found barcodes will be indicated with a green border overlaid on top.
 
-* --use-tensorrt: Enable TensorRT acceleration (Jetson only).
+* ```--use-tensorrt```: Enable TensorRT acceleration (Jetson only).

@@ -1,5 +1,5 @@
 # API Documentation
-The API documentations are accessible here: 
+The API documentation is accessible here: 
 * [Scanbot SDK - C API](https://scanbotsdk.github.io/documentation/barcode-scanner-sdk/linux/ScanbotSDK_8h.html)
 * [Scanbot SDK - C++ API](https://scanbotsdk.github.io/documentation/barcode-scanner-sdk/linux/ScanbotSDK_8hpp.html)
 
@@ -25,7 +25,7 @@ sudo apt install -y nvidia-l4t-cuda libnvinfer8 libnvinfer-plugin8 libnvonnxpars
 
 ----
 
-## Other linux platforms (Ubuntu, Raspberry Pi OS,  etc.)
+## Raspberry Pi OS, Ubuntu, Debian
 
 * Install a C++ compiler, CMake and OpenCV:
 
