@@ -18,11 +18,11 @@ Go to the `examples/c++/minial` directory in a terminal and run the following co
 ```bash
 mkdir build
 cd build
-cmake -DSCANBOTSDK_VERSION=<SCANBOTSDK-VERSION> ..
+cmake -DSCANBOTSDK_VERSION=<SDK-VERSION> -DSCANBOTSDK_API_TOKEN=<SDK-API-TOKEN> ..
 make
 ```
 
-_The SCANBOTSDK-VERSION (eg. "0.0.212") should have been specified alongwith the license file._
+_The SDK-VERSION and the SDK-API-TOKEN should have been specified alongwith the license file._
 
 ----
 ## Usage

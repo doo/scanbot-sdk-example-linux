@@ -6,6 +6,10 @@ if(NOT SCANBOTSDK_VERSION)
     message(FATAL_ERROR "SCANBOTSDK_VERSION is not set.")
 endif()
 
+if(NOT SCANBOTSDK_API_TOKEN)
+    message(FATAL_ERROR "SCANBOTSDK_API_TOKEN is not set.")
+endif()
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 set(SCANBOTSDK_DIR "${CMAKE_BINARY_DIR}/scanbotsdk")
 

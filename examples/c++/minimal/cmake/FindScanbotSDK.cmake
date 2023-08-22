@@ -8,7 +8,7 @@ endif()
 if (NOT EXISTS ${SCANBOTSDK_DIR})
   message(STATUS "Downloading ScanbotSDK ${SCANBOTSDK_VERSION} to ${SCANBOTSDK_DIR}")
   string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}-${CMAKE_HOST_SYSTEM_PROCESSOR}" PLATFORM_ID)
-  set(URL "https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/HZMdMdpCxVuaro3GE4G2gMmt/scanbotsdk-${SCANBOTSDK_VERSION}-${PLATFORM_ID}.tar.gz")
+  set(URL "https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/${SCANBOTSDK_API_TOKEN}/scanbotsdk-${SCANBOTSDK_VERSION}-${PLATFORM_ID}.tar.gz")
   execute_process(
     COMMAND wget ${URL}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
