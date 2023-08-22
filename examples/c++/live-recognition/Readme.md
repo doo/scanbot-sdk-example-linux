@@ -20,11 +20,11 @@ Go to the `examples/c++/live-recognition` directory in a terminal and run the fo
 ```bash
 mkdir build
 cd build
-cmake ..
+cmake -DSCANBOTSDK_VERSION=<SDK-VERSION> ..
 make
 ```
 
-_Note that the scanbotsdk library will be downloaded and placed at libs/scanbotsdk during the cmake configuration step._
+_The SDK-VERSION (eg. "0.0.212") should have been specified alongwith the license file._
 
 ----
 ## Usage

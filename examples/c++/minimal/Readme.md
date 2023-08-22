@@ -18,11 +18,11 @@ Go to the `examples/c++/minial` directory in a terminal and run the following co
 ```bash
 mkdir build
 cd build
-cmake ..
+cmake -DSCANBOTSDK_VERSION=<SCANBOTSDK-VERSION> ..
 make
 ```
 
-_Note that the scanbotsdk library will be downloaded and placed at libs/scanbotsdk during the cmake configuration step._
+_The SCANBOTSDK-VERSION (eg. "0.0.212") should have been specified alongwith the license file._
 
 ----
 ## Usage
