@@ -29,7 +29,7 @@ pip install --upgrade pip setuptools wheel
 * Install the Scanbot SDK package
 
 ```bash
-# specify the SDK-VERSION and SDK-API-TOKEN as specified alongwith the license file
+# specify the SDK-VERSION and SDK-API-TOKEN as specified along with the license file
 export SCANBOTSDK_VERSION=<SDK-VERSION>
 export SCANBOTSDK_API_TOKEN=<SDK-API-TOKEN>
 pip install https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/${SCANBOTSDK_API_TOKEN}/scanbotsdk-${SCANBOTSDK_VERSION}-py3-none-linux_aarch64.whl
@@ -64,7 +64,7 @@ pip install --upgrade pip setuptools wheel
 * Only on ARM64: Install the ARM64 Scanbot SDK package:
 
 ```bash
-# specify the SDK-VERSION and SDK-API-TOKEN as specified alongwith the license file
+# specify the SDK-VERSION and SDK-API-TOKEN as specified along with the license file
 export SCANBOTSDK_VERSION=<SDK-VERSION>
 export SCANBOTSDK_API_TOKEN=<SDK-API-TOKEN>
 pip install https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/${SCANBOTSDK_API_TOKEN}/scanbotsdk-${SCANBOTSDK_VERSION}-py3-none-linux_aarch64.whl
@@ -73,7 +73,7 @@ pip install https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/${SC
 * Only on x64: Install the x86_64 Scanbot SDK package:
 
 ```bash
-# specify the SDK-VERSION and SDK-API-TOKEN as specified alongwith the license file
+# specify the SDK-VERSION and SDK-API-TOKEN as specified along with the license file
 export SCANBOTSDK_VERSION=<SDK-VERSION>
 export SCANBOTSDK_API_TOKEN=<SDK-API-TOKEN>
 pip install https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/${SCANBOTSDK_API_TOKEN}/scanbotsdk-${SCANBOTSDK_VERSION}-py3-none-linux_x86_64.whl

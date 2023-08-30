@@ -24,7 +24,7 @@ cmake -DSCANBOTSDK_VERSION=<SDK-VERSION> -DSCANBOTSDK_API_TOKEN=<SDK-API-TOKEN> 
 make
 ```
 
-_The SDK-VERSION and the SDK-API-TOKEN should have been specified alongwith the license file._
+_The SDK-VERSION and the SDK-API-TOKEN should have been specified along with the license file._
 
 ----
 ## Usage
