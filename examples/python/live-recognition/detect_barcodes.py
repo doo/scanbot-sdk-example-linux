@@ -33,7 +33,7 @@ def parse_barcodes(barcodes, image):
     for barcode in barcodes:
         # remove all white-spaces, newlines and tabs from the barcode text
         barcode.text = barcode.text.replace(' ', '').replace('\n', '').replace('\t', '')
-        print('\t==> ' + barcode.text)
+        print(('\t==> ' + barcode.text).encode('utf-8'))
 
         # draw the ROI with individual line
         cv.line(image, (barcode.points[0], barcode.points[1]), (barcode.points[2], barcode.points[3]), (0, 255, 0), 2)
