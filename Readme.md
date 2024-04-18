@@ -2,6 +2,8 @@
 
 These examples show how to integrate the [Scanbot SDK for Linux](https://scanbot.io) into C++ and Python applications.
 
+**The Linux SDK is currently in closed beta.** The SDK and a trial license are available on request: [Get in contact](https://scanbot.io/developer/linux-barcode-scanner/)
+
 Refer to the respective README files in the examples directory for more details.
 
 ## Barcode recognition
@@ -16,4 +18,5 @@ Performance with a 1280x720 input image size in FAST mode:
 
 ## License
 
-You will need a valid trial or commercial license key to try these examples out. Contact us via https://scanbot.io/sdk.html to obtain one.
+You will need a valid trial or commercial license key to try these examples out. 
+[Contact us](https://scanbot.io/developer/linux-barcode-scanner/) to obtain one.
