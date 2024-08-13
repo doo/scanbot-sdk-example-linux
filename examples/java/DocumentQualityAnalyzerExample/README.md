@@ -2,6 +2,8 @@
 
 ## How to run the example
 
+The example app can be run only on Linux platform.
+
 To run the example you need to
 
 1. Specify values of SCANBOTSDK_VERSION and SCANBOTSDK_API_TOKEN in the `build.gradle` file with the values you received

@@ -6,6 +6,9 @@ plugins {
 def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>"
 def SCANBOTSDK_API_TOKEN = "<SCANBOTSDK_API_TOKEN>"
 
+def arch = System.getProperty("os.arch")
+def SCANBOTSDK_ARCHITECTURE = (arch.contains("arm") || arch.contains("aarch64")) ? "aarch64" : "x86_64"
+
 group = 'io.scanbot.sdk'
 version = '1.0'
 
@@ -27,7 +30,7 @@ def urlFile = { url, name ->
 }
 
 dependencies {
-    implementation urlFile("https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/${SCANBOTSDK_API_TOKEN}/scanbotsdk-${SCANBOTSDK_VERSION}-linux-x86_64.jar", "scanbotsdk.jar")
+    implementation urlFile("https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/${SCANBOTSDK_API_TOKEN}/scanbotsdk-${SCANBOTSDK_VERSION}-linux-${SCANBOTSDK_ARCHITECTURE}.jar", "scanbotsdk.jar")
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     files()

@@ -25,7 +25,7 @@ public class DocumentQualityAnalyzerExample {
     }
 
     public static void main(String[] args) throws IOException {
-        final String licenseKey = "<your_license_key>";
+        final String licenseKey = "<LICENSE_KEY>";
         ScanbotSDK.initialize(licenseKey);
         Config config = new Config();
         try (DocumentQualityAnalyzer dqa = new DocumentQualityAnalyzer(config)) {
