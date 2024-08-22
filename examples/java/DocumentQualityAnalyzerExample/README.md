@@ -11,8 +11,19 @@ To run the example you need to
 2. Specify your license key in the `io.scanbot.sdk.dqa.DocumentQualityAnalyzerExample` class with the value you received
    from us.
 
-After that you can run the example with the following command:
-`./gradlew run`
+You can run the example on an image by its file path or its resource path. 
+
+To run the example on an image by its file path, run the following command:
+
+`./gradlew run --args='--file "/path/to/image"'`
+
+To run the example on an image by its resource path, run the following command:
+
+`./gradlew run --args='--resource "path/to/resource"'`
+
+In particular, the example comes with a test image that can be used to run the example. To run the example on the test image run the following command:
+
+`./gradlew run --args='--resource "/img.png"'`
 
 During the script run all needed artifacts will be downloaded and the example will be executed.
 
