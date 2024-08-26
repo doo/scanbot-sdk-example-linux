@@ -1,6 +1,7 @@
 package io.scanbot.sdk.dqa;
 
 import io.scanbot.sdk.ScanbotSDK;
+import io.scanbot.sdk.LicenseStatus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class DocumentQualityAnalyzerExample {
     }
 
     private static void printUsage() {
-        System.out.println("Document Quality Analyzer Example");
+        System.out.println("Scanbot SDK Document Quality Analyzer Example");
         System.out.println("Usage:");
         System.out.println("");
         System.out.println("   ./gradlew run --args='--resource <path/to/bundle/resource.jpg>'");
@@ -38,8 +39,6 @@ public class DocumentQualityAnalyzerExample {
 
     public static void main(String[] args) throws IOException {
         final String licenseKey = "<LICENSE_KEY>";
-        ScanbotSDK.initialize(licenseKey);
-
         String filePath = null;
         String resourcePath = null;
 
@@ -55,6 +54,13 @@ public class DocumentQualityAnalyzerExample {
             }
         } else {
             printUsage();
+            return;
+        }
+
+        ScanbotSDK.initialize(licenseKey);
+
+        if (ScanbotSDK.getLicenseStatus() != LicenseStatus.OK) {
+            System.out.println("License status: " + ScanbotSDK.getLicenseStatus());
             return;
         }
 
