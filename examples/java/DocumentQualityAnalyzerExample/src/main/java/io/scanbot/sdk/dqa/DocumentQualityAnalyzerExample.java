@@ -24,6 +24,18 @@ public class DocumentQualityAnalyzerExample {
         }
     }
 
+    private static void printUsage() {
+        System.out.println("Document Quality Analyzer Example");
+        System.out.println("Usage:");
+        System.out.println("");
+        System.out.println("   ./gradlew run --args='--resource <path/to/bundle/resource.jpg>'");
+        System.out.println("");
+        System.out.println("or");
+        System.out.println("");
+        System.out.println("   ./gradlew run --args='--file <path/to/document.jpg>'");
+        System.out.println("");
+    }
+
     public static void main(String[] args) throws IOException {
         final String licenseKey = "<LICENSE_KEY>";
         ScanbotSDK.initialize(licenseKey);
@@ -38,12 +50,13 @@ public class DocumentQualityAnalyzerExample {
                 filePath = args[1];
             }
             else {
-                throw new IllegalArgumentException("You must provide either path to a resource or a file.");
+                printUsage();
+                return;
             }
         } else {
-            throw new IllegalArgumentException("Incorrect number of arguments.");
+            printUsage();
+            return;
         }
-
 
         Config config = new Config();
         try (DocumentQualityAnalyzer dqa = new DocumentQualityAnalyzer(config)) {
