@@ -3,6 +3,8 @@ plugins {
     id 'application'
 }
 
+// TODO Add your SCANBOTSDK_API_TOKEN and SCANBOTSDK_VERSION here.
+// They are available on request via beta@scanbot.io
 def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>"
 def SCANBOTSDK_API_TOKEN = "<SCANBOTSDK_API_TOKEN>"
 

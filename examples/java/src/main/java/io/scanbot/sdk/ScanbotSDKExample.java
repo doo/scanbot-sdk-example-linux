@@ -118,7 +118,10 @@ public class ScanbotSDKExample {
     }
 
     public static void main(String[] args) throws IOException {
-        final String licenseKey = "<LICENSE_KEY>";
+        // TODO Add your Scanbot SDK trial license key here.
+        // The SDK and a trial license are available on request via beta@scanbot.io
+        final String licenseKey = "<YOUR_LICENSE_KEY>";
+
         ScanbotSDK.initialize(licenseKey);
         String filePath = null;
         String resourcePath = null;
