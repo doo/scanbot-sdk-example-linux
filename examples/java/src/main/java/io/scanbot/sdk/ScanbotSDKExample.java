@@ -7,6 +7,8 @@ import io.scanbot.sdk.documentdetector.DocumentDetectorConfiguration;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzer;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzerConfiguration;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzerResult;
+import io.scanbot.sdk.exception.ImageRefException;
+import io.scanbot.sdk.exception.LicenseException;
 import io.scanbot.sdk.image.BufferImageLoadOptions;
 import io.scanbot.sdk.image.ImageRef;
 import io.scanbot.sdk.image.PathImageLoadOptions;
@@ -62,7 +64,7 @@ public class ScanbotSDKExample {
 
     }
 
-    private static void analyzeDocument(ImageRef imageRef) throws IOException {
+    private static void analyzeDocument(ImageRef imageRef) throws LicenseException {
         try (DocumentQualityAnalyzer documentQualityAnalyzer = new DocumentQualityAnalyzer(new DocumentQualityAnalyzerConfiguration())) {
             DocumentQualityAnalyzerResult result = documentQualityAnalyzer.analyzeDocumentQuality(imageRef);
             System.out.println("Document quality analysis result:");
@@ -71,7 +73,7 @@ public class ScanbotSDKExample {
         }
     }
 
-    private static void cropAndAnalyzeDocument(ImageRef imageRef, String savePath) {
+    private static void cropAndAnalyzeDocument(ImageRef imageRef, String savePath) throws LicenseException, ImageRefException {
         try (DocumentDetector detector = new DocumentDetector(new DocumentDetectorConfiguration());
              DocumentQualityAnalyzer analyzer = new DocumentQualityAnalyzer(new DocumentQualityAnalyzerConfiguration());
              DocumentDetectAndCropResult detectAndCropResult = detector.detectAndCrop(imageRef)) {
@@ -102,7 +104,7 @@ public class ScanbotSDKExample {
         }
     }
 
-    private static void detectDocument(ImageRef imageRef) throws IOException {
+    private static void detectDocument(ImageRef imageRef) throws LicenseException {
         try (DocumentDetector documentDetector = new DocumentDetector(new DocumentDetectorConfiguration())) {
             DocumentDetectionResult result = documentDetector.detect(imageRef);
             System.out.println("Document detection result:");
@@ -117,7 +119,7 @@ public class ScanbotSDKExample {
 
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         // TODO Add your Scanbot SDK trial license key here.
         // The SDK and a trial license are available on request via beta@scanbot.io
         final String licenseKey = "<YOUR_LICENSE_KEY>";
