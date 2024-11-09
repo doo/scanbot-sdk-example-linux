@@ -22,22 +22,6 @@ import java.util.Map;
 
 public class ScanbotSDKExample {
 
-    private static byte[] readAllBytes(String resourceName) throws IOException {
-        try (InputStream inputStream = ScanbotSDKExample.class.getResourceAsStream(resourceName)) {
-            final int bufLen = 1024;
-            byte[] buf = new byte[bufLen];
-            int readLen;
-
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-            while ((readLen = inputStream.read(buf, 0, bufLen)) != -1) {
-                outputStream.write(buf, 0, readLen);
-            }
-
-            return outputStream.toByteArray();
-        }
-    }
-
     private static void printUsage() {
         System.out.println("Scanbot SDK Example");
         System.out.println("Usage:");
@@ -58,8 +42,9 @@ public class ScanbotSDKExample {
         if (filePath != null) {
             return ImageRef.fromPath(filePath, new PathImageLoadOptions());
         } else {
-            byte[] imageBuffer = readAllBytes(resourcePath);
-            return ImageRef.fromEncodedBuffer(imageBuffer, new BufferImageLoadOptions());
+            try (InputStream inputStream = ScanbotSDKExample.class.getResourceAsStream(resourcePath)) {
+                return ImageRef.fromStream(inputStream, new BufferImageLoadOptions());
+            }
         }
 
     }
