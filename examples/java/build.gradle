@@ -38,6 +38,23 @@ dependencies {
     files()
 }
 
+jar {
+    manifest {
+        attributes(
+                'Implementation-Version': "1.0",
+                'Implementation-Vendor': 'Scanbot SDK GmbH',
+                'Implementation-Name': 'ScanbotSDK Java Wrapper Memory Test',
+                'Main-Class': 'io.scanbot.sdk.ScanbotSDKDocumentQualityStressTest'
+        )
+        archiveBaseName.set("ScanbotSDKDocumentQualityStressTest")
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude '.gitignore'
+    exclude '*.dvc'
+}
+
 application {
     mainClassName = "io.scanbot.sdk.ScanbotSDKExample"
 }
