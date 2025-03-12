@@ -1,9 +1,11 @@
 import scanbotsdk
 import argparse
+from typing import Sequence
 import cv2 as cv
+import numpy as np
+import os
 
-LICENSE_KEY:str = "Put-your-license-key-here"
-
+LICENSE_KEY: str = "Put-your-license-key-here"
 
 DEVICE_CAPTURE_WIDTH = 1280
 DEVICE_CAPTURE_HEIGHT = 720
@@ -28,21 +30,23 @@ def gstreamer_pipeline(device):
 
     return ret
 
-def parse_barcodes(barcodes, image):
+
+def parse_barcodes(barcodes: Sequence[scanbotsdk.BarcodeItem], image):
     print('Recognized barcodes:')
     for barcode in barcodes:
         # remove all white-spaces, newlines and tabs from the barcode text
-        barcode.text = barcode.text.replace(' ', '').replace('\n', '').replace('\t', '')
-        print(('\t==> ' + barcode.text).encode('utf-8'))
+        text = barcode.text.replace(' ', '').replace('\n', '').replace('\t', '')
+        print(('\t==> ' + text).encode('utf-8'))
 
         # draw the ROI with individual line
-        cv.line(image, (barcode.points[0], barcode.points[1]), (barcode.points[2], barcode.points[3]), (0, 255, 0), 2)
-        cv.line(image, (barcode.points[2], barcode.points[3]), (barcode.points[4], barcode.points[5]), (0, 255, 0), 2)
-        cv.line(image, (barcode.points[4], barcode.points[5]), (barcode.points[6], barcode.points[7]), (0, 255, 0), 2)
-        cv.line(image, (barcode.points[6], barcode.points[7]), (barcode.points[0], barcode.points[1]), (0, 255, 0), 2)
+        quad = barcode.quad
+        cv.line(image, (quad[0].x, quad[0].y), (quad[1].x, quad[1].y), (0, 255, 0), 2)
+        cv.line(image, (quad[1].x, quad[1].y), (quad[2].x, quad[2].y), (0, 255, 0), 2)
+        cv.line(image, (quad[2].x, quad[2].y), (quad[3].x, quad[3].y), (0, 255, 0), 2)
+        cv.line(image, (quad[3].x, quad[3].y), (quad[0].x, quad[0].y), (0, 255, 0), 2)
 
 
-def recognize_live(recognizer:scanbotsdk.BarcodeRecognizer, device:str, use_display:bool):
+def scan_live(scanner: scanbotsdk.BarcodeScanner, device: str, use_display: bool):
     DISPLAY_HEIGHT = 640
 
     try:
@@ -56,58 +60,72 @@ def recognize_live(recognizer:scanbotsdk.BarcodeRecognizer, device:str, use_disp
     if not cap.isOpened():
         print("Cannot open camera")
         exit(1)
-    
-    if use_display:
-        cv.namedWindow("BarcodeRecognizer", cv.WINDOW_AUTOSIZE)
 
-    while(True):
-        _, image = cap.read()
-        if image is None:
-            print("Failed to capture image")
-            break
-
-        barcodes = recognizer.recognize(image)
-        parse_barcodes(barcodes, image)
-
+    try:
         if use_display:
-            width = image.shape[1] * DISPLAY_HEIGHT / image.shape[0]
-            image = cv.resize(image, (int(width), DISPLAY_HEIGHT))
-            cv.imshow("BarcodeRecognizer", image)
-            cv.waitKey(1)
-
-            if cv.getWindowProperty("BarcodeRecognizer", cv.WND_PROP_AUTOSIZE) == -1:
+            cv.namedWindow("BarcodeRecognizer", cv.WINDOW_AUTOSIZE)
+        image = np.zeros((DEVICE_CAPTURE_HEIGHT, DEVICE_CAPTURE_WIDTH, 3), dtype=np.uint8)
+        while True:
+            # Note that the image is updated in-place
+            ret, _ = cap.read(image)
+            if not ret:
+                print("Failed to capture image")
                 break
-                    
-    cap.release()
+
+            # Although it is not required to use the image ref as a context manager, it is recommended to do so when
+            # creating from live source to ensure that the image_ref is timely released.
+            #
+            # Setting live_source=True lets the scanner know that we're running in live mode.
+            # In this mode we maintain the highest FPS because we spread the work of scanning barcodes across multiple frames.
+            # If you set live_source=False, the scanner will run in single-shot mode which is much slower,
+            # but has a much higher probability of finding all barcodes in the input image.
+            # As an alternative, you can explicitly set the scanner mode,
+            # by creating it with e.g. processing_mode=ProcessingMode.LIVE for live mode.
+            with scanbotsdk.ImageRef.from_ndarray(image, scanbotsdk.RawImageLoadOptions(live_source=True)) as image_ref:
+                barcode_scanning_result = scanner.run(
+                    image=image_ref)
+                parse_barcodes(barcode_scanning_result.barcodes, image)
+
+                if use_display:
+                    width = image.shape[1] * DISPLAY_HEIGHT / image.shape[0]
+                    to_show = cv.resize(image, (int(width), DISPLAY_HEIGHT))
+                    cv.imshow("BarcodeRecognizer",
+                              to_show)
+                    cv.waitKey(1)
+
+                    if cv.getWindowProperty("BarcodeRecognizer", cv.WND_PROP_AUTOSIZE) == -1:
+                        break
+    finally:
+        cap.release()
 
 
 def recognize():
     parser = argparse.ArgumentParser(description='Detect barcodes in an image.')
-    parser.add_argument('--input', type=str, required=True, help='Input device name (jetson_csi|libcamera) or number of /dev/video* device')
+    parser.add_argument('--input', type=str, required=True,
+                        help='Input device name (jetson_csi|libcamera) or number of /dev/video* device')
     parser.add_argument('--use-display', action='store_true', help='Show results in a window')
     parser.add_argument('--use-tensorrt', action='store_true', help='Use TensorRT backend for GPU acceleration')
-    
 
     args = parser.parse_args()
     input_device = args.input
     use_display = args.use_display
-    
+
     # Setup and initialize the Scanbot SDK
     print(f"Initializing Scanbot SDK...")
     scanbotsdk.initialize(LICENSE_KEY)
     print(f"License Status: {scanbotsdk.get_license_status()}")
 
-    # Setup recognition parameters
-    params = scanbotsdk.BarcodeRecognizerInitParams(
-        engine_mode=scanbotsdk.BarcodeRecognitionEngineMode.FAST,
-    )
-
+    # Setup scanning configuration
+    configuration = scanbotsdk.BarcodeScannerConfiguration(
+        processing_mode=scanbotsdk.ProcessingMode.AUTO,
+        barcode_format_configurations=[
+            scanbotsdk.BarcodeFormatCommonConfiguration(formats=scanbotsdk.BarcodeFormats.common)])
     if args.use_tensorrt:
-        params.use_tensorrt = True
+        configuration.accelerator = scanbotsdk.TensorRtAccelerator(engine_path=os.curdir)
 
-    recognizer = scanbotsdk.BarcodeRecognizer(params)
-    recognize_live(recognizer, input_device, use_display)
+    scanner = scanbotsdk.BarcodeScanner(configuration=configuration)
 
+    scan_live(scanner, input_device, use_display)
 
 
 if __name__ == '__main__':

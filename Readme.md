@@ -9,12 +9,12 @@ Refer to the respective README files in the examples directory for more details.
 ## Barcode recognition
 The Scanbot SDK allows for the recognition of various barcode types in images and video streams. The SDK is available for both the arm64 and x86_64 architectures. Furthermore, it supports GPU acceleration on NVidia Jetson devices.
 
-Performance with a 1280x720 input image size in FAST mode:
-| Device                                       | Frame-rate |
-|----------------------------------------------|------------|
-| Raspberry Pi 4                               | ~4 FPS     |
-| NVidia Jetson Nano 2GB                       | ~5 FPS     |
-| NVidia Jetson Nano 2GB with GPU acceleration | ~15 FPS    |
+Performance with a 1280x720 input image size with NEXT_GEN engine mode:
+| Device                                            | Frame-rate |
+|---------------------------------------------------|------------|
+| Raspberry Pi 4                                    | ~8.5 FPS   |
+| NVidia Jetson Orin Nano 8GB                       | ~40 FPS    |
+| NVidia Jetson Orin Nano 8GB with GPU acceleration | ~85 FPS    |
 
 ## License
 
