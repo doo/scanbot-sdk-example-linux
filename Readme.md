@@ -1,5 +1,5 @@
 
-![Scanbot SDK Logo](/ReadMes_Batch1/Images/ScanbotSDKLogo.png)
+![Scanbot SDK Logo](.images/ScanbotSDKLogo.png)
 
 # Example App for the Scanbot Linux Barcode Scanner SDK (Beta)
 
