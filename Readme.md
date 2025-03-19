@@ -1,5 +1,9 @@
-
-![Scanbot SDK Logo](.images/ScanbotSDKLogo.png)
+<p align="left">
+  <img src=".images/ScanbotSDKLogo.png#gh-light-mode-only" width="15%" />
+</p>
+<p align="left">
+  <img src=".images/ScanbotSDKLogo_darkmode.png#gh-dark-mode-only" width="15%" />
+</p>
 
 # Example App for the Scanbot Linux Barcode Scanner SDK (Beta)
 
