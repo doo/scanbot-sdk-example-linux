@@ -113,6 +113,7 @@ def recognize():
     # Setup and initialize the Scanbot SDK
     print(f"Initializing Scanbot SDK...")
     scanbotsdk.initialize(LICENSE_KEY)
+    scanbotsdk.wait_for_online_license_check_completion(5000)
     print(f"License Status: {scanbotsdk.get_license_status()}")
 
     # Setup scanning configuration
