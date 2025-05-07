@@ -28,7 +28,7 @@ To run the example on an image by its resource path, run the following command:
 
 The `<command>` can be one of the following:
 
-* `analyzeDocument`: analyze document quality in the image.
+* `analyzeMultiPageDocument`: analyze document quality in the images in a multi page document (PDF, TIFF) or a single page document (JPEG, PNG). Quality analysis is performed individually for each image in the document.
 * `detectDocument`: detect document in the image.
 * `cropAndAnalyzeDocument`: detect document in the image and analyze document quality in the crop. Additionally, allows to save the detected document crop to the path specified with `--save` parameter.
 

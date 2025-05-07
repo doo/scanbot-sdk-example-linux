@@ -1,20 +1,20 @@
 package io.scanbot.sdk;
 
-import io.scanbot.sdk.documentdetector.DocumentDetectAndCropResult;
-import io.scanbot.sdk.documentdetector.DocumentDetectionResult;
-import io.scanbot.sdk.documentdetector.DocumentDetector;
-import io.scanbot.sdk.documentdetector.DocumentDetectorConfiguration;
+import io.scanbot.sdk.documentscanner.DocumentScanningResult;
+import io.scanbot.sdk.documentscanner.DocumentDetectionResult;
+import io.scanbot.sdk.documentscanner.DocumentScanner;
+import io.scanbot.sdk.documentscanner.DocumentScannerConfiguration;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzer;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzerConfiguration;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzerResult;
-import io.scanbot.sdk.exception.ImageRefException;
-import io.scanbot.sdk.exception.LicenseException;
 import io.scanbot.sdk.image.BufferImageLoadOptions;
 import io.scanbot.sdk.image.ImageRef;
 import io.scanbot.sdk.image.PathImageLoadOptions;
 import io.scanbot.sdk.image.SaveImageOptions;
-
-import java.io.ByteArrayOutputStream;
+import io.scanbot.sdk.io.RandomAccessSource;
+import io.scanbot.sdk.multipageimageextractor.ExtractedPage;
+import io.scanbot.sdk.multipageimageextractor.MultiPageImageExtractor;
+import io.scanbot.sdk.multipageimageextractor.PageExtractionResult;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class ScanbotSDKExample {
         System.out.println();
         System.out.println("   ./gradlew run --args='<command> --file <path/to/file.jpg> --save <path/to/save/image.jpg>'");
         System.out.println();
-        System.out.println("   Available commands: detectDocument, analyzeDocument, cropAndAnalyzeDocument");
+        System.out.println("   Available commands: detectDocument, analyzeMultiPageDocument, cropAndAnalyzeDocument");
         System.out.println();
         System.out.println("   --save argument is optional and is applicable only to cropAndAnalyzeDocument command");
         System.out.println();
@@ -46,24 +46,56 @@ public class ScanbotSDKExample {
                 return ImageRef.fromStream(inputStream, new BufferImageLoadOptions());
             }
         }
-
     }
 
-    private static void analyzeDocument(ImageRef imageRef) throws LicenseException {
-        try (DocumentQualityAnalyzer documentQualityAnalyzer = new DocumentQualityAnalyzer(new DocumentQualityAnalyzerConfiguration())) {
-            DocumentQualityAnalyzerResult result = documentQualityAnalyzer.analyzeDocumentQuality(imageRef);
-            System.out.println("Document quality analysis result:");
-            System.out.println("Document found: " + result.getDocumentFound());
-            System.out.println("Document quality: " + result.getQuality());
+    private static RandomAccessSource createRandomAccessSource(String filePath, String resourcePath) throws IOException {
+        if (filePath != null) {
+            return new RandomAccessSource(filePath);
+        } else {
+            try (InputStream inputStream = ScanbotSDKExample.class.getResourceAsStream(resourcePath)) {
+                return new RandomAccessSource(inputStream);
+            }
         }
     }
 
-    private static void cropAndAnalyzeDocument(ImageRef imageRef, String savePath) throws LicenseException, ImageRefException {
-        try (DocumentDetector detector = new DocumentDetector(new DocumentDetectorConfiguration());
-             DocumentQualityAnalyzer analyzer = new DocumentQualityAnalyzer(new DocumentQualityAnalyzerConfiguration());
-             DocumentDetectAndCropResult detectAndCropResult = detector.detectAndCrop(imageRef)) {
+    private static PageExtractionResult extractImages(String filePath, String resourcePath) throws Exception {
+        try (RandomAccessSource source = createRandomAccessSource(filePath, resourcePath);
+             MultiPageImageExtractor extractor = new MultiPageImageExtractor()) {
+            return extractor.run(source);
+        }
+    }
 
-            DocumentDetectionResult detectionResult = detectAndCropResult.getDetectionResult();
+    private static void analyzeMultiPageDocument(String filePath, String resourcePath) throws Exception {
+        try (PageExtractionResult pageExtractionResult = extractImages(filePath, resourcePath);
+             DocumentQualityAnalyzer documentQualityAnalyzer = new DocumentQualityAnalyzer(new DocumentQualityAnalyzerConfiguration())) {
+            System.out.println("Pages in document: " + pageExtractionResult.getPages().size());
+            for (int i = 0; i < pageExtractionResult.getPages().size(); ++i) {
+                ExtractedPage page = pageExtractionResult.getPages().get(i);
+                System.out.println("Page " + (i + 1) + " contains " + page.getImages().size() + " image(s)");
+                for (int j = 0; j < page.getImages().size(); ++j) {
+                    // IMPORTANT NOTE
+                    // Using try-with-resources here is not mandatory cause in the worst case all the images
+                    // are closed when the pageExtractionResult is closed at the end of the outer try-with-resources block.
+                    // However, the images originally are usually stored in a compressed format internally and are decompressed when accessed for the first time.
+                    // To prevent storing all the decompressed images in memory at the same time, it is recommended to close the images as soon as they are not needed anymore.
+                    try (ImageRef imageRef = page.getImages().get(j).getImage()) {
+                        DocumentQualityAnalyzerResult result = documentQualityAnalyzer.analyzeDocumentQuality(imageRef);
+                        System.out.println("Analyzing image " + (j + 1) + " on page " + (i + 1));
+                        System.out.println("Document found: " + result.getDocumentFound());
+                        System.out.println("Document quality: " + result.getQuality());
+                    }
+                }
+            }
+        }
+    }
+
+    private static void cropAndAnalyzeDocument(String filePath, String resourcePath, String savePath) throws Exception {
+        try (ImageRef imageRef = createImageRef(filePath, resourcePath);
+             DocumentScanner scanner = new DocumentScanner(new DocumentScannerConfiguration());
+             DocumentQualityAnalyzer analyzer = new DocumentQualityAnalyzer(new DocumentQualityAnalyzerConfiguration());
+             DocumentScanningResult scanningResult = scanner.scan(imageRef)) {
+
+            DocumentDetectionResult detectionResult = scanningResult.getDetectionResult();
             System.out.println("Document detection result:");
             System.out.println("Detection status: " + detectionResult.getStatus());
             if (!detectionResult.getPoints().isEmpty()) {
@@ -72,13 +104,11 @@ public class ScanbotSDKExample {
                     System.out.println("x: " + detectionResult.getPoints().get(i).getX() + ", y: " + detectionResult.getPoints().get(i).getY());
                 }
             }
-            ImageRef crop = detectAndCropResult.getCroppedImage();
+            ImageRef crop = scanningResult.getCroppedImage();
             if (crop != null) {
                 if (savePath != null) {
-                    boolean saved = crop.saveImage(savePath, new SaveImageOptions());
-                    if (saved) {
-                        System.out.println("Cropped document saved to: " + savePath);
-                    }
+                    crop.saveImage(savePath, new SaveImageOptions());
+                    System.out.println("Cropped document saved to: " + savePath);
                 }
                 System.out.println("Analyzing cropped document...");
                 DocumentQualityAnalyzerResult result = analyzer.analyzeDocumentQuality(crop);
@@ -89,9 +119,10 @@ public class ScanbotSDKExample {
         }
     }
 
-    private static void detectDocument(ImageRef imageRef) throws LicenseException {
-        try (DocumentDetector documentDetector = new DocumentDetector(new DocumentDetectorConfiguration())) {
-            DocumentDetectionResult result = documentDetector.detect(imageRef);
+    private static void detectDocument(String filePath, String resourcePath) throws Exception {
+        try (ImageRef imageRef = createImageRef(filePath, resourcePath);
+             DocumentScanner documentScanner = new DocumentScanner(new DocumentScannerConfiguration())) {
+            DocumentDetectionResult result = documentScanner.detect(imageRef);
             System.out.println("Document detection result:");
             System.out.println("Detection status: " + result.getStatus());
             if (!result.getPoints().isEmpty()) {
@@ -137,20 +168,19 @@ public class ScanbotSDKExample {
             savePath = argsMap.get("--save");
         }
 
-        try(ImageRef imageRef = createImageRef(filePath, resourcePath)) {
-            String command = args[0];
-            switch (command.toLowerCase()) {
-                case "detectdocument":
-                    detectDocument(imageRef);
-                    break;
-                case "analyzedocument":
-                    analyzeDocument(imageRef);
-                    break;
-                case "cropandanalyzedocument":
-                    cropAndAnalyzeDocument(imageRef, savePath);
-                    break;
-                default: printUsage();
-            }
+        String command = args[0];
+        switch (command.toLowerCase()) {
+            case "detectdocument":
+                detectDocument(filePath, resourcePath);
+                break;
+            case "analyzemultipagedocument":
+                analyzeMultiPageDocument(filePath, resourcePath);
+                break;
+            case "cropandanalyzedocument":
+                cropAndAnalyzeDocument(filePath, resourcePath, savePath);
+                break;
+            default:
+                printUsage();
         }
     }
 
