@@ -12,9 +12,11 @@ import io.scanbot.sdk.image.ImageRef;
 import io.scanbot.sdk.image.PathImageLoadOptions;
 import io.scanbot.sdk.image.SaveImageOptions;
 import io.scanbot.sdk.io.RandomAccessSource;
+import io.scanbot.sdk.licensing.LicenseInfo;
 import io.scanbot.sdk.multipageimageextractor.ExtractedPage;
 import io.scanbot.sdk.multipageimageextractor.MultiPageImageExtractor;
 import io.scanbot.sdk.multipageimageextractor.PageExtractionResult;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -140,47 +142,66 @@ public class ScanbotSDKExample {
         // The SDK and a trial license are available on request via beta@scanbot.io
         final String licenseKey = "<YOUR_LICENSE_KEY>";
 
-        ScanbotSDK.initialize(licenseKey);
-        String filePath = null;
-        String resourcePath = null;
+        final String writablePath = ".";
+        ScanbotSDK.initialize(licenseKey, writablePath);
+        int onlineLicenseCheckCompletionTimeout = 15000;
+        ScanbotSDK.waitForOnlineLicenseCheckCompletion(onlineLicenseCheckCompletionTimeout);
 
-        if (args.length < 1) {
-            printUsage();
-            return;
+        LicenseInfo licenseInfo = ScanbotSDK.getLicenseInfo();
+        System.out.println("License Status: " + licenseInfo.getStatus());
+        boolean isFloatingLicense = licenseInfo.getDevices() != null;
+        if (isFloatingLicense) {
+            System.out.println("Using floating license with " + licenseInfo.getDevices() + " devices. Do not forget to call " +
+                    "io.scanbot.sdk.ScanbotSDK.deregisterDevice and io.scanbot.sdk.ScanbotSDK.waitForOnlineLicenseCheckCompletion when you no " +
+                    "longer need the license or use io.scanbot.sdk.ScanbotSDK.DeviceSession convenience class with try-with-resources pattern.");
         }
 
-        Map<String, String> argsMap = new HashMap<>();
-        for (int i = 1; i + 1 < args.length; i += 2) {
-            argsMap.put(args[i], args[i + 1]);
-        }
+        // If you are not using floating license, it is not required to use io.scanbot.sdk.DeviceSession as there is no
+        // need to notify server you are no longer using the license. Alternatively, you can manually call
+        // io.scanbot.sdk.ScanbotSDK.deregisterDevice and io.scanbot.sdk.ScanbotSDK.waitForOnlineLicenseCheckCompletion if you need asynchronous
+        // deregistration behaviour
+        try (DeviceSession deviceSession = new DeviceSession(DeviceSession.DEFAULT_CLOSE_TIMEOUT_MS)) {
+            String filePath = null;
+            String resourcePath = null;
 
-        if (argsMap.containsKey("--resource")) {
-            resourcePath = argsMap.get("--resource");
-        } else if (argsMap.containsKey("--file")) {
-            filePath = argsMap.get("--file");
-        } else {
-            printUsage();
-            return;
-        }
-
-        String savePath = null;
-        if (argsMap.containsKey("--save")) {
-            savePath = argsMap.get("--save");
-        }
-
-        String command = args[0];
-        switch (command.toLowerCase()) {
-            case "detectdocument":
-                detectDocument(filePath, resourcePath);
-                break;
-            case "analyzemultipagedocument":
-                analyzeMultiPageDocument(filePath, resourcePath);
-                break;
-            case "cropandanalyzedocument":
-                cropAndAnalyzeDocument(filePath, resourcePath, savePath);
-                break;
-            default:
+            if (args.length < 1) {
                 printUsage();
+                return;
+            }
+
+            Map<String, String> argsMap = new HashMap<>();
+            for (int i = 1; i + 1 < args.length; i += 2) {
+                argsMap.put(args[i], args[i + 1]);
+            }
+
+            if (argsMap.containsKey("--resource")) {
+                resourcePath = argsMap.get("--resource");
+            } else if (argsMap.containsKey("--file")) {
+                filePath = argsMap.get("--file");
+            } else {
+                printUsage();
+                return;
+            }
+
+            String savePath = null;
+            if (argsMap.containsKey("--save")) {
+                savePath = argsMap.get("--save");
+            }
+
+            String command = args[0];
+            switch (command.toLowerCase()) {
+                case "detectdocument":
+                    detectDocument(filePath, resourcePath);
+                    break;
+                case "analyzemultipagedocument":
+                    analyzeMultiPageDocument(filePath, resourcePath);
+                    break;
+                case "cropandanalyzedocument":
+                    cropAndAnalyzeDocument(filePath, resourcePath, savePath);
+                    break;
+                default:
+                    printUsage();
+            }
         }
     }
 

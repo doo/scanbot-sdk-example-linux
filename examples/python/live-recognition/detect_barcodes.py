@@ -113,19 +113,33 @@ def recognize():
     # Setup and initialize the Scanbot SDK
     print(f"Initializing Scanbot SDK...")
     scanbotsdk.initialize(LICENSE_KEY)
-    print(f"License Status: {scanbotsdk.get_license_status()}")
+    scanbotsdk.wait_for_online_license_check_completion(5000)
 
-    # Setup scanning configuration
-    configuration = scanbotsdk.BarcodeScannerConfiguration(
-        processing_mode=scanbotsdk.ProcessingMode.AUTO,
-        barcode_format_configurations=[
-            scanbotsdk.BarcodeFormatCommonConfiguration(formats=scanbotsdk.BarcodeFormats.common)])
-    if args.use_tensorrt:
-        configuration.accelerator = scanbotsdk.TensorRtAccelerator(engine_path=os.curdir)
+    license_info = scanbotsdk.get_license_info()
+    print(f"License Status: {license_info.status}")
+    is_floating_license = license_info.devices is not None
+    if is_floating_license:
+        print(
+            f"Using floating license with {license_info.devices} devices. Do not forget to call "
+            f"scanbotsdk.deregister_device and scanbotsdk.wait_for_device_deregistration_completion when you no "
+            f"longer need the license or use scanbotsdk.DeviceSession context manager.")
 
-    scanner = scanbotsdk.BarcodeScanner(configuration=configuration)
+    # If you are not using floating license, it is not required to use scanbotsdk.DeviceSession context manager as there is no
+    # need to notify server you are no longer using the license. Alternatively, you can manually call
+    # scanbotsdk.deregister_device and scanbotsdk.wait_for_device_deregistration_completion if you need asynchronous
+    # deregistration behaviour
+    with scanbotsdk.DeviceSession(deregister_timeout_ms=15000):
+        # Setup scanning configuration
+        configuration = scanbotsdk.BarcodeScannerConfiguration(
+            processing_mode=scanbotsdk.ProcessingMode.AUTO,
+            barcode_format_configurations=[
+                scanbotsdk.BarcodeFormatCommonConfiguration(formats=scanbotsdk.BarcodeFormats.common)])
+        if args.use_tensorrt:
+            configuration.accelerator = scanbotsdk.TensorRtAccelerator(engine_path=os.curdir)
 
-    scan_live(scanner, input_device, use_display)
+        scanner = scanbotsdk.BarcodeScanner(configuration=configuration)
+
+        scan_live(scanner, input_device, use_display)
 
 
 if __name__ == '__main__':
