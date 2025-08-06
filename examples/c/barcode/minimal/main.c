@@ -17,7 +17,6 @@ scanbotsdk_error_code_t process_image(scanbotsdk_barcode_scanner_t *scanner, con
     scanbotsdk_barcode_scanner_result_t *result = NULL;
 
     // region create scanbotsdk_image_t from frame
-    bool image_is_live = true;
     scanbotsdk_path_image_load_options_create_with_defaults(&image_load_options);
 
     ec = scanbotsdk_image_create_from_path(path, image_load_options, &image);
