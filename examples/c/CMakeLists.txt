@@ -13,10 +13,4 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 set(SCANBOTSDK_DIR "${CMAKE_CURRENT_BINARY_DIR}/scanbotsdk")
 find_package(ScanbotSDK REQUIRED)
 
-add_library(scanbotsdk SHARED IMPORTED)
-set_target_properties(scanbotsdk PROPERTIES
-    IMPORTED_LOCATION "${ScanbotSDK_LIBS}"
-    INTERFACE_INCLUDE_DIRECTORIES "${ScanbotSDK_INCLUDE_DIRS}"
-)
-
 add_subdirectory(barcode)
