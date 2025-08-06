@@ -1,13 +1,22 @@
 cmake_minimum_required(VERSION 3.10)
 project(scanbotsdk_c_example C)
-
 set(CMAKE_C_STANDARD 99)
 
+# Find or download Scanbot SDK
+if(NOT SCANBOTSDK_VERSION)
+    message(FATAL_ERROR "SCANBOTSDK_VERSION is not set.")
+endif()
+if(NOT SCANBOTSDK_API_TOKEN)
+    message(FATAL_ERROR "SCANBOTSDK_API_TOKEN is not set.")
+endif()
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 set(SCANBOTSDK_DIR "${CMAKE_CURRENT_BINARY_DIR}/scanbotsdk")
-set(SCANBOTSDK_API_TOKEN "<SCANBOTSDK_API_KEY>") # Replace with your actual API key
-set(SCANBOTSDK_VERSION "<SCANBOTSDK_VERSION>") # Replace with the desired version, e.g., "1.0.0"
-include(FindScanbotSDK.cmake)
+find_package(ScanbotSDK REQUIRED)
 
-add_executable(scanbotsdk_c_example main.c)
-target_link_libraries(scanbotsdk_c_example PRIVATE ${ScanbotSDK_LIBS})
-target_include_directories(scanbotsdk_c_example PRIVATE ${ScanbotSDK_INCLUDE_DIRS})
+add_library(scanbotsdk SHARED IMPORTED)
+set_target_properties(scanbotsdk PROPERTIES
+    IMPORTED_LOCATION "${ScanbotSDK_LIBS}"
+    INTERFACE_INCLUDE_DIRECTORIES "${ScanbotSDK_INCLUDE_DIRS}"
+)
+
+add_subdirectory(barcode)
