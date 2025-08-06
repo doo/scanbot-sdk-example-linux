@@ -44,7 +44,7 @@ cmake -DSCANBOTSDK_VERSION=<SCANBOTSDK_VERSION> -DSCANBOTSDK_API_TOKEN=<SCANBOTS
 make
 ```
 
-Replace `SCANBOTSDK_VERSION` and `SCANBOTSDK_API_TOKEN` with the avlues you received from us.
+Replace `SCANBOTSDK_VERSION` and `SCANBOTSDK_API_TOKEN` with the values you received from us.
 
 # Running the Examples
 See the `README.md` files in the individual example directories for instructions on how to run them.

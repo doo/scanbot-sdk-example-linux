@@ -39,3 +39,9 @@ find_path(ScanbotSDK_INCLUDE_DIRS
 
 find_package_handle_standard_args(ScanbotSDK
   REQUIRED_VARS ScanbotSDK_LIBS ScanbotSDK_INCLUDE_DIRS)
+
+add_library(scanbotsdk SHARED IMPORTED)
+set_target_properties(scanbotsdk PROPERTIES
+        IMPORTED_LOCATION "${ScanbotSDK_LIBS}"
+        INTERFACE_INCLUDE_DIRECTORIES "${ScanbotSDK_INCLUDE_DIRS}"
+)
