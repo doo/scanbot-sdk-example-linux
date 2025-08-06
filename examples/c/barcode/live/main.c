@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <limits.h>
 #include <ScanbotSDK.h>
 
 const char *error_message(scanbotsdk_error_code_t ec) {
@@ -123,10 +125,11 @@ scanbotsdk_error_code_t process_frame(scanbotsdk_barcode_scanner_t *scanner, fra
     return ec;
 }
 
-scanbotsdk_error_code_t create_barcode_scanner(scanbotsdk_barcode_scanner_t **barcode_scanner) {
+scanbotsdk_error_code_t create_barcode_scanner(bool use_tensor_rt, scanbotsdk_barcode_scanner_t **barcode_scanner) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
 
     scanbotsdk_barcode_format_common_configuration_t *common_format_configuration = NULL;
+    scanbotsdk_accelerator_t* accelerator = NULL;
     scanbotsdk_barcode_scanner_configuration_t *barcode_scanner_configuration = NULL;
 
     // region create barcode scanner configuration
@@ -168,6 +171,19 @@ scanbotsdk_error_code_t create_barcode_scanner(scanbotsdk_barcode_scanner_t **ba
     if (ec != SCANBOTSDK_OK) {
         goto exit;
     }
+
+    if (use_tensor_rt) {
+        scanbotsdk_tensor_rt_accelerator_t *tensor_rt_accelerator = NULL;
+        ec = scanbotsdk_tensor_rt_accelerator_create("./", &tensor_rt_accelerator);
+        if (ec != SCANBOTSDK_OK) {
+            goto exit;
+        }
+        scanbotsdk_tensor_rt_accelerator_as_scanbotsdk_accelerator(tensor_rt_accelerator, &accelerator);
+        ec = scanbotsdk_barcode_scanner_configuration_set_accelerator(barcode_scanner_configuration, accelerator);
+        if (ec != SCANBOTSDK_OK) {
+            goto exit;
+        }
+    }
     // endregion
 
     // region create barcode scanner
@@ -178,8 +194,9 @@ scanbotsdk_error_code_t create_barcode_scanner(scanbotsdk_barcode_scanner_t **ba
     // endregion
 
     exit:
-    scanbotsdk_barcode_format_common_configuration_free(common_format_configuration);
     scanbotsdk_barcode_scanner_configuration_free(barcode_scanner_configuration);
+    scanbotsdk_accelerator_free(accelerator);
+    scanbotsdk_barcode_format_common_configuration_free(common_format_configuration);
     return ec;
 }
 
@@ -187,6 +204,13 @@ int main(int argc, char *argv[]) {
     if (argc < 3) {
         fprintf(stderr, "Usage: %s <license_key> <path_to_camera_mock_image>\n", argv[0]);
         return 1;
+    }
+
+    bool use_tensor_rt = false;
+    if (argc > 3) {
+        if (strcmp(argv[3], "--use-tensor-rt") == 0) {
+            use_tensor_rt = true;
+        }
     }
 
     const int initialization_timeout_ms = 15000;
@@ -218,7 +242,7 @@ int main(int argc, char *argv[]) {
     // endregion
 
     // region create barcode scanner
-    ec = create_barcode_scanner(&barcode_scanner);
+    ec = create_barcode_scanner(use_tensor_rt, &barcode_scanner);
     if (ec != SCANBOTSDK_OK) {
         fprintf(stderr, "Failed to create barcode scanner: %d: %s\n", ec, error_message(ec));
         goto exit;
