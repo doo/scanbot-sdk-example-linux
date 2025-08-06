@@ -10,7 +10,6 @@ const char *error_message(scanbotsdk_error_code_t ec) {
     return scanbotsdk_error_message();
 }
 
-
 struct frame {
     int width;
     int height;
@@ -29,7 +28,7 @@ frame *next_frame(mock_camera *camera) {
     return &camera->mock_frame;
 }
 
-mock_camera *init_camera(const char *path) {
+scanbotsdk_error_code_t init_camera(const char *path, mock_camera **camera_out) {
     scanbotsdk_image_t *image = NULL;
     scanbotsdk_path_image_load_options_t *load_options = NULL;
     scanbotsdk_path_image_load_options_create_with_defaults(&load_options);
@@ -37,14 +36,14 @@ mock_camera *init_camera(const char *path) {
     scanbotsdk_path_image_load_options_free(load_options);
     if (ec != SCANBOTSDK_OK) {
         fprintf(stderr, "Failed to create image from path: %d: %s\n", ec, error_message(ec));
-        return NULL;
+        return ec;
     }
     scanbotsdk_raw_image_t *raw_image = NULL;
     ec = scanbotsdk_image_to_raw_image(image, &raw_image);
     scanbotsdk_image_free(image);
     if (ec != SCANBOTSDK_OK) {
         fprintf(stderr, "Failed to obtain raw image: %d: %s\n", ec, error_message(ec));
-        return NULL;
+        return ec;
     }
     frame f;
 
@@ -63,7 +62,8 @@ mock_camera *init_camera(const char *path) {
     scanbotsdk_raw_image_free(raw_image);
     mock_camera *camera = malloc(sizeof(mock_camera));
     camera->mock_frame = f;
-    return camera;
+    *camera_out = camera;
+    return SCANBOTSDK_OK;
 }
 
 void free_camera(mock_camera *camera) {
@@ -74,37 +74,64 @@ void free_camera(mock_camera *camera) {
     free(camera);
 }
 
-int main(int argc, char *argv[]) {
-    if (argc < 3) {
-        fprintf(stderr, "Usage: %s <license_key> <path_to_camera_mock_image>\n", argv[0]);
-        return 1;
-    }
+scanbotsdk_error_code_t process_frame(scanbotsdk_barcode_scanner_t *scanner, frame *frame, size_t frame_number) {
+    scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
+    scanbotsdk_raw_image_load_options_t *image_load_options = NULL;
+    scanbotsdk_image_t *image = NULL;
+    scanbotsdk_barcode_scanner_result_t *result = NULL;
 
-    const char *license_key = argv[1];
-    const char *mock_frame_path = argv[2];
+    // region create scanbotsdk_image_t from frame
+    bool image_is_live = true;
+    scanbotsdk_raw_image_load_options_create_with_defaults(image_is_live, &image_load_options);
 
-    // region Initialize Scanbot SDK
-    scanbotsdk_init_params_t params;
-    params.license_key = license_key;
-    params.writeable_path = ".";
-
-    scanbotsdk_error_code_t ec;
-    ec = scanbotsdk_initialize(&params);
+    ec = scanbotsdk_image_create_from_raw_image(
+            frame->data, frame->width, frame->height, frame->channels, frame->stride, image_load_options, &image);
     if (ec != SCANBOTSDK_OK) {
-        fprintf(stderr, "Failed to initialize Scanbot SDK: %d: %s\n", ec, error_message(ec));
-        return 1;
+        goto exit;
     }
     // endregion
 
-    // region Create Barcode Scanner Configuration
-    scanbotsdk_barcode_format_common_configuration_t *common_format_configuration = NULL;
-    ec = scanbotsdk_barcode_format_common_configuration_create_with_defaults(
-            &common_format_configuration);
+    // region run barcode scanner on the image
+    ec = scanbotsdk_barcode_scanner_run(scanner, image, &result);
+
     if (ec != SCANBOTSDK_OK) {
-        fprintf(stderr, "Failed to create common format configuration: %d: %s\n", ec,
-                error_message(ec));
-        return 1;
+        goto exit;
     }
+    bool success = false;
+    scanbotsdk_barcode_scanner_result_get_success(result, &success);
+    if (!success) {
+        fprintf(stdout, "No barcodes found in frame %zu\n", frame_number);
+    } else {
+        size_t barcodeCount = 0;
+        scanbotsdk_barcode_scanner_result_get_barcodes_size(result, &barcodeCount);
+        fprintf(stdout, "%zu barcodes found in frame %zu\n", barcodeCount, frame_number);
+        scanbotsdk_barcode_item_t **barcodes = malloc(barcodeCount * sizeof(scanbotsdk_barcode_item_t *));
+        scanbotsdk_barcode_scanner_result_get_barcodes(result, barcodes, barcodeCount);
+        for (size_t i = 0; i < barcodeCount; i++) {
+            const char *text = NULL;
+            scanbotsdk_barcode_item_get_text(barcodes[i], &text);
+            fprintf(stdout, "Barcode %zu: %s\n", i, text);
+        }
+        free(barcodes);
+    }
+    // endregion
+
+    exit:
+    scanbotsdk_raw_image_load_options_free(image_load_options);
+    scanbotsdk_image_free(image);
+    scanbotsdk_barcode_scanner_result_free(result);
+    return ec;
+}
+
+scanbotsdk_error_code_t create_barcode_scanner(scanbotsdk_barcode_scanner_t **barcode_scanner) {
+    scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
+
+    scanbotsdk_barcode_format_common_configuration_t *common_format_configuration = NULL;
+    scanbotsdk_barcode_scanner_configuration_t *barcode_scanner_configuration = NULL;
+
+    // region create barcode scanner configuration
+    scanbotsdk_barcode_format_common_configuration_create_with_defaults(
+            &common_format_configuration);
     scanbotsdk_barcode_format_t common_formats[] = {
             SCANBOTSDK_BARCODE_FORMAT_AZTEC,
             SCANBOTSDK_BARCODE_FORMAT_CODABAR,
@@ -126,112 +153,104 @@ int main(int argc, char *argv[]) {
     ec = scanbotsdk_barcode_format_common_configuration_set_formats(common_format_configuration, common_formats,
                                                                     sizeof(common_formats) / sizeof(common_formats[0]));
     if (ec != SCANBOTSDK_OK) {
-        scanbotsdk_barcode_format_common_configuration_free(common_format_configuration);
-        fprintf(stderr, "Failed to set formats in common format configuration: %d: %s\n", ec,
-                error_message(ec));
-        return 1;
+        goto exit;
     }
 
     scanbotsdk_barcode_format_configuration_base_t *common_format_configuration_as_base = NULL;
     scanbotsdk_barcode_format_common_configuration_as_scanbotsdk_barcode_format_configuration_base(
             common_format_configuration, &common_format_configuration_as_base);
 
-    scanbotsdk_barcode_scanner_configuration_t *barcode_scanner_configuration;
-    ec = scanbotsdk_barcode_scanner_configuration_create_with_defaults(
-            &barcode_scanner_configuration);
 
-    if (ec != SCANBOTSDK_OK) {
-        scanbotsdk_barcode_format_configuration_base_free(common_format_configuration_as_base);
-        fprintf(stderr, "Failed to create barcode scanner configuration: %d: %s\n", ec,
-                error_message(ec));
-        return 1;
-    }
+    scanbotsdk_barcode_scanner_configuration_create_with_defaults(
+            &barcode_scanner_configuration);
     ec = scanbotsdk_barcode_scanner_configuration_set_barcode_format_configurations(
             barcode_scanner_configuration, &common_format_configuration_as_base, 1);
-    scanbotsdk_barcode_format_configuration_base_free(common_format_configuration_as_base);
     if (ec != SCANBOTSDK_OK) {
-        scanbotsdk_barcode_scanner_configuration_free(barcode_scanner_configuration);
-        fprintf(stderr, "Failed to set barcode format configurations: %d: %s\n", ec,
-                error_message(ec));
-        return 1;
+        goto exit;
     }
     // endregion
 
-    // region Create Barcode Scanner
-    scanbotsdk_barcode_scanner_t *barcode_scanner = NULL;
-    ec = scanbotsdk_barcode_scanner_create(barcode_scanner_configuration, &barcode_scanner);
-    scanbotsdk_barcode_scanner_configuration_free(barcode_scanner_configuration);
+    // region create barcode scanner
+    ec = scanbotsdk_barcode_scanner_create(barcode_scanner_configuration, barcode_scanner);
     if (ec != SCANBOTSDK_OK) {
-        fprintf(stderr, "Failed to create barcode scanner: %d: %s\n", ec,
-                error_message(ec));
-        return 1;
+        goto exit;
     }
     // endregion
+
+    exit:
+    scanbotsdk_barcode_format_common_configuration_free(common_format_configuration);
+    scanbotsdk_barcode_scanner_configuration_free(barcode_scanner_configuration);
+    return ec;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc < 3) {
+        fprintf(stderr, "Usage: %s <license_key> <path_to_camera_mock_image>\n", argv[0]);
+        return 1;
+    }
+
+    const int initialization_timeout_ms = 15000;
+    const int deregister_device_timeout_ms = 15000;
+
+    scanbotsdk_barcode_scanner_t *barcode_scanner = NULL;
+    mock_camera *camera = NULL;
+
+    const char *license_key = argv[1];
+    const char *mock_frame_path = argv[2];
+
+    // region initialize Scanbot SDK
+    scanbotsdk_init_params_t params;
+    params.license_key = license_key;
+    params.writeable_path = ".";
+
+    scanbotsdk_error_code_t ec;
+    ec = scanbotsdk_initialize(&params);
+    if (ec != SCANBOTSDK_OK) {
+        fprintf(stderr, "Failed to initialize Scanbot SDK: %d: %s\n", ec, error_message(ec));
+        goto exit;
+    }
+    ec = scanbotsdk_wait_for_online_license_check_completion(initialization_timeout_ms);
+    if (ec != SCANBOTSDK_OK) {
+        fprintf(stderr, "Failed to wait for online license check completion: %d: %s\n", ec,
+                error_message(ec));
+        goto exit;
+    }
+    // endregion
+
+    ec = create_barcode_scanner(&barcode_scanner);
+    if (ec != SCANBOTSDK_OK) {
+        fprintf(stderr, "Failed to create barcode scanner: %d: %s\n", ec, error_message(ec));
+        goto exit;
+    }
 
     // region create mock camera that always returns the same frame
-    mock_camera *camera = init_camera(mock_frame_path);
-    if (!camera) {
-        scanbotsdk_barcode_scanner_free(barcode_scanner);
-        fprintf(stderr, "Failed to initialize mock camera with path: %s\n", mock_frame_path);
-        return 1;
+    ec = init_camera(mock_frame_path, &camera);
+    if (ec != SCANBOTSDK_OK) {
+        fprintf(stderr, "Failed to initialize mock camera with image: %s\n", mock_frame_path);
+        goto exit;
     }
     // endregion
 
-    for (size_t frameNumber = 0; frameNumber < 10; frameNumber++) {
-        fprintf(stdout, "Processing frame %zu\n", frameNumber);
+    // region frame processing loop
+    for (size_t frame_number = 0; frame_number < 10; frame_number++) {
+        fprintf(stdout, "Processing frame %zu\n", frame_number);
 
-        // region create scanbotsdk_image_t from mock camera frame
         frame *frame = next_frame(camera);
-        bool imageIsLive = true;
-        scanbotsdk_raw_image_load_options_t *load_options = NULL;
-        scanbotsdk_raw_image_load_options_create_with_defaults(imageIsLive, &load_options);
-        scanbotsdk_image_t *image = NULL;
-        ec = scanbotsdk_image_create_from_raw_image(
-                frame->data, frame->width, frame->height, frame->channels, frame->stride, load_options, &image);
-        scanbotsdk_raw_image_load_options_free(load_options);
+        ec = process_frame(barcode_scanner, frame, frame_number);
         if (ec != SCANBOTSDK_OK) {
-            scanbotsdk_barcode_scanner_free(barcode_scanner);
-            free_camera(camera);
-            fprintf(stderr, "Failed to create image from raw data: %d: %s\n", ec,
-                    error_message(ec));
-            return 1;
+            fprintf(stderr, "Failed to process frame %zu: %d: %s\n", frame_number, ec, error_message(ec));
+            goto exit;
         }
-        // endregion
-
-        // region run barcode scanner on the image
-        scanbotsdk_barcode_scanner_result_t *result = NULL;
-        ec = scanbotsdk_barcode_scanner_run(barcode_scanner, image, &result);
-        scanbotsdk_image_free(image);
-        if (ec != SCANBOTSDK_OK) {
-            scanbotsdk_barcode_scanner_free(barcode_scanner);
-            free_camera(camera);
-            fprintf(stderr, "Failed to run barcode scanner: %d: %s\n", ec,
-                    error_message(ec));
-            return 1;
-        }
-        bool success = false;
-        scanbotsdk_barcode_scanner_result_get_success(result, &success);
-        if (!success) {
-            fprintf(stdout, "No barcodes found in frame %zu\n", frameNumber);
-        } else {
-            size_t barcodeCount = 0;
-            scanbotsdk_barcode_scanner_result_get_barcodes_size(result, &barcodeCount);
-            fprintf(stdout, "%zu barcodes found in frame %zu\n", barcodeCount, frameNumber);
-            scanbotsdk_barcode_item_t **barcodes = malloc(barcodeCount * sizeof(scanbotsdk_barcode_item_t *));
-            scanbotsdk_barcode_scanner_result_get_barcodes(result, barcodes, barcodeCount);
-            for (size_t i = 0; i < barcodeCount; i++) {
-                const char *text = NULL;
-                scanbotsdk_barcode_item_get_text(barcodes[i], &text);
-                fprintf(stdout, "Barcode %zu: %s\n", i, text);
-            }
-            free(barcodes);
-        }
-        scanbotsdk_barcode_scanner_result_free(result);
-        // endregion
     }
+    // endregion
+
+    exit:
     scanbotsdk_barcode_scanner_free(barcode_scanner);
     free_camera(camera);
+    // If you are not using floating license, it is not necessary to call device deregistration.
+    scanbotsdk_deregister_device();
+    scanbotsdk_wait_for_device_deregistration_completion(deregister_device_timeout_ms);
 
-    return 0;
+    return (ec == SCANBOTSDK_OK) ? 0 : 1;
 }
 
