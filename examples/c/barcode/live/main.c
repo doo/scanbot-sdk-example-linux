@@ -217,11 +217,13 @@ int main(int argc, char *argv[]) {
     }
     // endregion
 
+    // region create barcode scanner
     ec = create_barcode_scanner(&barcode_scanner);
     if (ec != SCANBOTSDK_OK) {
         fprintf(stderr, "Failed to create barcode scanner: %d: %s\n", ec, error_message(ec));
         goto exit;
     }
+    // endregion
 
     // region create mock camera that always returns the same frame
     ec = init_camera(mock_frame_path, &camera);
