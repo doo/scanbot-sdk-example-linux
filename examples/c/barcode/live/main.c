@@ -83,6 +83,13 @@ scanbotsdk_error_code_t process_frame(scanbotsdk_barcode_scanner_t *scanner, fra
     scanbotsdk_barcode_scanner_result_t *result = NULL;
 
     // region create scanbotsdk_image_t from frame
+
+    // Setting image_is_live lets the scanner know that we're running in live mode.
+    // In this mode we maintain the highest FPS because we spread the work of scanning barcodes across multiple frames.
+    // If you set image_is_live = false, the scanner will run in single-shot mode which is much slower,
+    // but has a much higher probability of finding all barcodes in the input image.
+    // As an alternative, you can explicitly set the scanner mode,
+    // by creating it with e.g. SCANBOTSDK_PROCESSING_MODE_LIVE for live mode instead of SCANBOTSDK_PROCESSING_MODE_AUTO.
     bool image_is_live = true;
     scanbotsdk_raw_image_load_options_create_with_defaults(image_is_live, &image_load_options);
 
@@ -129,7 +136,7 @@ scanbotsdk_error_code_t create_barcode_scanner(bool use_tensor_rt, scanbotsdk_ba
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
 
     scanbotsdk_barcode_format_common_configuration_t *common_format_configuration = NULL;
-    scanbotsdk_accelerator_t* accelerator = NULL;
+    scanbotsdk_accelerator_t *accelerator = NULL;
     scanbotsdk_barcode_scanner_configuration_t *barcode_scanner_configuration = NULL;
 
     // region create barcode scanner configuration
@@ -168,6 +175,12 @@ scanbotsdk_error_code_t create_barcode_scanner(bool use_tensor_rt, scanbotsdk_ba
             &barcode_scanner_configuration);
     ec = scanbotsdk_barcode_scanner_configuration_set_barcode_format_configurations(
             barcode_scanner_configuration, &common_format_configuration_as_base, 1);
+    if (ec != SCANBOTSDK_OK) {
+        goto exit;
+    }
+
+    ec = scanbotsdk_barcode_scanner_configuration_set_processing_mode(
+            barcode_scanner_configuration, SCANBOTSDK_PROCESSING_MODE_AUTO);
     if (ec != SCANBOTSDK_OK) {
         goto exit;
     }
