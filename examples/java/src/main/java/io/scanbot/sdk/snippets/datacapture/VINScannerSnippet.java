@@ -1,19 +1,38 @@
 package io.scanbot.sdk.snippets.datacapture;
 
 import io.scanbot.sdk.vin.*;
+import io.scanbot.sdk.ScanbotSDK;
 import io.scanbot.sdk.image.ImageRef;
+import io.scanbot.sdk.licensing.LicenseStatus;
+import io.scanbot.sdk.textpattern.TextPatternScannerResult;
 
 public class VINScannerSnippet {
     public static void run(ImageRef image) throws Exception {
+        // Make sure you have a valid license
+        if(ScanbotSDK.getLicenseInfo().getStatus() != LicenseStatus.OKAY)
+            return;
+
+        VinScannerConfiguration config = new VinScannerConfiguration();
+        config.setExtractVINFromBarcode(true);
+        // Configure other parameters as needed.
+
         try(
-            var scanner = new VinScanner(new VinScannerConfiguration())
+            VinScanner scanner = new VinScanner(config)
         ) {
-            var result = scanner.run(image);
+            VinScannerResult result = scanner.run(image);
             printResult(result);
         }
     }
 
     private static void printResult(VinScannerResult result) {
+        TextPatternScannerResult textResult = result.getTextResult();
+        if (textResult != null) {
+            System.out.println("Text: " + textResult.getRawText());
+        }
 
+        VinBarcodeResult barcodeResult = result.getBarcodeResult();
+        if (barcodeResult != null) {
+            System.out.println("Extracted VIN: " + barcodeResult.getExtractedVIN());
+        }
     }
 }

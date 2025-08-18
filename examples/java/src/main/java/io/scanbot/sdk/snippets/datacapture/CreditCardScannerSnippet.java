@@ -1,14 +1,26 @@
 package io.scanbot.sdk.snippets.datacapture;
 
+import io.scanbot.sdk.ScanbotSDK;
 import io.scanbot.sdk.creditcard.*;
 import io.scanbot.sdk.image.ImageRef;
+import io.scanbot.sdk.licensing.LicenseStatus;
+import io.scanbot.sdk.utils.Utils;
 
 public class CreditCardScannerSnippet {
      public static void run(ImageRef image) throws Exception {
+        // Make sure you have a valid license
+        if(ScanbotSDK.getLicenseInfo().getStatus() != LicenseStatus.OKAY)
+            return;
+
+        CreditCardScannerConfiguration config = new CreditCardScannerConfiguration();
+        config.setRequireCardholderName(false);
+        config.setRequireExpiryDate(true);
+        // Configure other parameters as needed.
+
         try(
-            var scanner = new CreditCardScanner(new CreditCardScannerConfiguration())
+            CreditCardScanner scanner = new CreditCardScanner(config)
         ) {
-            var result = scanner.run(image);
+            CreditCardScanningResult result = scanner.run(image);
             printResult(result);
         }
     }
@@ -18,17 +30,6 @@ public class CreditCardScannerSnippet {
         System.out.println("  Detection status: " + result.getDetectionStatus());
         System.out.println("  Scanning status: " + result.getScanningStatus());
 
-        var doc = result.getCreditCard();
-        if (doc != null) {
-            System.out.println("  Generic Document:");
-            System.out.println("    Type: " + doc.getType());
-            System.out.println("    Confidence: " + doc.getConfidence() + " (weight: " + doc.getConfidenceWeight() + ")");
-        }
-
-        var quad = result.getQuad();
-        var quadNormalized = result.getQuadNormalized();
-
-        System.out.println("  Quad points: " + (quad != null ? quad.size() : 0));
-        System.out.println("  Normalized quad points: " + (quadNormalized != null ? quadNormalized.size() : 0));
+        Utils.printGenericDocument(result.getCreditCard());
     }
 }

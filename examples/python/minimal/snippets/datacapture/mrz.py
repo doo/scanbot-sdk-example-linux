@@ -1,11 +1,26 @@
-import scanbotsdk
 
-def scan_mrz(image: scanbotsdk.ImageRef):
-    configuration = scanbotsdk.MrzScannerConfiguration()
-    scanner = scanbotsdk.MrzScanner(configuration=configuration)
+from scanbotsdk import *
 
-    result = scanner.run(image=image)
+from utils import print_generic_document
 
-    print(f"MRZ Scanner Result:")
-    print(f"  Success:  {result.success}")
-    print(f"  Raw MRZ:   {result.raw_mrz}")
+def scan_mrz(image: ImageRef):
+    # Make sure you have a valid license
+    license_info = get_license_info()
+    if license_info.status != LicenseStatus.OKAY:
+        return
+    
+    config = MrzScannerConfiguration(
+        enable_detection=True,
+        incomplete_result_handling=MrzIncompleteResultHandling.ACCEPT,
+        frame_accumulation_configuration = AccumulatedResultsVerifierConfiguration(
+            minimum_number_of_required_frames_with_equal_scanning_result=1    
+        )
+    )
+    # Configure other parameters as needed.
+    
+    scanner = MrzScanner(configuration=config)
+    result: MrzScannerResult = scanner.run(image=image)
+
+    print(f" Success:  {result.success}")
+    print(f" Raw MRZ:  {result.raw_mrz}")
+    print_generic_document(result.document)

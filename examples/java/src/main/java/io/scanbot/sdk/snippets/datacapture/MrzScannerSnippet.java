@@ -1,14 +1,30 @@
 package io.scanbot.sdk.snippets.datacapture;
 
 import io.scanbot.sdk.mrz.*;
+import io.scanbot.sdk.utils.Utils;
+import io.scanbot.sdk.ScanbotSDK;
+import io.scanbot.sdk.frameaccumulation.AccumulatedResultsVerifierConfiguration;
 import io.scanbot.sdk.image.ImageRef;
+import io.scanbot.sdk.licensing.LicenseStatus;
 
 public class MrzScannerSnippet {
     public static void run(ImageRef image) throws Exception {
+        // Make sure you have a valid license
+        if(ScanbotSDK.getLicenseInfo().getStatus() != LicenseStatus.OKAY)
+            return;
+
+        MrzScannerConfiguration config = new MrzScannerConfiguration();
+        AccumulatedResultsVerifierConfiguration accumulated_config = new AccumulatedResultsVerifierConfiguration();
+        accumulated_config.setMinimumNumberOfRequiredFramesWithEqualScanningResult(1);
+
+        
+        config.setFrameAccumulationConfiguration(accumulated_config);
+        // Configure other parameters as needed.
+
         try(
-            var scanner = new MrzScanner(new MrzScannerConfiguration())
+            MrzScanner scanner = new MrzScanner(config)
         ) {
-            var result = scanner.run(image);
+            MrzScannerResult result = scanner.run(image);
             printResult(result);
         }
     }
@@ -18,11 +34,6 @@ public class MrzScannerSnippet {
         System.out.println("  Success: " + result.getSuccess());
         System.out.println("  Raw MRZ: " + result.getRawMRZ());
 
-        var doc = result.getDocument();
-        if (doc != null) {
-            System.out.println("  Generic Document:");
-            System.out.println("    Type: " + doc.getType());
-            System.out.println("    Confidence: " + doc.getConfidence() + " (weight: " + doc.getConfidenceWeight() + ")");
-        }
+        Utils.printGenericDocument(result.getDocument());
     }
 }
