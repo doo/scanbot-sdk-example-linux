@@ -47,17 +47,17 @@ int main(int argc, char *argv[]) {
     params.writeable_path = ".";
 
     scanbotsdk_error_code_t ec = scanbotsdk_initialize(&params);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "initialize: %d: %s\n", ec, error_message(ec)); return 1; }
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "initialize: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     ec = scanbotsdk_wait_for_online_license_check_completion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "license_wait: %d: %s\n", ec, error_message(ec)); goto cleanup; }
-
-     if (strcmp(category, "scan") == 0) {
-        if (!file_path) { print_usage(argv[0]); return 1; }
+    
+    if (strcmp(category, "scan") == 0) {
+        if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
 
         scanbotsdk_image_t *image = NULL;
         ec = load_image_from_path(file_path, &image);
-        if (ec != SCANBOTSDK_OK) return 1;
+        if (ec != SCANBOTSDK_OK) goto cleanup;
 
         if      (strcmp(command, "barcode")            == 0) ec = detect_barcode(image);
         else if (strcmp(command, "document")           == 0) ec = detect_document(image);
@@ -74,41 +74,41 @@ int main(int argc, char *argv[]) {
         scanbotsdk_image_free(image);
     }
     else if (strcmp(category, "classify") == 0) {
-        if (!file_path) { print_usage(argv[0]); return 1; }
+        if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
 
         scanbotsdk_image_t *image = NULL;
         ec = load_image_from_path(file_path, &image);
-        if (ec != SCANBOTSDK_OK) return 1;
+        if (ec != SCANBOTSDK_OK) goto cleanup;
 
-        if      (strcmp(command, "document")        == 0) ec = classify_document(image);
+        if      (strcmp(command, "document") == 0) ec = classify_document(image);
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
+
+        scanbotsdk_image_free(image);
     }
     else if (strcmp(category, "analyse") == 0) {
-        if (!file_path) { print_usage(argv[0]); return 1; }
+        if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
 
-        if      (strcmp(command, "analyse_multi_page") == 0) ec = analyse_multi_page(file_path);
+        if (strcmp(command, "analyse_multi_page") == 0) {
+            ec = analyse_multi_page(file_path);
+        }
         else if (strcmp(command, "crop_analyze") == 0) {
-            scanbotsdk_image_t *img = NULL;
-            ec = load_image_from_path(file_path, &img);
-            if (ec == SCANBOTSDK_OK) {
-                ec = crop_and_analyse(img, save_path);
-                scanbotsdk_image_free(img);
-            }
+            scanbotsdk_image_t *image = NULL;
+            ec = load_image_from_path(file_path, &image);
+            if (ec != SCANBOTSDK_OK) goto cleanup;
+
+            ec = crop_and_analyse(image, save_path);
+            scanbotsdk_image_free(image);
         }
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
     }
     else if (strcmp(category, "parse") == 0) {
-        if (!text_input) { print_usage(argv[0]); return 1; }
+        if (!text_input) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
 
-        if      (strcmp(command, "mrz")        == 0) ec = parse_mrz(text_input);
-        else if (strcmp(command, "barcode_doc")== 0) ec = parse_barcode_document(text_input);
+        if      (strcmp(command, "mrz")         == 0) ec = parse_mrz(text_input);
+        else if (strcmp(command, "barcode_doc") == 0) ec = parse_barcode_document(text_input);
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
     }
-    else {
-        print_usage(argv[0]);
-        return 1;
-    }
-
+    else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
 
 cleanup:
     scanbotsdk_deregister_device();
