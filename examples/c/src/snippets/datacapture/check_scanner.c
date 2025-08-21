@@ -39,8 +39,6 @@ scanbotsdk_error_code_t detect_check(scanbotsdk_image_t *image) {
     scanbotsdk_check_scanning_result_t *result = NULL;
 
     ec = scanbotsdk_check_scanner_configuration_create_with_defaults(&config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
-
     ec = scanbotsdk_check_scanner_configuration_set_document_detection_mode(config, SCANBOTSDK_CHECK_DOCUMENT_DETECTION_MODE_DETECT_AND_CROP_DOCUMENT);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "set_document_detection_mode: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // Configure other parameters as needed.

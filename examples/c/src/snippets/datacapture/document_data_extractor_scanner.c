@@ -29,7 +29,6 @@ scanbotsdk_error_code_t extract_document_data(scanbotsdk_image_t *image) {
     scanbotsdk_document_data_extraction_result_t *result = NULL;
 
     ec = scanbotsdk_document_data_extractor_configuration_create_with_defaults(&config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // Configure other parameters as needed.
 
     ec = scanbotsdk_document_data_extractor_create(config, &extractor);

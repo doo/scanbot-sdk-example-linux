@@ -15,13 +15,11 @@ void print_analyzer_result(scanbotsdk_document_quality_analyzer_result_t *result
 
     printf("Document detection: %s\n", document_found ? "Found" : "Not found");
 
-    if (quality &&
-        *quality >= SCANBOTSDK_DOCUMENT_QUALITY_VERY_POOR &&
-        *quality <= SCANBOTSDK_DOCUMENT_QUALITY_EXCELLENT)
+    if (!quality)
     {
         printf("Document quality: %s\n", quality_str[*quality]);
     } else {
-        printf("Document quality: Unknown\n");
+        printf("No document found.\n");
     }
 }
 
@@ -65,8 +63,6 @@ scanbotsdk_error_code_t analyse_multi_page(char* path) {
 
     // region Setup analyzer
     ec = scanbotsdk_document_quality_analyzer_configuration_create_with_defaults(&config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
-
     ec = scanbotsdk_document_quality_analyzer_create(config, &analyzer);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "analyzer_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // endregion

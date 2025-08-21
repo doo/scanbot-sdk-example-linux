@@ -4,7 +4,7 @@
 #include <snippets/datacapture/mrz_parser.h>
 #include <utils/utils.h>
 
-scanbotsdk_error_code_t parse_mrz(char* text) {
+scanbotsdk_error_code_t parse_mrz(const char* text) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
 
     scanbotsdk_mrz_parser_t* parser = NULL;
@@ -14,7 +14,6 @@ scanbotsdk_error_code_t parse_mrz(char* text) {
     bool status;
 
     ec = scanbotsdk_mrz_parser_configuration_create_with_defaults(&config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "create_config: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // Configure other parameters as needed.
     
     ec = scanbotsdk_mrz_parser_create(config, &parser);
@@ -34,8 +33,9 @@ scanbotsdk_error_code_t parse_mrz(char* text) {
     }
 
 cleanup:
-    scanbotsdk_mrz_parser_free(parser);
     scanbotsdk_mrz_parser_configuration_free(config);
+    scanbotsdk_mrz_parser_free(parser);
+    scanbotsdk_mrz_scanner_result_free(result);
     return ec;
 }
 

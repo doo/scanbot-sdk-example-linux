@@ -8,8 +8,7 @@ scanbotsdk_error_code_t print_barcodes_result(scanbotsdk_barcode_scanner_result_
     scanbotsdk_error_code_t ec;
     bool success = false; 
 
-    ec = scanbotsdk_barcode_scanner_result_get_success(result, &success);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_success: %d: %s\n", ec, error_message(ec)); return ec; }
+    scanbotsdk_barcode_scanner_result_get_success(result, &success);
 
     if (!success) return fprintf(stdout, "No barcodes found.\n"), SCANBOTSDK_OK;
 
@@ -19,7 +18,7 @@ scanbotsdk_error_code_t print_barcodes_result(scanbotsdk_barcode_scanner_result_
 
     scanbotsdk_barcode_item_t **barcodes = calloc(count, sizeof(*barcodes));
     ec = scanbotsdk_barcode_scanner_result_get_barcodes(result, barcodes, count);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_barcodes: %d: %s\n", ec, error_message(ec)); free(barcodes);  goto cleanup; }
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_barcodes: %d: %s\n", ec, error_message(ec));  goto cleanup; }
 
     for (size_t i = 0; i < count; ++i) {
         const char *text = NULL;
@@ -48,7 +47,6 @@ scanbotsdk_error_code_t detect_barcode(scanbotsdk_image_t *image) {
 
     // region create and run barcode scanner
     ec = scanbotsdk_barcode_scanner_configuration_create_with_defaults(&config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // Configure other parameters as needed.
 
     ec = scanbotsdk_barcode_scanner_create(config, &scanner);

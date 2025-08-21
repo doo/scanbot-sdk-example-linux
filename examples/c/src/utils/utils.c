@@ -5,23 +5,22 @@
 scanbotsdk_error_code_t load_image_from_path(const char *path, scanbotsdk_image_t **out_image) {
     scanbotsdk_path_image_load_options_t *load_options = NULL;
     scanbotsdk_error_code_t ec = scanbotsdk_path_image_load_options_create_with_defaults(&load_options);
-    if (ec != SCANBOTSDK_OK) return ec;
 
     ec = scanbotsdk_image_create_from_path(path, load_options, out_image);
     scanbotsdk_path_image_load_options_free(load_options);
-
+    
     return ec;
 }
 
 scanbotsdk_error_code_t print_generic_document_fields(scanbotsdk_generic_document_t *doc) {
     size_t fields_count = 0;
     scanbotsdk_error_code_t ec = scanbotsdk_generic_document_get_fields_size(doc, &fields_count);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_fields_size: %d\n", ec); return ec; }
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_fields_size: %d\n", ec); goto cleanup; }
 
     printf("Fields count: %zu\n", fields_count);
 
     scanbotsdk_field_t **fields = calloc(fields_count, sizeof(*fields));
-    if (!fields) { fprintf(stderr, "alloc fields failed\n"); return SCANBOTSDK_ERROR_UNKNOWN_ERROR; }
+    if (!fields) { fprintf(stderr, "alloc fields failed\n"); ec = SCANBOTSDK_ERROR_OUT_OF_MEMORY; goto cleanup; }
 
     ec = scanbotsdk_generic_document_get_fields(doc, fields, fields_count);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_fields: %d\n", ec); goto cleanup; }
@@ -33,16 +32,14 @@ scanbotsdk_error_code_t print_generic_document_fields(scanbotsdk_generic_documen
         const char *type_name = NULL;
         scanbotsdk_field_type_get_name(field_type, &type_name);
 
-        scanbotsdk_ocr_result_t *ocr = NULL;
-        if (scanbotsdk_field_get_value(fields[i], &ocr) == SCANBOTSDK_OK && ocr) {
-            const char *text = NULL; 
-            double confidence = 0.0;
-            scanbotsdk_ocr_result_get_text(ocr, &text);
-            scanbotsdk_ocr_result_get_confidence(ocr, &confidence);
-            printf("Field[%zu]: type=%s, value=\"%s\", confidence=%f\n",
-                i, type_name, text ? text : "", confidence);
+      scanbotsdk_ocr_result_t *ocr_result = NULL;
+        if (scanbotsdk_field_get_value(fields[i], &ocr_result) == SCANBOTSDK_OK && ocr_result) {
+            const char *text = NULL;
+            scanbotsdk_ocr_result_get_text(ocr_result, &text);
+            printf("Field[%zu]: type=%s, value=\"%s\"\n",
+                i, type_name, text ? text : "text value n/a");
         } else {
-            printf("Field[%zu]: type=%s, value=(n/a)\n", i, type_name);
+            printf("Field[%zu]: type=%s, value=text value n/a\n", i, type_name);
         }
     }
 

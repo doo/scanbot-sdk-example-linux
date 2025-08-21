@@ -20,7 +20,7 @@ scanbotsdk_error_code_t print_medical_certificate_result(scanbotsdk_medical_cert
 
     scanbotsdk_medical_certificate_patient_info_field_t **fields = calloc(count, sizeof(*fields));
     ec = scanbotsdk_medical_certificate_patient_info_box_get_fields(patient_info, fields, count);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_patient_info_box_get_fields: %d: %s\n", ec, error_message(ec)); free(fields);  goto cleanup; }
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_patient_info_box_get_fields: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     for (size_t i = 0; i < count; ++i) {
         scanbotsdk_medical_certificate_patient_info_field_type_t type;
@@ -45,7 +45,6 @@ scanbotsdk_error_code_t detect_medical_certificate(scanbotsdk_image_t *image) {
     scanbotsdk_medical_certificate_scanning_result_t *result = NULL;
 
     ec = scanbotsdk_medical_certificate_scanning_parameters_create_with_defaults(&params);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // Configure other parameters as needed.
 
     ec = scanbotsdk_medical_certificate_scanner_create(&scanner);

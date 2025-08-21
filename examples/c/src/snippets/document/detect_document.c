@@ -7,12 +7,6 @@ scanbotsdk_error_code_t print_document_result(scanbotsdk_document_detection_resu
     scanbotsdk_document_detection_status_t status;
 
     scanbotsdk_document_detection_result_get_status(result, &status);
-
-    if (status != SCANBOTSDK_DOCUMENT_DETECTION_STATUS_OK) {
-        printf("[detect] Document not OK (status=%d)\n", (int)status);
-        return ec;
-    }
-    
     printf("Detection Status = %d\n", (int)status);
 
     scanbotsdk_document_detection_scores_t *scores = NULL;
@@ -36,7 +30,6 @@ scanbotsdk_error_code_t detect_document(scanbotsdk_image_t *image) {
     scanbotsdk_document_detection_result_t *result = NULL;
 
     ec = scanbotsdk_document_scanner_configuration_create_with_defaults(&config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // Configure other parameters as needed.
 
     ec = scanbotsdk_document_scanner_create(config, &scanner);

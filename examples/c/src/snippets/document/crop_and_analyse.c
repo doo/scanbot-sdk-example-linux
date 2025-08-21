@@ -18,7 +18,6 @@ scanbotsdk_error_code_t detect_document_cropped(
     
     // region Setup scanner
     ec = scanbotsdk_document_scanner_configuration_create_with_defaults(&config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // Configure other parameters as needed.
 
     ec = scanbotsdk_document_scanner_create(config, &scanner);
@@ -45,20 +44,13 @@ scanbotsdk_error_code_t detect_document_cropped(
         fprintf(stderr, "get_cropped_image: %d: %s\n", ec, error_message(ec));
         goto cleanup;
     }
+    
+    if(!cropped_image) { fprintf(stdout, "No document was detected"); goto cleanup; }
 
     const char *unique_id = NULL;
     ec = scanbotsdk_image_get_unique_id(cropped_image, &unique_id);
     if (ec != SCANBOTSDK_OK || unique_id == NULL) { fprintf(stderr, "Failed to get cropped image id: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     printf("Cropped image unique_id: %s\n", unique_id);
-
-    /**
-     * You must acquire a reference to the cropped image here.
-     * Otherwise, when `scanbotsdk_document_scanning_result_free(result)` is called
-     * in the cleanup section, it will release the internal image object and
-     * invalidate the pointer created from `unique_id`.
-     */
-    ec = scanbotsdk_image_acquire_reference(unique_id);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "image_acquire_reference: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     ec = scanbotsdk_image_create_from_id(unique_id, cropped_image_out);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "image_create_from_id: %d: %s\n", ec, error_message(ec)); goto cleanup; }
@@ -83,7 +75,7 @@ scanbotsdk_error_code_t save_cropped_image(
 
     printf("Saving cropped image to: %s\n", save_path);
 
-    scanbotsdk_image_save(cropped_image, save_path, save_options);
+    ec = scanbotsdk_image_save(cropped_image, save_path, save_options);
 
 cleanup:
     scanbotsdk_save_image_options_free(save_options);
@@ -101,7 +93,7 @@ void print_result(scanbotsdk_document_quality_analyzer_result_t *result) {
 
     printf("Document detection: %s\n", document_found ? "Found" : "Not found");
 
-    if (quality && *quality >= SCANBOTSDK_DOCUMENT_QUALITY_VERY_POOR && *quality <= SCANBOTSDK_DOCUMENT_QUALITY_EXCELLENT) {
+    if (quality) {
         printf("Document quality: %s (%d)\n", quality_str[*quality], *quality);
     } else {
         printf("Document quality: Unknown\n");
@@ -118,7 +110,6 @@ static scanbotsdk_error_code_t analyse_document_quality(
 
     // region Setup analyzer
     ec = scanbotsdk_document_quality_analyzer_configuration_create_with_defaults(&analyse_config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "analyse_config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // Configure other parameters as needed.
 
     ec = scanbotsdk_document_quality_analyzer_create(analyse_config, &analyzer);
@@ -147,7 +138,7 @@ scanbotsdk_error_code_t crop_and_analyse(
     scanbotsdk_image_t *cropped_image = NULL;
 
     ec = detect_document_cropped(image, &cropped_image);
-    if (ec != SCANBOTSDK_OK) goto cleanup;
+    if (ec != SCANBOTSDK_OK || !cropped_image) { goto cleanup; }
 
     // Save if a non-empty path is provided
     if (save_path && save_path[0] != '\0') {

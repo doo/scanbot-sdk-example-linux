@@ -3,6 +3,6 @@
 
 #include <ScanbotSDK.h>
 
-scanbotsdk_error_code_t parse_mrz(char* text);
+scanbotsdk_error_code_t parse_mrz(const char* text);
 
 #endif

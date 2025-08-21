@@ -30,10 +30,7 @@ scanbotsdk_error_code_t detect_mrz(scanbotsdk_image_t *image) {
     scanbotsdk_accumulated_results_verifier_configuration_t *frame_accumulation_config = NULL;
 
     ec = scanbotsdk_mrz_scanner_configuration_create_with_defaults(&config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
-
     ec = scanbotsdk_accumulated_results_verifier_configuration_create_with_defaults(&frame_accumulation_config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "frame_accumulation_config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     scanbotsdk_accumulated_results_verifier_configuration_set_maximum_number_of_accumulated_frames(frame_accumulation_config, 1);
     scanbotsdk_mrz_scanner_configuration_set_frame_accumulation_configuration(config, frame_accumulation_config);

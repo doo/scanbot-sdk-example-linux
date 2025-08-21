@@ -32,11 +32,9 @@ scanbotsdk_error_code_t print_ocr_result(scanbotsdk_page_t *page) {
         if (ec != SCANBOTSDK_OK) { fprintf(stderr, "block_as_ocr: %d: %s\n", ec, error_message(ec)); continue; }
 
         const char *block_text = NULL;
-        ec = scanbotsdk_ocr_element_get_text(block_el, &block_text);
-        if (ec == SCANBOTSDK_OK && block_text) {
-            printf("Block: \"%s\"\n", block_text);
-        }
-
+        scanbotsdk_ocr_element_get_text(block_el, &block_text);
+        printf("Block: \"%s\"\n", block_text);
+        
         size_t line_count = 0;
         ec = scanbotsdk_block_get_lines_size(block, &line_count);
         if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_lines_size: %d: %s\n", ec, error_message(ec)); continue; }

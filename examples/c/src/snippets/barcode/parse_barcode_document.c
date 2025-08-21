@@ -4,7 +4,7 @@
 #include <snippets/barcode/parse_barcode_document.h>
 #include <utils/utils.h>
 
-scanbotsdk_error_code_t parse_barcode_document(char* raw_string) {
+scanbotsdk_error_code_t parse_barcode_document(const char* raw_string) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
 
     scanbotsdk_barcode_document_format_t formats[] = {

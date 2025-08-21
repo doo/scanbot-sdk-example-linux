@@ -3,6 +3,6 @@
 
 #include <ScanbotSDK.h>
 
-scanbotsdk_error_code_t parse_barcode_document(char* raw_string);
+scanbotsdk_error_code_t parse_barcode_document(const char* raw_string);
 
 #endif

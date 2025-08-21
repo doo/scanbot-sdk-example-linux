@@ -23,7 +23,6 @@ scanbotsdk_error_code_t detect_text_pattern(scanbotsdk_image_t *image) {
     scanbotsdk_text_pattern_scanner_result_t *result = NULL;
 
     ec = scanbotsdk_text_pattern_scanner_configuration_create_with_defaults(&config);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "config_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // Configure other parameters as needed.
 
     ec = scanbotsdk_text_pattern_scanner_create(config, &scanner);
