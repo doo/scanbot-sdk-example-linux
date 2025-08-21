@@ -3,6 +3,9 @@
 #include <snippets/license/floating_license.h>
 #include <utils/utils.h>
 
+static const int SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS = 15000;
+static const int DEREGISTER_DEVICE_TIMEOUT_MS = 15000;
+
 char* license_status_str(scanbotsdk_license_status_t s) {
     switch (s) {
         case SCANBOTSDK_LICENSE_STATUS_OKAY: return "OKAY";
@@ -38,7 +41,7 @@ void init_with_floating_license() {
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_license_info (before wait): %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     // Wait for the online license check to complete
-    ec = scanbotsdk_wait_for_online_license_check_completion(15000);
+    ec = scanbotsdk_wait_for_online_license_check_completion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "wait_for_online_license_check_completion: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     // Query license info AFTER waiting for online check
@@ -63,5 +66,5 @@ void init_with_floating_license() {
 cleanup:
     scanbotsdk_license_info_free(info);
     scanbotsdk_deregister_device();
-    scanbotsdk_wait_for_device_deregistration_completion(15000);
+    scanbotsdk_wait_for_device_deregistration_completion(DEREGISTER_DEVICE_TIMEOUT_MS);
 }

@@ -23,6 +23,9 @@
 #include <snippets/document/crop_and_analyse.h>
 #include <snippets/document/document_classifier.h>
 
+static const int SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS = 15000;
+static const int DEREGISTER_DEVICE_TIMEOUT_MS = 15000;
+
 int main(int argc, char *argv[]) {
     if (argc < 3) {
         print_usage(argv[0]);
@@ -46,7 +49,7 @@ int main(int argc, char *argv[]) {
     scanbotsdk_error_code_t ec = scanbotsdk_initialize(&params);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "initialize: %d: %s\n", ec, error_message(ec)); return 1; }
 
-    ec = scanbotsdk_wait_for_online_license_check_completion(15000);
+    ec = scanbotsdk_wait_for_online_license_check_completion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "license_wait: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
      if (strcmp(category, "scan") == 0) {
@@ -109,6 +112,6 @@ int main(int argc, char *argv[]) {
 
 cleanup:
     scanbotsdk_deregister_device();
-    scanbotsdk_wait_for_device_deregistration_completion(15000);
+    scanbotsdk_wait_for_device_deregistration_completion(DEREGISTER_DEVICE_TIMEOUT_MS);
     return (ec == SCANBOTSDK_OK) ? 0 : 1;
 }
