@@ -8,7 +8,7 @@ import io.scanbot.sdk.mrz.MrzParserConfiguration;
 import io.scanbot.sdk.mrz.MrzScannerResult;
 import io.scanbot.sdk.utils.Utils;
 
-public class ParseMrzSnippet {
+public class MrzParserSnippet {
     public static void run(String str) throws Exception {
         // Make sure you have a valid license
         if(ScanbotSDK.getLicenseInfo().getStatus() != LicenseStatus.OKAY)
