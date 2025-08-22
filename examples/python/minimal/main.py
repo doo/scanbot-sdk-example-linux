@@ -19,19 +19,21 @@ from snippets.datacapture.check import scan_check
 
 from utils import create_image_ref, parse_flags, print_usage
 
-# TODO Add your Scanbot SDK trial license key here.
-# The SDK and a trial license are available on request via beta@scanbot.io
-LICENSE_KEY:str = "<SCANBOTSDK-LICENSE>"
-
 def main():
     if len(sys.argv) < 3:
         print_usage()
         return
+    
+    flags = parse_flags(sys.argv[3:])
+    
+    # TODO Add your Scanbot SDK trial license key here.
+    # The SDK and a trial license are available on request via beta@scanbot.io
+    license_key = flags.get("--license", "<SCANBOTSDK-LICENSE>")
 
     # Setup and initialize the Scanbot SDK
     print(f"Initializing Scanbot SDK...")
     
-    scanbotsdk.initialize(LICENSE_KEY)
+    scanbotsdk.initialize(license_key)
     scanbotsdk.wait_for_online_license_check_completion(5000)
     
     license_info = scanbotsdk.get_license_info()
@@ -51,7 +53,6 @@ def main():
     with scanbotsdk.DeviceSession(deregister_timeout_ms=15000):
         category   = sys.argv[1].lower()
         subcommand = sys.argv[2].lower()
-        flags      = parse_flags(sys.argv[3:])
 
         file_path     = flags.get("--file")
         save_path     = flags.get("--save")

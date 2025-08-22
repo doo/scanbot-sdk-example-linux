@@ -18,9 +18,19 @@ public class ScanbotSDKExample {
             return;
         }
 
+        // parse category, subcommand, flags ---
+        final String category   = args[0].toLowerCase(Locale.ROOT);
+        final String subcommand = args[1].toLowerCase(Locale.ROOT);
+        final Map<String, String> f = Utils.parseFlags(Arrays.copyOfRange(args, 2, args.length));
+        final String file     = f.get("--file");
+        final String resource = f.get("--resource");
+        final String save     = f.get("--save");
+        final String text     = f.get("--text");
+        final String license  = f.get("--license");
+
         // TODO Add your Scanbot SDK trial license key here.
         // The SDK and a trial license are available on request via beta@scanbot.io
-        final String licenseKey = "<SCANBOTSDK-LICENSE>";
+        final String licenseKey = license != null ? license : "<SCANBOTSDK-LICENSE>";
         final String writablePath = ".";
 
         ScanbotSDK.initialize(licenseKey, writablePath);
@@ -35,15 +45,6 @@ public class ScanbotSDKExample {
                     "io.scanbot.sdk.ScanbotSDK.deregisterDevice and io.scanbot.sdk.ScanbotSDK.waitForOnlineLicenseCheckCompletion when you no " +
                     "longer need the license or use io.scanbot.sdk.ScanbotSDK.DeviceSession convenience class with try-with-resources pattern.");
         }
-
-        // parse category, subcommand, flags ---
-        final String category   = args[0].toLowerCase(Locale.ROOT);
-        final String subcommand = args[1].toLowerCase(Locale.ROOT);
-        final Map<String, String> f = Utils.parseFlags(Arrays.copyOfRange(args, 2, args.length));
-        final String file     = f.get("--file");
-        final String resource = f.get("--resource");
-        final String save     = f.get("--save");
-        final String text     = f.get("--text");
 
         // If you are not using floating license, it is not required to use io.scanbot.sdk.DeviceSession as there is no
         // need to notify server you are no longer using the license. Alternatively, you can manually call
@@ -92,7 +93,7 @@ public class ScanbotSDKExample {
                 case "parse": {
                     if (text == null || text.trim().isEmpty()) { ExampleUsage.print(); return; }
                     switch (subcommand) {
-                        case "mrz":         ParseMrzSnippet.run(text); break;
+                        case "mrz":         MrzParserSnippet.run(text); break;
                         case "barcode_doc": ParseBarcodeDocumentSnippet.run(text); break;
                         default: ExampleUsage.print();
                     }

@@ -46,17 +46,15 @@ def parse_flags(tokens) -> OrderedDict:
             flags[token] = next_val
     return flags
 
-
 def print_usage():
     print("Scanbot SDK Example\n")
     print("Usage:")
-    print("  python main.py scan <command> --file <path/to/file.jpg>")
+    print("  python main.py scan <command> --file <path/to/file.jpg> [--license <KEY>]")
     print("or")
-    print("  python main.py scan <command> --file <path/to/file.jpg>\n")
-    print("  python main.py classify <command> --file <path/to/file.jpg>\n")
-    print("  python main.py analyse <command> --file <path/to/file> --save <path/to/save>")
+    print("  python main.py classify <command> --file <path/to/file.jpg> [--license <KEY>]\n")
+    print("  python main.py analyse <command> --file <path/to/file> --save <path/to/save> [--license <KEY>]")
     print("or")
-    print("  python main.py parse <command> --text \"<input>\"\n")
+    print("  python main.py parse <command> --text \"<input>\" [--license <KEY>]\n")
     print("Available scan commands:")
     print("  barcode | document | check | credit_card | document_extractor | medical_certificate | mrz | ocr | text_pattern | vin\n")
     print("Available analyse commands:")
@@ -66,10 +64,11 @@ def print_usage():
     print("Available parse commands:")
     print("  mrz | barcode_doc\n")
     print("Note:")
-    print("  The --save argument is optional and only used with analyse/crop_analyze.\n")
+    print("  The --save argument is optional and only used with analyse/crop_analyze.")
+    print("  The --license argument is optional. If not provided, a placeholder \"<SCANBOTSDK-LICENSE>\" will be used.\n")
     print("Examples:")
-    print("  python main.py scan barcode --file images/example.jpg")
-    print("  python main.py analyse analyse_multi_page --file files/doc.pdf")
-    print("  python main.py analyse crop_analyze --file images/doc.jpg --save out/crop.jpg")
-    print("  python main.py parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\"")
+    print("  python main.py scan barcode --file images/example.jpg --license <KEY>")
+    print("  python main.py analyse analyse_multi_page --file files/doc.pdf --license <KEY>")
+    print("  python main.py analyse crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>")
+    print("  python main.py parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\" --license <KEY>")
     print()
