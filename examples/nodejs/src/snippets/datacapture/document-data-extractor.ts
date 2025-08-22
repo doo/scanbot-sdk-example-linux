@@ -9,39 +9,40 @@ export class DocumentDataExtractorSnippet {
       return;
     }
 
-    ScanbotSDK.autorelease(async () => {
-      var commonConfig =
-        new ScanbotSDK.DocumentDataExtractorCommonConfiguration();
-      commonConfig.acceptedDocumentTypes = [
-        "DeIdCardFront",
-        "DeIdCardBack",
-        "DeHealthInsuranceCardFront",
-        "DePassport",
-        "DeResidencePermitFront",
-        "DeResidencePermitBack",
-        "EuropeanHealthInsuranceCard",
-        "EuropeanDriverLicenseFront",
-        "EuropeanDriverLicenseBack",
-      ];
-      // Configure supported document types
-      const elements: ScanbotSDK.DocumentDataExtractorConfigurationElement[] = [
-        commonConfig,
-      ];
 
-      const accumulationConfig =
-        new ScanbotSDK.ResultAccumulationConfiguration();
-      accumulationConfig.confirmationMethod = "EXACT";
+    var commonConfig =
+      new ScanbotSDK.DocumentDataExtractorCommonConfiguration();
+    commonConfig.acceptedDocumentTypes = [
+      "DeIdCardFront",
+      "DeIdCardBack",
+      "DeHealthInsuranceCardFront",
+      "DePassport",
+      "DeResidencePermitFront",
+      "DeResidencePermitBack",
+      "EuropeanHealthInsuranceCard",
+      "EuropeanDriverLicenseFront",
+      "EuropeanDriverLicenseBack",
+    ];
+    // Configure supported document types
+    const elements: ScanbotSDK.DocumentDataExtractorConfigurationElement[] = [
+      commonConfig,
+    ];
 
-      const config = new ScanbotSDK.DocumentDataExtractorConfiguration();
-      config.configurations = elements;
-      config.resultAccumulationConfig = accumulationConfig;
-      // Configure other parameters as needed.
+    const accumulationConfig =
+      new ScanbotSDK.ResultAccumulationConfiguration();
+    accumulationConfig.confirmationMethod = "EXACT";
 
-      const extractor = await ScanbotSDK.DocumentDataExtractor.create(config);
-      const result = await extractor.run(image);
+    const config = new ScanbotSDK.DocumentDataExtractorConfiguration();
+    config.configurations = elements;
+    config.resultAccumulationConfig = accumulationConfig;
+    // Configure other parameters as needed.
 
-      this.printResult(result);
-    });
+    // `await using` ensures both extractor and result are properly disposed
+    // when the scope ends, as they hold unmanaged resources.
+    await using extractor = await ScanbotSDK.DocumentDataExtractor.create(config);
+    await using result = await extractor.run(image);
+
+    this.printResult(result);
   }
 
   private static printResult(

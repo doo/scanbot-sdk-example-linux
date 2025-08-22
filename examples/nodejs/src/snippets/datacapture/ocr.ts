@@ -8,11 +8,11 @@ export class OcrSnippet {
       return;
     }
 
-    await ScanbotSDK.autorelease(async () => {
-      const scanner = await ScanbotSDK.OcrEngine.create();
-      const page = await scanner.run(image);
-      this.printResult(page);
-    });
+    // `await using` ensures the scanner is properly disposed
+    // when the scope ends, as it holds unmanaged resources.
+    await using scanner = await ScanbotSDK.OcrEngine.create();
+    const page = await scanner.run(image);
+    this.printResult(page);
   }
 
   private static printResult(page: ScanbotSDK.Page): void {

@@ -8,16 +8,16 @@ export class TextPatternScannerSnippet {
       return;
     }
 
-    await ScanbotSDK.autorelease(async () => {
-      const config = new ScanbotSDK.TextPatternScannerConfiguration();
-      config.minimumNumberOfRequiredFramesWithEqualScanningResult = 2;
-      config.validator = new ScanbotSDK.DefaultContentValidator();
-      // configure other parameters as needed
+    const config = new ScanbotSDK.TextPatternScannerConfiguration();
+    config.minimumNumberOfRequiredFramesWithEqualScanningResult = 2;
+    config.validator = new ScanbotSDK.DefaultContentValidator();
+    // configure other parameters as needed
 
-      const scanner = await ScanbotSDK.TextPatternScanner.create(config);
-      const result = await scanner.run(image);
+    // `await using` ensures the scanner is properly disposed
+    // when the scope ends, as it holds unmanaged resources.  
+    await using scanner = await ScanbotSDK.TextPatternScanner.create(config);
+    const result = await scanner.run(image);
 
-      console.log("Raw Text: " + result.rawText);
-    });
+    console.log("Raw Text: " + result.rawText);
   }
 }

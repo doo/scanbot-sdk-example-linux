@@ -25,7 +25,17 @@ async function main(): Promise<void> {
   }
 
   const args = process.argv.slice(2);
-  const licenseKey: string = "SCANBOTSDK-LICENSE";
+
+  const category = args[0]?.toLowerCase() ?? "";
+  const subcommand = args[1]?.toLowerCase() ?? "";
+  const flags = parseFlags(args.slice(2));
+
+  const file = flags["--file"] as string | undefined;
+  const save = flags["--save"] as string | undefined;
+  const text = flags["--text"] as string | undefined;
+  const licenseFlag = flags["--license"] as string | undefined;
+
+  const licenseKey: string = licenseFlag ?? "SCANBOTSDK-LICENSE";
   const writablePath = ".";
 
   await ScanbotSDK.initialize({
@@ -43,14 +53,6 @@ async function main(): Promise<void> {
         `when you no longer need the license.`
     );
   }
-
-  const category = args[0]?.toLowerCase() ?? "";
-  const subcommand = args[1]?.toLowerCase() ?? "";
-  const flags = parseFlags(args.slice(2));
-
-  const file = flags["--file"] as string | undefined;
-  const save = flags["--save"] as string | undefined;
-  const text = flags["--text"] as string | undefined;
 
   await ScanbotSDK.autorelease(async () => {
     switch (category) {

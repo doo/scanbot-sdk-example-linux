@@ -9,28 +9,33 @@ export class DetectBarcodesSnippet {
       return;
     }
 
-    ScanbotSDK.autorelease(async () => {
-      var config = new ScanbotSDK.BarcodeScannerConfiguration();
-      // Configure other parameters as needed.
+    var config = new ScanbotSDK.BarcodeScannerConfiguration();
+    var formatConfig = new ScanbotSDK.BarcodeFormatCommonConfiguration();
+    formatConfig.gs1Handling = "DECODE_FULL"
+    
+    config.barcodeFormatConfigurations = [formatConfig];
+    config.returnBarcodeImage = true;
+    // Configure other parameters as needed.
 
-      const scanner = await ScanbotSDK.BarcodeScanner.create(config);
-      const result = await scanner.run(image);
-      const barcodes = result.barcodes ?? [];
-      if (barcodes.length === 0) {
-        console.log("No barcodes found.");
-        return;
-      }
+    // `await using` ensures both scanner and result are properly disposed
+    // when the scope ends, as they hold unmanaged resources.
+    await using scanner = await ScanbotSDK.BarcodeScanner.create(config);
+    await using result = await scanner.run(image);
+    const barcodes = result.barcodes ?? [];
+    if (barcodes.length === 0) {
+      console.log("No barcodes found.");
+      return;
+    }
 
-      barcodes.forEach((barcode, idx) => {
-        // If you want to use the image later, call barcode.sourceImage?.encodeImage(...) and save the returned buffer.
-        // Otherwise, the image reference will be released once the ImageRef object is closed or garbage-collected.
+    barcodes.forEach((barcode, idx) => {
+      // If you want to use the image later, call barcode.sourceImage?.encodeImage(...) and save the returned buffer.
+      // Otherwise, the image reference will be released once the ImageRef object is closed or garbage-collected.
 
-        console.log(`Barcode #${idx + 1}:`);
-        console.log(`  Format: ${barcode.format}`);
-        console.log(`  Text:   ${barcode.text}`);
+      console.log(`Barcode #${idx + 1}:`);
+      console.log(`  Format: ${barcode.format}`);
+      console.log(`  Text:   ${barcode.text}`);
 
-        printGenericDocument(barcode.extractedDocument);
-      });
+      printGenericDocument(barcode.extractedDocument);
     });
   }
 }

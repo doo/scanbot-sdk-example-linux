@@ -8,19 +8,19 @@ export class MedicalCertificateScannerSnippet {
       return;
     }
 
-    await ScanbotSDK.autorelease(async () => {
-      // Configure scanning parameters
-      const params = new ScanbotSDK.MedicalCertificateScanningParameters();
-      params.recognizePatientInfoBox = true;
-      params.shouldCropDocument = true;
-      // configure other parameters as needed
+    // Configure scanning parameters
+    const params = new ScanbotSDK.MedicalCertificateScanningParameters();
+    params.recognizePatientInfoBox = true;
+    params.shouldCropDocument = true;
+    // configure other parameters as needed
 
-      // Create scanner and run
-      const scanner = await ScanbotSDK.MedicalCertificateScanner.create();
-      const result = await scanner.run(image, params);
+    // Create scanner and run
+    // `await using` ensures both scanner and result are properly disposed
+    // when the scope ends, as they hold unmanaged resources.
+    await using scanner = await ScanbotSDK.MedicalCertificateScanner.create();
+    await using result = await scanner.run(image, params);
 
-      this.printResult(result);
-    });
+    this.printResult(result);
   }
 
   private static printResult(

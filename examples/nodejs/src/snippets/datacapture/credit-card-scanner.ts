@@ -8,16 +8,17 @@ export class CreditCardScannerSnippet {
       console.warn("License is not valid.");
       return;
     }
+    var config = new ScanbotSDK.CreditCardScannerConfiguration();
+    config.requireExpiryDate = false;
+    config.requireCardholderName = false;
+    // Configure other parameters as needed.
 
-    ScanbotSDK.autorelease(async () => {
-      var config = new ScanbotSDK.CreditCardScannerConfiguration();
-      // Configure other parameters as needed.
+    // `await using` ensures both scanner and result are properly disposed
+    // when the scope ends, as they hold unmanaged resources.
+    await using scanner = await ScanbotSDK.CreditCardScanner.create(config);
+    await using result = await scanner.run(image);
 
-      const scanner = await ScanbotSDK.CreditCardScanner.create(config);
-      const result = await scanner.run(image);
-
-      this.printResult(result);
-    });
+    this.printResult(result);
   }
 
   private static printResult(

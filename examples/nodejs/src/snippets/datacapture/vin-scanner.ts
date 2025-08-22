@@ -8,16 +8,16 @@ export class VinScannerSnippet {
       return;
     }
 
-    await ScanbotSDK.autorelease(async () => {
-      const config = new ScanbotSDK.VinScannerConfiguration();
-      config.extractVINFromBarcode = true;
-      // configure other parameters as needed
+    const config = new ScanbotSDK.VinScannerConfiguration();
+    config.extractVINFromBarcode = true;
+    // configure other parameters as needed
 
-      const scanner = await ScanbotSDK.VinScanner.create(config);
-      const result = await scanner.run(image);
+    // `await using` ensures the scanner is properly disposed
+    // when the scope ends, as it holds unmanaged resources.
+    await using scanner = await ScanbotSDK.VinScanner.create(config);
+    const result = await scanner.run(image);
 
-      this.printResult(result);
-    });
+    this.printResult(result);
   }
 
   private static printResult(result: ScanbotSDK.VinScannerResult): void {

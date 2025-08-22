@@ -9,10 +9,12 @@ export class ParseBarcodeDocumentSnippet {
       return;
     }
 
-    var parser = await ScanbotSDK.BarcodeDocumentParser.create(
+    // `await using` ensures both parser and result are properly disposed
+    // when the scope ends, as they hold unmanaged resources.
+    await using parser = await ScanbotSDK.BarcodeDocumentParser.create(
       ScanbotSDK.BarcodeDocumentFormats.all
     );
-    var result = await parser.parse(str);
+    await using result = await parser.parse(str);
 
     console.log(`Success :${result.success}`);
     printGenericDocument(result.parsedDocument);

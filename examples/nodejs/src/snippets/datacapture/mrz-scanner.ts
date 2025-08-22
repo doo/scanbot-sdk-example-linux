@@ -9,23 +9,23 @@ export class MrzScannerSnippet {
       return;
     }
 
-    await ScanbotSDK.autorelease(async () => {
-      const config = new ScanbotSDK.MrzScannerConfiguration();
+    const config = new ScanbotSDK.MrzScannerConfiguration();
 
-      const accumulatedConfig = new ScanbotSDK.AccumulatedResultsVerifierConfiguration();
-      accumulatedConfig.minimumNumberOfRequiredFramesWithEqualScanningResult = 1;
+    const accumulatedConfig = new ScanbotSDK.AccumulatedResultsVerifierConfiguration();
+    accumulatedConfig.minimumNumberOfRequiredFramesWithEqualScanningResult = 1;
 
-      config.frameAccumulationConfiguration = accumulatedConfig;
-      // configure other parameters as needed
+    config.frameAccumulationConfiguration = accumulatedConfig;
+    // configure other parameters as needed
 
-      const scanner = await ScanbotSDK.MrzScanner.create(config);
-      const result = await scanner.run(image);
+    // `await using` ensures both scanner and result are properly disposed
+    // when the scope ends, as they hold unmanaged resources.
+    await using scanner = await ScanbotSDK.MrzScanner.create(config);
+    await using result = await scanner.run(image);
 
-      console.log("MRZ Scanner Result:");
-      console.log("  Success: " + result.success);
-      console.log("  Raw MRZ: " + result.rawMRZ);
+    console.log("MRZ Scanner Result:");
+    console.log("  Success: " + result.success);
+    console.log("  Raw MRZ: " + result.rawMRZ);
 
-      printGenericDocument(result.document);
-    });
+    printGenericDocument(result.document);
   }
 }
