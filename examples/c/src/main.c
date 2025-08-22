@@ -37,10 +37,11 @@ int main(int argc, char *argv[]) {
     char *file_path  = get_flag(argc, argv, "--file");
     char *save_path  = get_flag(argc, argv, "--save");
     char *text_input = get_flag(argc, argv, "--text");
+    char *license_arg = get_flag(argc, argv, "--license");
 
     // TODO Add your Scanbot SDK trial license key here.
     // The SDK and a trial license are available on request via beta@scanbot.io
-    char *scanbot_license_key = "<SCANBOTSDK-LICENSE>";
+    char *scanbot_license_key = license_arg ? license_arg : "<SCANBOTSDK-LICENSE>";
 
     scanbotsdk_init_params_t params = {0};
     params.license_key   = scanbot_license_key;

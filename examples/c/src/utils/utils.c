@@ -71,13 +71,13 @@ char* get_flag(int argc, char *argv[], const char *flag) {
 void print_usage(const char *prog) {
     printf("Scanbot SDK Example\n\n");
     printf("Usage:\n");
-    printf("  %s scan <command> --file <path/to/file.jpg>\n", prog);
+    printf("  %s scan <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
-    printf("  %s classify <command> --file <path/to/file.jpg>\n", prog);
+    printf("  %s classify <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
-    printf("  %s analyse <command> --file <path/to/file.jpg> --save <path/to/save.jpg>\n", prog);
+    printf("  %s analyse <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
-    printf("  %s parse <command> --text \"<input>\"\n\n", prog);
+    printf("  %s parse <command> --text \"<input>\" [--license <KEY>]\n\n", prog);
 
     printf("Available scan commands:\n");
     printf("  barcode | document | check | credit_card | document_extractor |\n");
@@ -93,12 +93,14 @@ void print_usage(const char *prog) {
     printf("  mrz | barcode_doc\n\n");
 
     printf("Note:\n");
-    printf("  The --save argument is optional and only used with analyse/crop_analyze.\n\n");
+    printf("  The --save argument is optional and only used with analyse/crop_analyze.\n");
+    printf("  The --license argument is optional. If not provided, the program will\n");
+    printf("  \tcheck the placeholder <SCANBOTSDK-LICENSE> in main.c\n");
 
     printf("Examples:\n");
-    printf("  %s scan barcode --file images/example.jpg\n", prog);
-    printf("  %s analyse analyse_multi_page --file files/doc.pdf\n", prog);
-    printf("  %s analyse crop_analyze --file images/doc.jpg --save out/crop.jpg\n", prog);
-    printf("  %s parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\"\n", prog);
+    printf("  %s scan barcode --file images/example.jpg --license <KEY>\n", prog);
+    printf("  %s analyse analyse_multi_page --file files/doc.pdf --license <KEY>\n", prog);
+    printf("  %s analyse crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>\n", prog);
+    printf("  %s parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\" --license <KEY>\n", prog);
     printf("\n");
 }
