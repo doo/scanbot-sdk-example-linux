@@ -76,6 +76,7 @@ scanbotsdk_error_code_t save_cropped_image(
     printf("Saving cropped image to: %s\n", save_path);
 
     ec = scanbotsdk_image_save(cropped_image, save_path, save_options);
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "image_save: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
 cleanup:
     scanbotsdk_save_image_options_free(save_options);
@@ -96,7 +97,7 @@ void print_result(scanbotsdk_document_quality_analyzer_result_t *result) {
     if (quality) {
         printf("Document quality: %s (%d)\n", quality_str[*quality], *quality);
     } else {
-        printf("Document quality: Unknown\n");
+        printf("No document found.\n");
     }
 }
 

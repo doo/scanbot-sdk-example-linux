@@ -15,12 +15,51 @@ void print_analyzer_result(scanbotsdk_document_quality_analyzer_result_t *result
 
     printf("Document detection: %s\n", document_found ? "Found" : "Not found");
 
-    if (!quality)
+    if (quality)
     {
         printf("Document quality: %s\n", quality_str[*quality]);
     } else {
         printf("No document found.\n");
     }
+}
+
+static scanbotsdk_error_code_t process_page(scanbotsdk_extracted_page_t *page, scanbotsdk_document_quality_analyzer_t *analyzer) 
+{
+    scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
+    scanbotsdk_extracted_image_t **images = NULL;
+    size_t page_images_count = 0;
+
+    ec = scanbotsdk_extracted_page_get_images_size(page, &page_images_count);
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_images_size: %d: %s\n", ec, error_message(ec)); goto cleanup; }
+
+    if (page_images_count == 0) { printf("Page has no images.\n"); goto cleanup; }
+
+    images = calloc(page_images_count, sizeof(*images));
+    if (!images) { fprintf(stderr, "calloc images failed\n"); ec = SCANBOTSDK_ERROR_OUT_OF_MEMORY; goto cleanup; }
+
+    ec = scanbotsdk_extracted_page_get_images(page, images, page_images_count);
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_images: %d: %s\n", ec, error_message(ec)); goto cleanup; }
+
+    for (size_t j = 0; j < page_images_count; j++) {
+        scanbotsdk_image_t *image = NULL;
+        scanbotsdk_document_quality_analyzer_result_t *analyse_result = NULL;
+
+        ec = scanbotsdk_extracted_image_get_image(images[j], &image);
+        if (ec != SCANBOTSDK_OK) { fprintf(stderr, "extracted_image_get_image: %d: %s\n", ec, error_message(ec)); goto inner_cleanup; }
+
+        ec = scanbotsdk_document_quality_analyzer_run(analyzer, image, &analyse_result);
+        if (ec != SCANBOTSDK_OK) { fprintf(stderr, "analyzer_run: %d: %s\n", ec, error_message(ec)); goto inner_cleanup; }
+
+        print_analyzer_result(analyse_result);
+
+    inner_cleanup:
+        scanbotsdk_document_quality_analyzer_result_free(analyse_result);
+        if (ec != SCANBOTSDK_OK) break;
+    }
+
+cleanup:
+    free(images);
+    return ec;
 }
 
 scanbotsdk_error_code_t analyse_multi_page(char* path) {
@@ -69,41 +108,13 @@ scanbotsdk_error_code_t analyse_multi_page(char* path) {
 
     // region Process pages
     for (size_t i = 0; i < page_count; i++) {
-        size_t page_images_count = 0;
-
-        ec = scanbotsdk_extracted_page_get_images_size(pages[i], &page_images_count);
-        if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_images_size: %d: %s\n", ec, error_message(ec)); goto cleanup; }
-
-        if (page_images_count == 0) {
-            printf("Page %zu: no images.\n", i);
-            continue;
-        }
-
-        images = calloc(page_images_count, sizeof(*images));
-        if (!images) { fprintf(stderr, "calloc images failed\n"); ec = SCANBOTSDK_ERROR_OUT_OF_MEMORY; goto cleanup; }
-
-        ec = scanbotsdk_extracted_page_get_images(pages[i], images, page_images_count);
-        if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_images: %d: %s\n", ec, error_message(ec)); goto cleanup; }
-
-        for (size_t j = 0; j < page_images_count; j++) {
-            scanbotsdk_image_t *img = NULL;
-            ec = scanbotsdk_extracted_image_get_image(images[j], &img);
-            if (ec != SCANBOTSDK_OK) { fprintf(stderr, "extracted_image_get_image: %d: %s\n", ec, error_message(ec)); goto cleanup; }
-
-            scanbotsdk_document_quality_analyzer_result_t *analyse_result = NULL;
-            ec = scanbotsdk_document_quality_analyzer_run(analyzer, img, &analyse_result);
-            if (ec != SCANBOTSDK_OK) { fprintf(stderr, "analyzer_run: %d: %s\n", ec, error_message(ec)); scanbotsdk_image_free(img); goto cleanup; }
-
-            print_analyzer_result(analyse_result);
-
-            scanbotsdk_document_quality_analyzer_result_free(analyse_result);
-        }
+        ec = process_page(pages[i], analyzer);
+        if (ec != SCANBOTSDK_OK) goto cleanup;
     }
     // endregion
 
 cleanup:
     free(pages);
-    free(images);
 
     scanbotsdk_document_quality_analyzer_free(analyzer);
     scanbotsdk_document_quality_analyzer_configuration_free(config);

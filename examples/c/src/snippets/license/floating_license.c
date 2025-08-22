@@ -31,40 +31,57 @@ void init_with_floating_license() {
     params.writeable_path = ".";
 
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
-    scanbotsdk_license_info_t* info = NULL; 
+    scanbotsdk_license_info_t* info_before_initialization = NULL; 
+    scanbotsdk_license_info_t* info_after_initialization  = NULL; 
 
     ec = scanbotsdk_initialize(&params);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "initialize: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     // Query license info BEFORE waiting for online check
-    ec = scanbotsdk_get_license_info(&info);
+    ec = scanbotsdk_get_license_info(&info_before_initialization);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_license_info (before wait): %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
-    // Wait for the online license check to complete
+    // Wait for the online license check to complete.
+    // scanbotsdk_initialize() is non-blocking and triggers the license validation
+    // asynchronously in the background. Without waiting here, the license status
+    // may still be unknown or incomplete, which can lead to incorrect assumptions
+    // about license validity.
     ec = scanbotsdk_wait_for_online_license_check_completion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "wait_for_online_license_check_completion: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     // Query license info AFTER waiting for online check
-    ec = scanbotsdk_get_license_info(&info);
+    ec = scanbotsdk_get_license_info(&info_after_initialization);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_license_info (after wait): %d: %s\n", ec, error_message(ec)); goto cleanup; }
     else {
         scanbotsdk_license_status_t status;
         bool online_check_in_progress;
 
-        ec = scanbotsdk_license_info_get_status(info, &status);
+        ec = scanbotsdk_license_info_get_status(info_after_initialization, &status);
         if (ec != SCANBOTSDK_OK) { fprintf(stderr, "license_info_get_status (after wait): %d: %s\n", ec, error_message(ec)); goto cleanup; }
         
-        ec = scanbotsdk_license_info_get_online_license_check_in_progress(info, &online_check_in_progress);
+        ec = scanbotsdk_license_info_get_online_license_check_in_progress(info_after_initialization, &online_check_in_progress);
         if (ec != SCANBOTSDK_OK) { fprintf(stderr, "license_info_get_online_license_check_in_progress (after wait): %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
         printf("[after wait]  status=%s (%d), online_check_in_progress=%s\n",
                license_status_str(status), (int)status,
                online_check_in_progress ? "true" : "false");
-
     }
 
 cleanup:
-    scanbotsdk_license_info_free(info);
+    scanbotsdk_license_info_free(info_before_initialization);
+    scanbotsdk_license_info_free(info_after_initialization);
+
+    // For floating licenses it is highly recommended to call device deregistration.
+    // This releases the license slot on the server, allowing other devices to activate.
+    // If scanbotsdk_deregister_device() is not called, the license will remain occupied
+    // by this device for some time that corresponds to the interval between license
+    // checks (usually about 15 minutes). During this period other devices may not be
+    // able to activate and "device slots exceeded" errors can occur.
     scanbotsdk_deregister_device();
+
+    // Wait for deregistration to complete to ensure the slot is actually released.
+    // If this call returns SCANBOTSDK_ERROR_TIMEOUT, the deregistration did not
+    // finish within the timeout (e.g. due to network issues), and the license may remain
+    // locked on the server.
     scanbotsdk_wait_for_device_deregistration_completion(DEREGISTER_DEVICE_TIMEOUT_MS);
 }
