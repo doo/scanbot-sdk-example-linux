@@ -1,6 +1,8 @@
 package io.scanbot.sdk;
 
 import io.scanbot.sdk.image.ImageRef;
+import io.scanbot.sdk.image.ImageRefPoolSnapshot;
+import io.scanbot.sdk.image.ImageRefProfiler;
 import io.scanbot.sdk.licensing.LicenseInfo;
 import io.scanbot.sdk.snippets.barcode.*;
 import io.scanbot.sdk.snippets.datacapture.*;
@@ -12,6 +14,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ScanbotSDKExample {
+    static final int SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS = 15000;
+
     public static void main(String[] args) throws Exception {
         if (args.length < 2) {
             ExampleUsage.print();
@@ -34,26 +38,24 @@ public class ScanbotSDKExample {
         final String writablePath = ".";
 
         ScanbotSDK.initialize(licenseKey, writablePath);
-        ScanbotSDK.waitForOnlineLicenseCheckCompletion(15_000);
+        ScanbotSDK.waitForOnlineLicenseCheckCompletion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS);
 
         LicenseInfo licenseInfo = ScanbotSDK.getLicenseInfo();
         System.out.println("License Status: " + licenseInfo.getStatus());
-
-        boolean isFloatingLicense = licenseInfo.getDevices() != null;
-        if (isFloatingLicense) {
-            System.out.println("Using floating license with " + licenseInfo.getDevices() + " devices. Do not forget to call " +
-                    "io.scanbot.sdk.ScanbotSDK.deregisterDevice and io.scanbot.sdk.ScanbotSDK.waitForOnlineLicenseCheckCompletion when you no " +
-                    "longer need the license or use io.scanbot.sdk.ScanbotSDK.DeviceSession convenience class with try-with-resources pattern.");
-        }
-
+        
         // If you are not using floating license, it is not required to use io.scanbot.sdk.DeviceSession as there is no
         // need to notify server you are no longer using the license. Alternatively, you can manually call
-        // io.scanbot.sdk.ScanbotSDK.deregisterDevice and io.scanbot.sdk.ScanbotSDK.waitForOnlineLicenseCheckCompletion if you need asynchronous
+        // io.scanbot.sdk.ScanbotSDK.deregisterDevice and io.scanbot.sdk.ScanbotSDK.waitForDeviceDeregistrationCompletion if you need asynchronous
         // deregistration behaviour
         try (DeviceSession ignored = new DeviceSession(DeviceSession.DEFAULT_CLOSE_TIMEOUT_MS)) {
             switch (category) {
                 case "scan": {
                     if (file == null && resource == null) { ExampleUsage.print(); return; }
+
+                    // NOTE: Using try-with-resources on ImageRef is optional, since images are also
+                    // released when their parent container is closed. However, because images are
+                    // stored compressed and decompressed on first access, it’s better to close them
+                    // early to avoid keeping too many decompressed images in memory.
                     try (ImageRef image = Utils.createImageRef(file, resource)) {
                         switch (subcommand) {
                             case "barcode":             DetectBarcodesSnippet.run(image); break;
@@ -102,5 +104,10 @@ public class ScanbotSDKExample {
                 default: ExampleUsage.print();
             }
         }
+
+        // This demonstrates that no images remain in memory, after the ImageRef has been closed.
+        ImageRefPoolSnapshot snapshot = ImageRefProfiler.makeSnapshot();
+        System.out.println("Total memory consumption: " + snapshot.getTotalMemoryConsumption());
+        System.out.println("ImageRef profiles: " + snapshot.getImageRefProfiles());
     }
 }

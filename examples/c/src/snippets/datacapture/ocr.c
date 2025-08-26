@@ -26,24 +26,29 @@ static scanbotsdk_error_code_t process_word(scanbotsdk_word_t *word) {
 static scanbotsdk_error_code_t process_line(scanbotsdk_line_t *line) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
     scanbotsdk_ocr_element_t *el = NULL;
+    scanbotsdk_word_t **words = NULL;
+    size_t word_count = 0;
 
     ec = scanbotsdk_line_as_scanbotsdk_ocr_element(line, &el);
-    if (ec != SCANBOTSDK_OK) return ec;
+    if (ec != SCANBOTSDK_OK) goto cleanup;
 
     print_ocr_element_text(el, "Line", 2);
 
-    size_t word_count = 0;
     ec = scanbotsdk_line_get_words_size(line, &word_count);
-    if (ec != SCANBOTSDK_OK || word_count == 0) return ec;
+    if (ec != SCANBOTSDK_OK || word_count == 0) goto cleanup;
 
-    scanbotsdk_word_t **words = calloc(word_count, sizeof(*words));
-    if (!words) return SCANBOTSDK_ERROR_UNKNOWN_ERROR;
+    words = calloc(word_count, sizeof(*words));
+    if (!words) { ec = SCANBOTSDK_ERROR_UNKNOWN_ERROR; goto cleanup; }
 
     ec = scanbotsdk_line_get_words(line, words, word_count);
+    if (ec != SCANBOTSDK_OK) goto cleanup;
+
     for (size_t k = 0; k < word_count; k++) {
-        process_word(words[k]);
+        scanbotsdk_error_code_t ec = process_word(words[k]);
+        if (ec != SCANBOTSDK_OK) goto cleanup;
     }
 
+cleanup:
     free(words);
     return ec;
 }
@@ -51,45 +56,58 @@ static scanbotsdk_error_code_t process_line(scanbotsdk_line_t *line) {
 static scanbotsdk_error_code_t process_block(scanbotsdk_block_t *block) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
     scanbotsdk_ocr_element_t *el = NULL;
+    scanbotsdk_line_t **lines = NULL;         // declare before gotos
+    size_t line_count = 0;
 
     ec = scanbotsdk_block_as_scanbotsdk_ocr_element(block, &el);
-    if (ec != SCANBOTSDK_OK) return ec;
+    if (ec != SCANBOTSDK_OK) goto cleanup;
 
     print_ocr_element_text(el, "Block", 0);
 
-    size_t line_count = 0;
     ec = scanbotsdk_block_get_lines_size(block, &line_count);
-    if (ec != SCANBOTSDK_OK || line_count == 0) return ec;
+    if (ec != SCANBOTSDK_OK || line_count == 0) goto cleanup;
 
-    scanbotsdk_line_t **lines = calloc(line_count, sizeof(*lines));
-    if (!lines) return SCANBOTSDK_ERROR_UNKNOWN_ERROR;
+    lines = calloc(line_count, sizeof(*lines));
+    if (!lines) { ec = SCANBOTSDK_ERROR_UNKNOWN_ERROR; goto cleanup; }
 
     ec = scanbotsdk_block_get_lines(block, lines, line_count);
+    if (ec != SCANBOTSDK_OK) goto cleanup;
+
     for (size_t j = 0; j < line_count; j++) {
-        process_line(lines[j]);
+        scanbotsdk_error_code_t ec = process_line(lines[j]);
+        if (ec != SCANBOTSDK_OK) goto cleanup;
     }
-    
+
+cleanup:
     free(lines);
     return ec;
 }
 
-scanbotsdk_error_code_t print_ocr_result(scanbotsdk_page_t *page) {
+static scanbotsdk_error_code_t print_ocr_result(scanbotsdk_page_t *page) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
-
+    scanbotsdk_block_t **blocks = NULL;
     size_t block_count = 0;
+
     ec = scanbotsdk_page_get_blocks_size(page, &block_count);
-    if (ec != SCANBOTSDK_OK) return ec;
+    if (ec != SCANBOTSDK_OK) goto cleanup;
 
-    if (block_count == 0) { printf("No text found.\n"); return SCANBOTSDK_OK;}
+    if (block_count == 0) {
+        printf("No text found.\n");
+        goto cleanup;
+    }
 
-    scanbotsdk_block_t **blocks = calloc(block_count, sizeof(*blocks));
-    if (!blocks) return SCANBOTSDK_ERROR_UNKNOWN_ERROR;
+    blocks = calloc(block_count, sizeof(*blocks));
+    if (!blocks) { ec = SCANBOTSDK_ERROR_UNKNOWN_ERROR; goto cleanup; }
 
     ec = scanbotsdk_page_get_blocks(page, blocks, block_count);
+    if (ec != SCANBOTSDK_OK) goto cleanup;
+
     for (size_t i = 0; i < block_count; i++) {
-        process_block(blocks[i]);
+        scanbotsdk_error_code_t ec = process_block(blocks[i]);
+        if (ec != SCANBOTSDK_OK) goto cleanup;
     }
-    
+
+cleanup:
     free(blocks);
     return ec;
 }

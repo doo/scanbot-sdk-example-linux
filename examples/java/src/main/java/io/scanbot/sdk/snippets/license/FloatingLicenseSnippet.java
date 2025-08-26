@@ -5,13 +5,15 @@ import io.scanbot.sdk.ScanbotSDK;
 import io.scanbot.sdk.licensing.LicenseInfo;
 
 public class FloatingLicenseSnippet {
+    static final int SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS = 15000;
 
     public static void initWithFloatingLicense() throws Exception {
         String scanbotLicenseKey = "SCANBOTSDK-LICENSE";
 
         ScanbotSDK.initialize(scanbotLicenseKey, System.getProperty("user.dir"));
 
-        try (DeviceSession deviceSession = new DeviceSession(15_000)) {
+        // Automatically handles license deregistration when it closes.
+        try (DeviceSession deviceSession = new DeviceSession(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS)) {
             // BEFORE waiting for online check
             LicenseInfo beforeInfo = ScanbotSDK.getLicenseInfo();
             System.out.printf(
@@ -22,7 +24,7 @@ public class FloatingLicenseSnippet {
             );
 
             // Wait for the online license check
-            ScanbotSDK.waitForOnlineLicenseCheckCompletion(15_000);
+            ScanbotSDK.waitForOnlineLicenseCheckCompletion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS);
 
             // AFTER waiting for online check
             LicenseInfo afterInfo = ScanbotSDK.getLicenseInfo();
@@ -33,8 +35,9 @@ public class FloatingLicenseSnippet {
                     afterInfo.getOnlineLicenseCheckInProgress()
             );
         }
-
-        ScanbotSDK.deregisterDevice();
-        ScanbotSDK.waitForDeviceDeregistrationCompletion(15000);
+        // If you are not using floating license, it is not required to use io.scanbot.sdk.DeviceSession as there is no
+        // need to notify server you are no longer using the license. Alternatively, you can manually call
+        // io.scanbot.sdk.ScanbotSDK.deregisterDevice() and io.scanbot.sdk.ScanbotSDK.waitForDeviceDeregistrationCompletion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS) if you need asynchronous
+        // deregistration behaviour
     }
 }

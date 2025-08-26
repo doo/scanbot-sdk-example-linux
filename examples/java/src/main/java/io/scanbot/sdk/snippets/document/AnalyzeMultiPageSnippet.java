@@ -2,12 +2,10 @@ package io.scanbot.sdk.snippets.document;
 
 import java.util.List;
 
-import io.scanbot.sdk.ScanbotSDK;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzer;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzerConfiguration;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzerResult;
 import io.scanbot.sdk.image.ImageRef;
-import io.scanbot.sdk.licensing.LicenseStatus;
 import io.scanbot.sdk.multipageimageextractor.ExtractedImage;
 import io.scanbot.sdk.multipageimageextractor.ExtractedPage;
 import io.scanbot.sdk.multipageimageextractor.PageExtractionResult;
@@ -15,10 +13,6 @@ import io.scanbot.sdk.utils.Utils;
 
 public class AnalyzeMultiPageSnippet {
     public static void run(String filePath, String resourcePath) throws Exception {
-        // Make sure you have a valid license
-        if(ScanbotSDK.getLicenseInfo().getStatus() != LicenseStatus.OKAY)
-            return;
-
         DocumentQualityAnalyzerConfiguration analyse_config = new DocumentQualityAnalyzerConfiguration();
         analyse_config.setTileSize(300);
         analyse_config.setDetectOrientation(true);
@@ -37,11 +31,16 @@ public class AnalyzeMultiPageSnippet {
                 List<ExtractedImage> images = page.getImages();
 
                 for (int imageIndex = 0; imageIndex < images.size(); imageIndex++) {
+                    // NOTE: Using try-witюh-resources on ImageRef is optional, since images are also
+                    // released when their parent container is closed. However, because images are
+                    // stored compressed and decompressed on first access, it’s better to close them
+                    // early to avoid keeping too many decompressed images in memory.
                     try (ImageRef image = images.get(imageIndex).getImage()) {
                         DocumentQualityAnalyzerResult result = analyzer.run(image);
                         System.out.printf("Page %d, Image %d -> Found: %b, Quality: %s%n",
                                 pageIndex + 1, imageIndex + 1,
                                 result.getDocumentFound(), result.getQuality());
+                        System.out.printf("Orientation: %f", result.getOrientation());
                     }
                 }
             }

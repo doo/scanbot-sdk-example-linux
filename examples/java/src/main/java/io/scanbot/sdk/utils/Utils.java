@@ -48,20 +48,15 @@ public class Utils {
         String typeFullName = (type != null) ? type.getFullName() : "—";
         System.out.printf("Type: %s (%s)%n", typeName, typeFullName);
 
-        if (doc.getFields() != null && !doc.getFields().isEmpty()) {
-            System.out.println("Fields:");
-            for (Field field : doc.getFields()) {
-                String fieldName = (field.getType() != null) ? field.getType().getName() : "—";
-                String valueText = (field.getValue() != null) ? field.getValue().getText() : null;
-                System.out.printf("%s: %s%n", fieldName, valueText);
-            }
+        System.out.println("Fields:");
+        for (Field field : doc.getFields()) {
+            String fieldName = (field.getType() != null) ? field.getType().getName() : "—";
+            String valueText = (field.getValue() != null) ? field.getValue().getText() : null;
+            System.out.printf("%s: %s%n", fieldName, valueText);
         }
-
-        if (doc.getChildren() != null && !doc.getChildren().isEmpty()) {
-            System.out.println("Children:");
-            for (GenericDocument child : doc.getChildren()) {
-                printGenericDocument(child);
-            }
+        System.out.println("Children:");
+        for (GenericDocument child : doc.getChildren()) {
+            printGenericDocument(child);
         }
     }
 

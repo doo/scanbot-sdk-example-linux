@@ -2,29 +2,22 @@ package io.scanbot.sdk.snippets.datacapture;
 
 import io.scanbot.sdk.mrz.*;
 import io.scanbot.sdk.utils.Utils;
-import io.scanbot.sdk.ScanbotSDK;
 import io.scanbot.sdk.frameaccumulation.AccumulatedResultsVerifierConfiguration;
 import io.scanbot.sdk.image.ImageRef;
-import io.scanbot.sdk.licensing.LicenseStatus;
 
 public class MrzScannerSnippet {
     public static void run(ImageRef image) throws Exception {
-        // Make sure you have a valid license
-        if(ScanbotSDK.getLicenseInfo().getStatus() != LicenseStatus.OKAY)
-            return;
-
         MrzScannerConfiguration config = new MrzScannerConfiguration();
         AccumulatedResultsVerifierConfiguration accumulated_config = new AccumulatedResultsVerifierConfiguration();
         accumulated_config.setMinimumNumberOfRequiredFramesWithEqualScanningResult(1);
 
-        
         config.setFrameAccumulationConfiguration(accumulated_config);
         // Configure other parameters as needed.
 
         try(
-            MrzScanner scanner = new MrzScanner(config)
-        ) {
+            MrzScanner scanner = new MrzScanner(config);
             MrzScannerResult result = scanner.run(image);
+        ) {
             printResult(result);
         }
     }

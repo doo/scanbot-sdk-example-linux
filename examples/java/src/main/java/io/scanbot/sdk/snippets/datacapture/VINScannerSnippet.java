@@ -1,23 +1,17 @@
 package io.scanbot.sdk.snippets.datacapture;
 
 import io.scanbot.sdk.vin.*;
-import io.scanbot.sdk.ScanbotSDK;
 import io.scanbot.sdk.image.ImageRef;
-import io.scanbot.sdk.licensing.LicenseStatus;
 import io.scanbot.sdk.textpattern.TextPatternScannerResult;
 
 public class VINScannerSnippet {
     public static void run(ImageRef image) throws Exception {
-        // Make sure you have a valid license
-        if(ScanbotSDK.getLicenseInfo().getStatus() != LicenseStatus.OKAY)
-            return;
-
         VinScannerConfiguration config = new VinScannerConfiguration();
         config.setExtractVINFromBarcode(true);
         // Configure other parameters as needed.
 
         try(
-            VinScanner scanner = new VinScanner(config)
+            VinScanner scanner = new VinScanner(config);
         ) {
             VinScannerResult result = scanner.run(image);
             printResult(result);

@@ -1,6 +1,5 @@
 package io.scanbot.sdk.snippets.document;
 
-import io.scanbot.sdk.ScanbotSDK;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzer;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzerConfiguration;
 import io.scanbot.sdk.documentqualityanalyzer.DocumentQualityAnalyzerResult;
@@ -11,16 +10,11 @@ import io.scanbot.sdk.documentscanner.DocumentScannerParameters;
 import io.scanbot.sdk.documentscanner.DocumentScanningResult;
 import io.scanbot.sdk.image.ImageRef;
 import io.scanbot.sdk.image.SaveImageOptions;
-import io.scanbot.sdk.licensing.LicenseStatus;
 import io.scanbot.sdk.utils.Utils;
 
 public class CropAndAnalyzeSnippet {
 
     public static void run(String filePath, String resourcePath, String savePath) throws Exception {
-        // Make sure you have a valid license
-        if(ScanbotSDK.getLicenseInfo().getStatus() != LicenseStatus.OKAY)
-            return;
-
         DocumentScannerParameters scanner_params = new DocumentScannerParameters();
         scanner_params.setAcceptedAngleScore(75);
         scanner_params.setIgnoreOrientationMismatch(false);
@@ -36,9 +30,9 @@ public class CropAndAnalyzeSnippet {
         try (
             ImageRef image = Utils.createImageRef(filePath, resourcePath);
             DocumentScanner scanner = new DocumentScanner(config);
-            DocumentQualityAnalyzer analyzer = new DocumentQualityAnalyzer(analyse_config)
-        ) {
+            DocumentQualityAnalyzer analyzer = new DocumentQualityAnalyzer(analyse_config);
             DocumentScanningResult scanResult = scanner.scan(image);
+        ) {
             DocumentDetectionResult detection = scanResult.getDetectionResult();
             System.out.println("Detection status: " + detection.getStatus());
             detection.getPoints().forEach(p ->

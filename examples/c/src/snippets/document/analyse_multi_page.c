@@ -53,8 +53,7 @@ static scanbotsdk_error_code_t process_page(scanbotsdk_extracted_page_t *page, s
         print_analyzer_result(analyse_result);
 
     inner_cleanup:
-        scanbotsdk_document_quality_analyzer_result_free(analyse_result);
-        if (ec != SCANBOTSDK_OK) break;
+        if (ec != SCANBOTSDK_OK) { goto cleanup; }
     }
 
 cleanup:

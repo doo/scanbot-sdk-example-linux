@@ -57,11 +57,12 @@ int main(int argc, char *argv[]) {
     // about license validity.
     ec = scanbotsdk_wait_for_online_license_check_completion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "license_wait: %d: %s\n", ec, error_message(ec)); goto cleanup; }
-    
+
+    scanbotsdk_image_t *image = NULL;
+
     if (strcmp(category, "scan") == 0) {
         if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
 
-        scanbotsdk_image_t *image = NULL;
         ec = load_image_from_path(file_path, &image);
         if (ec != SCANBOTSDK_OK) goto cleanup;
 
@@ -76,20 +77,15 @@ int main(int argc, char *argv[]) {
         else if (strcmp(command, "text_pattern")       == 0) ec = detect_text_pattern(image);
         else if (strcmp(command, "vin")                == 0) ec = detect_vin(image);
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
-
-        scanbotsdk_image_free(image);
     }
     else if (strcmp(category, "classify") == 0) {
         if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
 
-        scanbotsdk_image_t *image = NULL;
         ec = load_image_from_path(file_path, &image);
         if (ec != SCANBOTSDK_OK) goto cleanup;
 
         if      (strcmp(command, "document") == 0) ec = classify_document(image);
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
-
-        scanbotsdk_image_free(image);
     }
     else if (strcmp(category, "analyse") == 0) {
         if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
@@ -98,12 +94,10 @@ int main(int argc, char *argv[]) {
             ec = analyse_multi_page(file_path);
         }
         else if (strcmp(command, "crop_analyze") == 0) {
-            scanbotsdk_image_t *image = NULL;
             ec = load_image_from_path(file_path, &image);
             if (ec != SCANBOTSDK_OK) goto cleanup;
 
             ec = crop_and_analyse(image, save_path);
-            scanbotsdk_image_free(image);
         }
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
     }
@@ -117,6 +111,7 @@ int main(int argc, char *argv[]) {
     else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
 
 cleanup:
+    scanbotsdk_image_free(image);
     // For floating licenses it is highly recommended to call device deregistration.
     // This releases the license slot on the server, allowing other devices to activate.
     // If scanbotsdk_deregister_device() is not called, the license will remain occupied

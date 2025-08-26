@@ -124,7 +124,7 @@ scanbotsdk_error_code_t process_frame(scanbotsdk_barcode_scanner_t *scanner, fra
         scanbotsdk_barcode_scanner_result_get_barcodes_size(result, &count);
         fprintf(stdout, "%zu barcodes found in frame %zu\n", count, frame_number);
 
-        scanbotsdk_barcode_item_t **barcodes = malloc(count * sizeof(*barcodes));
+        scanbotsdk_barcode_item_t **barcodes = calloc(count, sizeof(*barcodes));
         scanbotsdk_barcode_scanner_result_get_barcodes(result, barcodes, count);
         for (size_t i = 0; i < count; i++)
         {
