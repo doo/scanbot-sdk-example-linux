@@ -2,11 +2,6 @@ import * as ScanbotSDK from "scanbotsdk";
 
 export class CropAndAnalyzeSnippet {
   public static async run(filePath: string, savePath?: string): Promise<void> {
-    const licenseInfo = await ScanbotSDK.getLicenseInfo();
-    if (licenseInfo.status !== "OKAY") {
-      console.warn("License is not valid.");
-      return;
-    }
     const scannerParams = new ScanbotSDK.DocumentScannerParameters();
     scannerParams.acceptedAngleScore = 75;
     scannerParams.ignoreOrientationMismatch = false;

@@ -3,11 +3,6 @@ from scanbotsdk import *
 from utils import print_generic_document
 
 def parse_barcode_document(raw_string: str):
-    # Make sure you have a valid license
-    license_info = get_license_info()
-    if license_info.status != LicenseStatus.OKAY:
-        return
-    
     document_parser = BarcodeDocumentParser(
         accepted_formats=BarcodeDocumentFormats.all
     )

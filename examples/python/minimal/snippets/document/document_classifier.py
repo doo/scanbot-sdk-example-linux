@@ -1,11 +1,6 @@
 from scanbotsdk import *
 
 def classify_document(image: ImageRef):
-    # Make sure you have a valid license
-    license_info = get_license_info()
-    if license_info.status != LicenseStatus.OKAY:
-        return
-    
     config = DocumentClassifierConfiguration(
         crop=True
     )

@@ -3,11 +3,6 @@ import { printGenericDocument } from "../utils/utils";
 
 export class CreditCardScannerSnippet {
   public static async run(image: ScanbotSDK.ImageRef): Promise<void> {
-    const licenseInfo = await ScanbotSDK.getLicenseInfo();
-    if (licenseInfo.status !== "OKAY") {
-      console.warn("License is not valid.");
-      return;
-    }
     var config = new ScanbotSDK.CreditCardScannerConfiguration();
     config.requireExpiryDate = false;
     config.requireCardholderName = false;

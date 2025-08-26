@@ -2,12 +2,6 @@ import * as ScanbotSDK from "scanbotsdk";
 
 export class OcrSnippet {
   public static async run(image: ScanbotSDK.ImageRef): Promise<void> {
-    const licenseInfo = await ScanbotSDK.getLicenseInfo();
-    if (licenseInfo.status !== "OKAY") {
-      console.warn("License is not valid.");
-      return;
-    }
-
     // `await using` ensures the scanner is properly disposed
     // when the scope ends, as it holds unmanaged resources.
     await using scanner = await ScanbotSDK.OcrEngine.create();

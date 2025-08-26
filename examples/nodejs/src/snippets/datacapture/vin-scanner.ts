@@ -2,12 +2,6 @@ import * as ScanbotSDK from "scanbotsdk";
 
 export class VinScannerSnippet {
   public static async run(image: ScanbotSDK.ImageRef): Promise<void> {
-    const licenseInfo = await ScanbotSDK.getLicenseInfo();
-    if (licenseInfo.status !== "OKAY") {
-      console.warn("License is not valid.");
-      return;
-    }
-
     const config = new ScanbotSDK.VinScannerConfiguration();
     config.extractVINFromBarcode = true;
     // configure other parameters as needed

@@ -3,11 +3,6 @@ from scanbotsdk import *
 from utils import create_image_ref
 
 def crop_and_analyse(image_path: str):
-    # Make sure you have a valid license
-    license_info = get_license_info()
-    if license_info.status != LicenseStatus.OKAY:
-        return
-    
     image: ImageRef = create_image_ref(image_path)
     
     config = DocumentScannerConfiguration()
@@ -37,8 +32,5 @@ def crop_and_analyse(image_path: str):
     analyser = DocumentQualityAnalyzer(configuration=analyser_config)
     quality_result: DocumentQualityAnalyzerResult = analyser.run(image=result.cropped_image)
     
-    # if you want to use cropped image later, call result.cropped_image.encode(), and save buffer,
-    # otherwise image reference will be released when the ImageRef object is garbage collected.
-
     print(f"Document Found: {quality_result.document_found}")
     print(f"Quality: {quality_result.quality.name}")

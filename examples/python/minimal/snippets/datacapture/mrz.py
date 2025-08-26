@@ -4,11 +4,6 @@ from scanbotsdk import *
 from utils import print_generic_document
 
 def scan_mrz(image: ImageRef):
-    # Make sure you have a valid license
-    license_info = get_license_info()
-    if license_info.status != LicenseStatus.OKAY:
-        return
-    
     config = MrzScannerConfiguration(
         enable_detection=True,
         incomplete_result_handling=MrzIncompleteResultHandling.ACCEPT,

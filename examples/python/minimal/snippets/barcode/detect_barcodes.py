@@ -1,11 +1,6 @@
 from scanbotsdk import *
 
 def scan_barcode(image: ImageRef):
-    # Make sure you have a valid license
-    license_info = get_license_info()
-    if license_info.status != LicenseStatus.OKAY:
-        return
-    
     configuration = BarcodeScannerConfiguration(
         return_barcode_image=True
     )

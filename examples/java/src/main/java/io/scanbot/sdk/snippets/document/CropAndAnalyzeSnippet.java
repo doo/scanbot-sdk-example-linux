@@ -13,7 +13,6 @@ import io.scanbot.sdk.image.SaveImageOptions;
 import io.scanbot.sdk.utils.Utils;
 
 public class CropAndAnalyzeSnippet {
-
     public static void run(String filePath, String resourcePath, String savePath) throws Exception {
         DocumentScannerParameters scanner_params = new DocumentScannerParameters();
         scanner_params.setAcceptedAngleScore(75);

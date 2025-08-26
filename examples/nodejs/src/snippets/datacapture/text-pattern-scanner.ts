@@ -2,12 +2,6 @@ import * as ScanbotSDK from "scanbotsdk";
 
 export class TextPatternScannerSnippet {
   public static async run(image: ScanbotSDK.ImageRef): Promise<void> {
-    const licenseInfo = await ScanbotSDK.getLicenseInfo();
-    if (licenseInfo.status !== "OKAY") {
-      console.warn("License is not valid.");
-      return;
-    }
-
     const config = new ScanbotSDK.TextPatternScannerConfiguration();
     config.minimumNumberOfRequiredFramesWithEqualScanningResult = 2;
     config.validator = new ScanbotSDK.DefaultContentValidator();

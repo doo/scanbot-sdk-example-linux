@@ -2,12 +2,6 @@ import * as ScanbotSDK from "scanbotsdk";
 
 export class DetectDocumentSnippet {
   public static async run(image: ScanbotSDK.ImageRef): Promise<void> {
-    const licenseInfo = await ScanbotSDK.getLicenseInfo();
-    if (licenseInfo.status !== "OKAY") {
-      console.warn("License is not valid.");
-      return;
-    }
-
     var scanner_params = new ScanbotSDK.DocumentScannerParameters();
     scanner_params.acceptedAngleScore = 75;
     scanner_params.ignoreOrientationMismatch = false;

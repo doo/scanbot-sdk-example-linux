@@ -25,11 +25,6 @@ def print_medical_certificate_result(result: MedicalCertificateScanningResult):
 
 
 def scan_medical_certificate(image: ImageRef):
-    # Make sure you have a valid license
-    license_info = get_license_info()
-    if license_info.status != LicenseStatus.OKAY:
-        return
-    
     params = MedicalCertificateScanningParameters(
         recognize_patient_info_box = True,
         should_crop_document = True

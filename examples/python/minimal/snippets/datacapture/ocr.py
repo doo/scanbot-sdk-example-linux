@@ -16,10 +16,6 @@ def print_ocr_page(page: Page):
 
 
 def run_ocr(image_path: str):
-    license_info = get_license_info()
-    if license_info.status != LicenseStatus.OKAY:
-        return
-    
     npimage = cv.imread(image_path)
     image = ImageRef.from_ndarray(npimage, RawImageLoadOptions(live_source=True))
 

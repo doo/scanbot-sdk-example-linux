@@ -1,11 +1,6 @@
 from scanbotsdk import *
     
 def analyse_multi_page(file_path: str):
-    # Make sure you have a valid license
-    license_info = get_license_info()
-    if license_info.status != LicenseStatus.OKAY:
-        return
-    
     configuration = DocumentQualityAnalyzerConfiguration(
         tile_size = 300,
         detect_orientation = True,

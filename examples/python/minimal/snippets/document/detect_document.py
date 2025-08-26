@@ -1,11 +1,6 @@
 from scanbotsdk import *
 
 def scan_document(image: ImageRef):
-    # Make sure you have a valid license
-    license_info = get_license_info()
-    if license_info.status != LicenseStatus.OKAY:
-        return
-    
     config = DocumentScannerConfiguration()
     config.parameters.accepted_angle_score = 75
     config.parameters.ignore_orientation_mismatch = False

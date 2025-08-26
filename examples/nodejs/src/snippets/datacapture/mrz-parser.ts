@@ -3,12 +3,6 @@ import { printGenericDocument } from "../utils/utils";
 
 export class MrzParserSnippet {
   public static async run(rawMrz: string): Promise<void> {
-    const licenseInfo = await ScanbotSDK.getLicenseInfo();
-    if (licenseInfo.status !== "OKAY") {
-      console.warn("License is not valid.");
-      return;
-    }
-
     const config = new ScanbotSDK.MrzParserConfiguration();
     config.incompleteResultHandling = "ACCEPT";
     // Configure other parameters as needed.

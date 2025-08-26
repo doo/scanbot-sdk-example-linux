@@ -3,12 +3,6 @@ import { extractImages } from "../utils/utils";
 
 export class AnalyzeMultiPageSnippet {
   public static async run(filePath: string): Promise<void> {
-    const licenseInfo = await ScanbotSDK.getLicenseInfo();
-    if (licenseInfo.status !== "OKAY") {
-      console.warn("License is not valid.");
-      return;
-    }
-
     const analyzeConfig =
       new ScanbotSDK.DocumentQualityAnalyzerConfiguration();
     analyzeConfig.tileSize = 300;
