@@ -18,6 +18,14 @@ import { ParseBarcodeDocumentSnippet } from "./snippets/barcode/parse-barcode-do
 import { AnalyzeMultiPageSnippet } from "./snippets/document/analyse-multipage";
 import { CropAndAnalyzeSnippet } from "./snippets/document/crop-analyse";
 
+async function awaitPromise(promise: Promise<void>, maxAwaitTimeMs: number = 60 * 1000): Promise<void> {
+  const timer = setTimeout(() => {
+    throw new Error("Operation timed out");
+  }, maxAwaitTimeMs);
+  await promise;
+  clearTimeout(timer);
+}
+
 async function main(): Promise<void> {
   if (process.argv.length < 2) {
     printUsage();
@@ -114,9 +122,4 @@ async function main(): Promise<void> {
   });
 }
 
-main();
-
-setTimeout(() => {
-  console.log("Exiting after timeout");
-  process.exit(0);
-}, 100);
+awaitPromise(main());
