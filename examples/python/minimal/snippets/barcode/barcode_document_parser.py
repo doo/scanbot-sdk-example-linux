@@ -7,6 +7,6 @@ def parse_barcode_document(raw_string: str):
         accepted_formats=BarcodeDocumentFormats.all
     )
     
-    result: BarcodeDocumentParserResult= document_parser.parse(raw_string=raw_string)
+    result: BarcodeDocumentParserResult = document_parser.parse(raw_string=raw_string)
     print_generic_document(result.parsed_document)
 

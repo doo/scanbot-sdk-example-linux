@@ -31,7 +31,7 @@ def scan_medical_certificate(image: ImageRef):
     )
     # Configure other parameters as needed.
     
-    extractor = MedicalCertificateScanner()
-    result: MedicalCertificateScanningResult = extractor.run(image=image, parameters=params)
+    scanner = MedicalCertificateScanner()
+    result: MedicalCertificateScanningResult = scanner.run(image=image, parameters=params)
 
     print_medical_certificate_result(result)

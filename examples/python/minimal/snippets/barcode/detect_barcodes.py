@@ -15,8 +15,6 @@ def scan_barcode(image: ImageRef):
     if result.barcodes:
         print(f"Found {len(result.barcodes)} barcodes:")
         for barcode in result.barcodes:
-            # if you want to use image later, call barcode.source_image.encode(), and save buffer,
-            # otherwise image reference will be released when the ImageRef object is garbage collected.
             print(f"\t{barcode.text}")
     else:
         print("No barcodes found")

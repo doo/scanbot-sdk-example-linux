@@ -4,17 +4,17 @@ Usage:
   npx ts-node src/index.ts <category> <subcommand> [--file <path>] [--save <path>] [--text <value>] [--license <key>]
 
 Categories & subcommands:
-  scan <barcode|document|check|credit_card|document_extractor|medical_certificate|mrz|ocr|text_pattern|vin>
-  analyse <analyse_multi_page|crop_analyze>
+  scan <barcode | document  | check | credit_card | document_extractor  | medical_certificate | mrz | ocr | text_pattern  | vin>
+  analyse <analyse_multi_page | crop_analyze>
   classify <document>
-  parse <mrz|barcode_doc>
+  parse <mrz  | barcode_doc>
 
 Flags:
   --file <path>       Path to an input image/file on disk
   --save <path>       Path to save outputs
   --text <value>      Text input for parsers
   --license <key>     Scanbot SDK license key (optional).
-                      If not provided, the placeholder variable "SCANBOTSDK-LICENSE" is applied.
+                      If not provided, the placeholder variable "<SCANBOTSDK-LICENSE>" is applied.
 
 Examples:
   npx ts-node src/index.ts scan barcode --file images/example.jpg --license <KEY>

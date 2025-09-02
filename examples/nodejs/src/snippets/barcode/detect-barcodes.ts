@@ -15,13 +15,12 @@ export class DetectBarcodesSnippet {
     // when the scope ends, as they hold unmanaged resources.
     await using scanner = await ScanbotSDK.BarcodeScanner.create(config);
     await using result = await scanner.run(image);
-    const barcodes = result.barcodes ?? [];
-    if (barcodes.length === 0) {
+    if (result.barcodes.length === 0) {
       console.log("No barcodes found.");
       return;
     }
 
-    barcodes.forEach((barcode, idx) => {
+    result.barcodes.forEach((barcode, idx) => {
       console.log(`Barcode #${idx + 1}:`);
       console.log(`  Format: ${barcode.format}`);
       console.log(`  Text:   ${barcode.text}`);

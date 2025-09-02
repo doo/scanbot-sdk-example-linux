@@ -1,5 +1,4 @@
 from scanbotsdk import *
-import cv2 as cv
 from timeit import default_timer as timer
 
 def print_ocr_page(page: Page):
@@ -15,10 +14,7 @@ def print_ocr_page(page: Page):
                 print(f'    Word: "{word.text}"')
 
 
-def run_ocr(image_path: str):
-    npimage = cv.imread(image_path)
-    image = ImageRef.from_ndarray(npimage, RawImageLoadOptions(live_source=True))
-
+def run_ocr(image: ImageRef):
     engine = OcrEngine()
     start_time = timer()
     page = engine.run(image=image)

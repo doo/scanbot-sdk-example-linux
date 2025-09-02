@@ -11,5 +11,5 @@ def scan_check(image: ImageRef):
     result: CheckScanningResult = scanner.run(image=image)
 
     print(f"Document Detection status result: {result.document_detection_result.status.name}")
-    print(f"Ink Status: {result.status.name}")
+    print(f"MagneticInkStripScanning Status: {result.status.name}")
     print_generic_document(result.check)

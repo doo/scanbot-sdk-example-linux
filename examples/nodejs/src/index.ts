@@ -43,7 +43,7 @@ async function main(): Promise<void> {
   const text = flags["--text"] as string | undefined;
   const licenseFlag = flags["--license"] as string | undefined;
 
-  const licenseKey: string = licenseFlag ?? "SCANBOTSDK-LICENSE";
+  const licenseKey: string = licenseFlag ?? "<SCANBOTSDK-LICENSE>";
   const writablePath = ".";
 
   await ScanbotSDK.initialize({
@@ -62,6 +62,14 @@ async function main(): Promise<void> {
     );
   }
 
+  // `ScanbotSDK.autorelease` automatically disposes all unmanaged resources
+  // (e.g. ImageRefs, scanners, results) created inside this block when it ends.
+  // This prevents memory leaks and avoids having to call `.release()` manually.
+  //
+  // Alternatively, you can use `await using` on individual
+  // objects for more fine-grained control.
+  //
+  // Both patterns serve the same purpose: ensuring resources are freed in time.
   await ScanbotSDK.autorelease(async () => {
     switch (category) {
       case "scan": {
@@ -100,7 +108,7 @@ async function main(): Promise<void> {
         const image = await ScanbotSDK.ImageRef.fromPath(file);
 
         switch (subcommand) {
-          case "document": await DocumentClassifierSnippet.run(image); break;
+          case "document":            await DocumentClassifierSnippet.run(image); break;
           default: printUsage();
         }
         break;
@@ -110,8 +118,8 @@ async function main(): Promise<void> {
         if (!text || text.trim().length === 0) { printUsage(); return; }
 
         switch (subcommand) {
-          case "mrz":         await MrzParserSnippet.run(text); break;
-          case "barcode_doc": await ParseBarcodeDocumentSnippet.run(text); break;
+          case "mrz":                 await MrzParserSnippet.run(text); break;
+          case "barcode_doc":         await ParseBarcodeDocumentSnippet.run(text); break;
           default: printUsage();
         }
         break;

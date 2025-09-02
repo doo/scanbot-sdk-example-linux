@@ -1,6 +1,6 @@
+from typing import Dict
 from scanbotsdk import *
 from pathlib import Path
-from collections import OrderedDict
 import sys
 
 def create_image_ref(path: str) -> ImageRef:
@@ -10,10 +10,6 @@ def create_image_ref(path: str) -> ImageRef:
     return ImageRef.from_path(str(p))
 
 def print_generic_document(doc: GenericDocument):
-    if not doc:
-        print("Document: None")
-        return
-
     print(f"Type: {doc.type.name} {doc.type.full_name}")
     
     if doc.fields:
@@ -25,11 +21,10 @@ def print_generic_document(doc: GenericDocument):
     if doc.children:
         print("Children:")
         for child in doc.children:
-            print_generic_document(child)
-            
+            print_generic_document(child) 
 
-def parse_flags(tokens) -> OrderedDict:
-    flags = OrderedDict()
+def parse_flags(tokens) -> Dict:
+    flags = Dict()
     it = iter(tokens)
     for token in it:
         if not token.startswith("--"):
@@ -50,25 +45,31 @@ def print_usage():
     print("Scanbot SDK Example\n")
     print("Usage:")
     print("  python main.py scan <command> --file <path/to/file.jpg> [--license <KEY>]")
-    print("or")
-    print("  python main.py classify <command> --file <path/to/file.jpg> [--license <KEY>]\n")
+    print("  python main.py classify <command> --file <path/to/file.jpg> [--license <KEY>]")
     print("  python main.py analyse <command> --file <path/to/file> --save <path/to/save> [--license <KEY>]")
-    print("or")
-    print("  python main.py parse <command> --text \"<input>\" [--license <KEY>]\n")
+    print("  python main.py parse <command> --text \"<input>\" [--license <KEY>]")
+    print("  python main.py live <command> --device <device_name> [--license <KEY>]\n")
+
     print("Available scan commands:")
-    print("  barcode | document | check | credit_card | document_extractor | medical_certificate | mrz | ocr | text_pattern | vin\n")
+    print("  barcode | document | check | credit_card | document_data_extractor | medical_certificate | mrz | ocr | text_pattern | vin\n")
     print("Available analyse commands:")
     print("  analyse_multi_page | crop_analyze\n")
     print("Available classify commands:")
-    print("  document \n")
+    print("  document\n")
     print("Available parse commands:")
     print("  mrz | barcode_doc\n")
+    print("Available live commands:")
+    print("  barcode\n")
+
     print("Note:")
-    print("  The --save argument is optional and only used with analyse/crop_analyze.")
-    print("  The --license argument is optional. If not provided, a placeholder \"<SCANBOTSDK-LICENSE>\" will be used.\n")
+    print("  --save is optional, only used with analyse/crop_analyze.")
+    print("  --license is optional, default is \"<SCANBOTSDK-LICENSE>\".")
+    print("  --device is required for live command (e.g. libcamera or jetson_csi).\n")
+
     print("Examples:")
     print("  python main.py scan barcode --file images/example.jpg --license <KEY>")
     print("  python main.py analyse analyse_multi_page --file files/doc.pdf --license <KEY>")
     print("  python main.py analyse crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>")
     print("  python main.py parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\" --license <KEY>")
+    print("  python main.py live barcode --device jetson_csi --license <KEY>")
     print()
