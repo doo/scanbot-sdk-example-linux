@@ -24,7 +24,7 @@ def print_generic_document(doc: GenericDocument):
             print_generic_document(child) 
 
 def parse_flags(tokens) -> Dict:
-    flags = Dict()
+    flags = {}
     it = iter(tokens)
     for token in it:
         if not token.startswith("--"):
