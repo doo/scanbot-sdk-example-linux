@@ -79,7 +79,7 @@ pip install --upgrade pip setuptools wheel
 ```
 
 ### 3. Download and install the Scanbot SDK
-1. Go to [GitHub Releases](https://github.com/doo/scanbot-sdk-example-linux/releases/tag/v0.800.3)  
+1. Go to [GitHub Releases](https://github.com/doo/scanbot-sdk-example-linux/releases)  
 2. Manually download the **Python package** for your platform (ARM64 or x86_64).  
 3. Install it with pip, for example:
 
