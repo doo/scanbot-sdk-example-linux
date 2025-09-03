@@ -20,7 +20,15 @@ def barcode_live(input_device: str, use_display: bool = True, use_tensorrt: bool
     scanner = BarcodeScanner(configuration=configuration)
 
     def on_frame(frame: np.ndarray):
-        # Always use ImageRef as a context manager for live sources → timely release
+        # Although it is not required to use the image ref as a context manager, it is recommended to do so when
+        # creating from live source to ensure that the image_ref is timely released.
+        #
+        # Setting live_source=True lets the scanner know that we're running in live mode.
+        # In this mode we maintain the highest FPS because we spread the work of scanning barcodes across multiple frames.
+        # If you set live_source=False, the scanner will run in single-shot mode which is much slower,
+        # but has a much higher probability of finding all barcodes in the input image.
+        # As an alternative, you can explicitly set the scanner mode,
+        # by creating it with e.g. processing_mode=ProcessingMode.LIVE for live mode.
         with ImageRef.from_ndarray(frame, RawImageLoadOptions(live_source=True)) as image_ref:
             result = scanner.run(image=image_ref)
             for barcode in result.barcodes:
