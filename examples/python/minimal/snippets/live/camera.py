@@ -55,21 +55,23 @@ class Camera:
 
     def run(self, frame_callback: Callable[[np.ndarray], None]):
         try:
+            image = np.zeros((DEVICE_CAPTURE_HEIGHT, DEVICE_CAPTURE_WIDTH, 3), dtype=np.uint8)
             while True:
-                success, frame = self.cap.read()
+                success, _ = self.cap.read(image)
                 if not success:
                     print("Failed to capture image")
                     break
 
-                frame_callback(frame)
+                frame_callback(image)
 
                 if self.use_display:
-                    aspect_width = int(frame.shape[1] * DISPLAY_HEIGHT / frame.shape[0])
-                    display_frame = cv.resize(frame, (aspect_width, DISPLAY_HEIGHT))
+                    aspect_width = int(image.shape[1] * DISPLAY_HEIGHT / image.shape[0])
+                    display_frame = cv.resize(image, (aspect_width, DISPLAY_HEIGHT))
                     cv.imshow(WINDOW_NAME, display_frame)
-                    cv.waitKey(WAIT_DELAY_MS)
 
-                    if cv.getWindowProperty(WINDOW_NAME, cv.WND_PROP_VISIBLE) < 1:
+                    if cv.waitKey(WAIT_DELAY_MS) == 27:  # ESC to quit
+                        break
+                    if cv.getWindowProperty(WINDOW_NAME, cv.WND_PROP_AUTOSIZE) < 0:
                         break
         finally:
             self.cap.release()
