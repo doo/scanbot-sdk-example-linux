@@ -3,14 +3,6 @@ plugins {
     id 'application'
 }
 
-// TODO Add your SCANBOTSDK_API_TOKEN and SCANBOTSDK_VERSION here.
-// They are available on request via beta@scanbot.io
-def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>"
-def SCANBOTSDK_API_TOKEN = "<SCANBOTSDK_API_TOKEN>"
-
-def arch = System.getProperty("os.arch")
-def SCANBOTSDK_ARCHITECTURE = (arch.contains("arm") || arch.contains("aarch64")) ? "aarch64" : "x86_64"
-
 group = 'io.scanbot.sdk'
 version = '1.0'
 
@@ -18,28 +10,38 @@ repositories {
     mavenCentral()
 }
 
-def urlFile = { url, name ->
-    File file = new File("${layout.buildDirectory.get()}/libs/${name}")
-    file.parentFile.mkdirs()
-    if (!file.exists()) {
-        new URL(url).withInputStream { downloadStream ->
-            file.withOutputStream { fileOut ->
-                fileOut << downloadStream
-            }
+def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>"
+def SCANBOTSDK_ARCH   = "<SCANBOTSDK_ARCH>" // aarch64 | x86_64
+
+def scanbotJarName = "scanbotsdk-${SCANBOTSDK_VERSION}-linux-${SCANBOTSDK_ARCH}.jar"
+def scanbotJarFile = file("libs/${scanbotJarName}")
+
+tasks.register("verifyScanbotJar") {
+    doLast {
+        if (!scanbotJarFile.exists()) {
+            throw new org.gradle.api.GradleException(
+                "${scanbotJarFile.path} not found. Please place this file into the libs/ folder."
+            )
+        } else {
+            println "Использую JAR: ${scanbotJarFile.name}"
         }
     }
-    files(file.absolutePath)
 }
 
+tasks.withType(JavaCompile).configureEach { dependsOn tasks.named("verifyScanbotJar") }
+tasks.named("test") { it.dependsOn tasks.named("verifyScanbotJar") }
+tasks.named("run")  { it.dependsOn tasks.named("verifyScanbotJar") }
+tasks.named("jar")  { it.dependsOn tasks.named("verifyScanbotJar") }
+
 dependencies {
-    implementation urlFile("https://scanbotsdk-deployment.s3.amazonaws.com/ScanbotSDK-Linux/${SCANBOTSDK_API_TOKEN}/scanbotsdk-${SCANBOTSDK_VERSION}-linux-${SCANBOTSDK_ARCHITECTURE}.jar", "scanbotsdk.jar")
+    implementation files(scanbotJarFile)
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    files()
 }
 
 application {
-    mainClassName = "io.scanbot.sdk.ScanbotSDKExample"
+    mainClass = "io.scanbot.sdk.ScanbotSDKExample"
 }
 
 test {

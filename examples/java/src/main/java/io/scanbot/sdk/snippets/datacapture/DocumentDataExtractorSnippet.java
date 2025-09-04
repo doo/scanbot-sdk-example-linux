@@ -31,7 +31,8 @@ public class DocumentDataExtractorSnippet {
         ResultAccumulationConfiguration accumulation_config = new ResultAccumulationConfiguration();
         accumulation_config.setConfirmationMethod(ConfirmationMethod.EXACT);
 
-        DocumentDataExtractorConfiguration config = new DocumentDataExtractorConfiguration(elements);
+        DocumentDataExtractorConfiguration config = new DocumentDataExtractorConfiguration();
+        config.setConfigurations(elements);
         config.setResultAccumulationConfig(accumulation_config);
         // Configure other parameters as needed.
 

@@ -3,3 +3,4 @@ statistics.dat
 
 examples/c/build/*
 examples/nodejs/node_modules
+examples/java/libs/*.jar
