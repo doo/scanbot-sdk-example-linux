@@ -1,18 +1,26 @@
 package io.scanbot.sdk.snippets.image;
 
+import java.io.IOException;
 
 import io.scanbot.sdk.documentscanner.DocumentDetectionResult;
 import io.scanbot.sdk.documentscanner.DocumentScanner;
 import io.scanbot.sdk.documentscanner.DocumentScannerConfiguration;
-
+import io.scanbot.sdk.exception.InvalidImageRefException;
 import io.scanbot.sdk.image.ImageInfo;
 import io.scanbot.sdk.image.ImageRef;
 import io.scanbot.sdk.image.ImageRotation;
+import io.scanbot.sdk.image.SaveImageOptions;
 import io.scanbot.sdk.imageprocessing.BinarizationFilterPreset;
 import io.scanbot.sdk.imageprocessing.CustomBinarizationFilter;
 import io.scanbot.sdk.imageprocessing.ImageProcessor;
 
 public class ImageProcessingSnippets {
+
+    public static void saveImage(ImageRef image, String path) throws IOException, InvalidImageRefException {
+        SaveImageOptions options = new SaveImageOptions();
+        options.setQuality(80);
+        image.saveImage(path, options);
+    }
 
     public static void rotate90(ImageRef image) throws Exception {
         try (ImageProcessor processor = new ImageProcessor();
@@ -44,15 +52,14 @@ public class ImageProcessingSnippets {
         }
     }
 
-    public static void applyBinarizationFilter(ImageRef image) throws Exception {
+    public static void applyBinarizationFilter(ImageRef image, String path) throws Exception {
         CustomBinarizationFilter filter = new CustomBinarizationFilter();
         filter.setPreset(BinarizationFilterPreset.PRESET_4);
 
         try (ImageProcessor processor = new ImageProcessor();
-             ImageRef filtered = processor.applyFilter(image, filter)) {
+            ImageRef filteredImage = processor.applyFilter(image, filter)) {
 
-            ImageInfo filteredInfo = filtered.imageInfo();
-            System.out.println("Filtered WxH: " + filteredInfo.getWidth() + "x" + filteredInfo.getHeight());
+            filteredImage.saveImage(path, new SaveImageOptions());
         }
     }
 

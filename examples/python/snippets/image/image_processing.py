@@ -1,5 +1,9 @@
 from scanbotsdk import *
 
+def save_image(image: ImageRef, path: str) -> None:
+    options = SaveImageOptions(quality=80)
+    image.save_image(path, options)
+    
 def rotate_90(image: ImageRef) -> None:
     processor = ImageProcessor()
     rotated = processor.rotate(image=image, rotation=ImageRotation.CLOCKWISE_90)
@@ -27,13 +31,11 @@ def resize(image: ImageRef, max_size: int) -> None:
     print(f"Resized WxH: {resized_info.width}x{resized_info.height}")
 
 
-def apply_binarization_filter(image: ImageRef) -> None:
+def apply_binarization_filter(image: ImageRef, path: str) -> None:
     processor = ImageProcessor()
     image_filter = CustomBinarizationFilter(preset=BinarizationFilterPreset.PRESET_4)
-    filtered = processor.apply_filter(image=image, filter=image_filter)
-
-    filtered_info = filtered.info()
-    print(f"Filtered WxH: {filtered_info.width}x{filtered_info.height}")
+    filtered_img = processor.apply_filter(image=image, filter=image_filter)
+    filtered_img.save_image(path)
 
 
 def detect_and_crop_document(image: ImageRef) -> None:

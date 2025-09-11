@@ -1,5 +1,10 @@
 import * as ScanbotSDK from "scanbotsdk";
 
+export async function saveImage(image: ScanbotSDK.ImageRef, path: string): Promise<void> {
+  const options = new ScanbotSDK.SaveImageOptions({ quality: 80 });
+  await image.saveImage(path, options);
+}
+
 export async function rotate90(image: ScanbotSDK.ImageRef): Promise<void> {
   await using imageProcessor = await ScanbotSDK.ImageProcessor.create();
   await using rotated = await imageProcessor.rotate(image, "CLOCKWISE_90");
@@ -27,13 +32,12 @@ export async function resize(image: ScanbotSDK.ImageRef, maxSize: number): Promi
   console.log(`Resized WxH: ${resizedInfo.width}x${resizedInfo.height}`);
 }
 
-export async function applyBinarizationFilter(image: ScanbotSDK.ImageRef): Promise<void> {
+export async function applyBinarizationFilter(image: ScanbotSDK.ImageRef, path: string): Promise<void> {
   await using imageProcessor = await ScanbotSDK.ImageProcessor.create();
   const filter = new ScanbotSDK.CustomBinarizationFilter({ preset: "PRESET_4" });
-  await using filtered = await imageProcessor.applyFilter(image, filter);
+  await using filtered_img = await imageProcessor.applyFilter(image, filter);
 
-  const info = await filtered.imageInfo();
-  console.log(`Filtered WxH: ${info.width}x${info.height}`);
+  await filtered_img.saveImage(path);
 }
 
 export async function detectAndCropDocument(image: ScanbotSDK.ImageRef): Promise<void> {
