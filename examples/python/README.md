@@ -1,5 +1,4 @@
 # Scanbot SDK – Python on Linux
-This repository demonstrates how to use the [Scanbot SDK for Linux](https://scanbot.io) with Python.  
 
 ## NVidia Jetson
 
@@ -40,7 +39,6 @@ Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you wa
 python -c "import scanbotsdk"
 ```
 
-✅ You're ready to run the examples!
 
 ### ⚡ Performance notes (Jetson)
 To avoid throttling, set max GPU/CPU/memory clocks:
@@ -84,7 +82,24 @@ Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you wa
 python -c "import scanbotsdk"
 ```
 
-✅ Done! You can now run the examples.
+## Usage
+The example supports four modes: **scan**, **analyze**, **classify**, and **parse**.
+```bash
+python main.py scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
+python main.py scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
+python main.py analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
+python main.py analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
+python main.py classify <subcommand> --file|--resource <path/to/file.jpg> [--license <KEY>]
+python main.py parse <subcommand> --text "<input>" [--license <KEY>]
+```
+
+## Example
+```bash
+python main.py scan barcode --file images/example.jpg --license <KEY>
+python main.py analyze analyse_multi_page --file files/doc.pdf --license <KEY>
+python main.py analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
+python main.py parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
+```
 
 ## API References
 👉 [Scanbot SDK Python API](https://scanbotsdk.github.io/documentation/barcode-scanner-sdk/linux/python-api/)
