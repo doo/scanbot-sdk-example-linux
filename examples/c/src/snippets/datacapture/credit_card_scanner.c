@@ -7,13 +7,17 @@
 scanbotsdk_error_code_t print_credit_card_result(scanbotsdk_credit_card_scanning_result_t *result) {
     scanbotsdk_error_code_t ec;
     scanbotsdk_generic_document_t *credit_card = NULL;
-    scanbotsdk_document_detection_status_t status;
+    scanbotsdk_document_detection_status_t detection_status;
 
     ec = scanbotsdk_credit_card_scanning_result_get_credit_card(result, &credit_card);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_check: %d\n", ec); return ec; }
 
-    scanbotsdk_credit_card_scanning_result_get_detection_status(result, &status);
-    printf("Document Detection Status = %d\n", (int)status);
+    ec = scanbotsdk_credit_card_scanning_result_get_detection_status(result, &detection_status);
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_detection_status: %d\n", ec); return ec; }
+
+    const char *detection_status_str = NULL;
+    ec = scanbotsdk_document_detection_status_t_to_string(detection_status, &detection_status_str);
+    printf("Document Detection status: %s\n", detection_status_str);
 
     ec = print_generic_document_fields(credit_card);
     return ec;

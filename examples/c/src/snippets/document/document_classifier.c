@@ -24,10 +24,16 @@ scanbotsdk_error_code_t classify_document(scanbotsdk_image_t *image) {
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "classifier_run: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     ec = scanbotsdk_document_classifier_result_get_status(result, &status);
-    printf("Classifier Status: %d\n", (int)status);
+
+    const char *status_str = NULL;
+    ec = scanbotsdk_document_classifier_status_t_to_string(status, &status_str);
+    printf("Classifier Status: %s\n", status_str);
 
     ec = scanbotsdk_document_classifier_result_get_document_type(result, &doc_type);
-    printf("Type: %d\n", (int)doc_type);
+
+    const char *doc_type_str = NULL;
+    ec = scanbotsdk_document_type_t_to_string(doc_type, &doc_type_str);
+    printf("Type: %s\n", doc_type_str);
 
 cleanup:
     scanbotsdk_document_classifier_free(classifier);

@@ -31,8 +31,12 @@ scanbotsdk_error_code_t detect_document_cropped(
     ec = scanbotsdk_document_scanning_result_get_detection_result(result, &detect_result);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_detection_result: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
-    scanbotsdk_document_detection_result_get_status(detect_result, &status);
-    printf("Document Detection Status = %d\n", (int)status);
+    ec = scanbotsdk_document_detection_result_get_status(detect_result, &status);
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_status: %d: %s\n", ec, error_message(ec)); goto cleanup; }
+
+    const char *status_str = NULL;
+    ec = scanbotsdk_document_detection_status_t_to_string(status, &status_str);
+    printf("Document Detection status: %s\n", status_str);
 
     scanbotsdk_document_detection_result_get_points(detect_result, &points);
     printf("Points x:%d  y:%d\n", points->x, points->y);

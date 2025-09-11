@@ -10,11 +10,14 @@ scanbotsdk_error_code_t print_check_result(scanbotsdk_check_scanning_result_t *r
     scanbotsdk_generic_document_t *check = NULL;
     
     scanbotsdk_document_detection_result_t *detect_result = NULL;
-    scanbotsdk_document_detection_status_t status;
+    scanbotsdk_document_detection_status_t detect_status;
 
     ec = scanbotsdk_check_scanning_result_get_status(result, &ink_strip_status);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_status: %d\n", ec); return ec; }
-    printf("Ink strip status: %d\n", (int)ink_strip_status);
+
+    const char *ink_status_str = NULL;
+    ec = scanbotsdk_check_magnetic_ink_strip_scanning_status_t_to_string(ink_strip_status, &ink_status_str);
+    printf("Ink strip status: %s\n", ink_status_str);
 
     ec = scanbotsdk_check_scanning_result_get_check(result, &check);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_check: %d\n", ec); return ec; }
@@ -22,10 +25,13 @@ scanbotsdk_error_code_t print_check_result(scanbotsdk_check_scanning_result_t *r
     ec = scanbotsdk_check_scanning_result_get_document_detection_result(result, &detect_result);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_document_detection_result: %d: %s\n", ec, error_message(ec)); return ec; }
 
-    scanbotsdk_document_detection_result_get_status(detect_result, &status);
-    printf("Document Detection Status = %d\n", (int)status);
+    ec = scanbotsdk_document_detection_result_get_status(detect_result, &detect_status);
+    
+    const char *detect_status_str = NULL;
+    ec = scanbotsdk_document_detection_status_t_to_string(detect_status, &detect_status_str);
+    printf("Document Detection Status: %s\n", detect_status_str);
 
-    if(check != NULL) { 
+    if(check) { 
         print_generic_document_fields(check); 
     }
     return ec;

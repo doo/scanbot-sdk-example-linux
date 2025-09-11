@@ -6,8 +6,11 @@ scanbotsdk_error_code_t print_document_result(scanbotsdk_document_detection_resu
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
     scanbotsdk_document_detection_status_t status;
 
-    scanbotsdk_document_detection_result_get_status(result, &status);
-    printf("Detection Status = %d\n", (int)status);
+    ec = scanbotsdk_document_detection_result_get_status(result, &status);
+
+    const char *status_str = NULL;
+    ec = scanbotsdk_document_detection_status_t_to_string(status, &status_str);
+    printf("Document Detection status: %s\n", status_str);
 
     scanbotsdk_document_detection_scores_t *scores = NULL;
     ec = scanbotsdk_document_detection_result_get_detection_scores(result, &scores);

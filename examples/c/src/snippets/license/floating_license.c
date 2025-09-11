@@ -6,23 +6,6 @@
 static const int SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS = 15000;
 static const int DEREGISTER_DEVICE_TIMEOUT_MS = 15000;
 
-char* license_status_str(scanbotsdk_license_status_t s) {
-    switch (s) {
-        case SCANBOTSDK_LICENSE_STATUS_OKAY: return "OKAY";
-        case SCANBOTSDK_LICENSE_STATUS_TRIAL: return "TRIAL";
-        case SCANBOTSDK_LICENSE_STATUS_OKAY_EXPIRING_SOON: return "OKAY_EXPIRING_SOON";
-        case SCANBOTSDK_LICENSE_STATUS_FAILURE_NOT_SET: return "FAILURE_NOT_SET";
-        case SCANBOTSDK_LICENSE_STATUS_FAILURE_CORRUPTED: return "FAILURE_CORRUPTED";
-        case SCANBOTSDK_LICENSE_STATUS_FAILURE_WRONG_OS: return "FAILURE_WRONG_OS";
-        case SCANBOTSDK_LICENSE_STATUS_FAILURE_APP_ID_MISMATCH: return "FAILURE_APP_ID_MISMATCH";
-        case SCANBOTSDK_LICENSE_STATUS_FAILURE_EXPIRED: return "FAILURE_EXPIRED";
-        case SCANBOTSDK_LICENSE_STATUS_FAILURE_SERVER: return "FAILURE_SERVER";
-        case SCANBOTSDK_LICENSE_STATUS_FAILURE_VERSION: return "FAILURE_VERSION";
-        case SCANBOTSDK_LICENSE_STATUS_FAILURE_INACTIVE: return "FAILURE_INACTIVE";
-        default: return "UNKNOWN";
-    }
-}
-
 void init_with_floating_license() {
     const char *scanbot_license_key = "SCANBOTSDK-LICENSE";
 
@@ -62,9 +45,11 @@ void init_with_floating_license() {
         ec = scanbotsdk_license_info_get_online_license_check_in_progress(info_after_initialization, &online_check_in_progress);
         if (ec != SCANBOTSDK_OK) { fprintf(stderr, "license_info_get_online_license_check_in_progress (after wait): %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
-        printf("[after wait]  status=%s (%d), online_check_in_progress=%s\n",
-               license_status_str(status), (int)status,
-               online_check_in_progress ? "true" : "false");
+        printf("[after wait] online_check_in_progress=%s\n", online_check_in_progress ? "true" : "false");
+        
+        const char *status_str = NULL;
+        ec = scanbotsdk_license_status_t_to_string(status, &status_str);
+        printf("License Status: %s\n", status_str);
     }
 
 cleanup:
