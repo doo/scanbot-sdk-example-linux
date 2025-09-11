@@ -3,7 +3,7 @@ import * as ScanbotSDK from "scanbotsdk";
 export class TextPatternScannerSnippet {
   public static async run(image: ScanbotSDK.ImageRef): Promise<void> {
     const config = new ScanbotSDK.TextPatternScannerConfiguration();
-    config.minimumNumberOfRequiredFramesWithEqualScanningResult = 2;
+    config.minimumNumberOfRequiredFramesWithEqualScanningResult = 1;
     config.validator = new ScanbotSDK.DefaultContentValidator();
     // configure other parameters as needed
 

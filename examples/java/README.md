@@ -2,13 +2,10 @@
 This repository demonstrates how to use the [Scanbot SDK for Linux](https://scanbot.io) with Java.  
 
 ### Setup
-1. Go to [GitHub Releases](https://github.com/doo/scanbot-sdk-example-linux/releases)  
-2. Manually download the **Jar package** for your platform (ARM64 or x86_64).  
-3. Place the SDK JAR `scanbotsdk-<SCANBOTSDK_VERSION>-linux-<SCANBOTSDK_ARCH>.jar` into the `libs/` folder.
-4. Open `build.gradle` and set the constants:  
+
+Open `build.gradle` and replace the constant with the actual version number of the SDK you want to install.
    ```groovy
    def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>" // ex: 0.800.3
-   def SCANBOTSDK_ARCH    = "<SCANBOTSDK_ARCH>"   // x86_64 or aarch64
    ```  
 
 ## Usage

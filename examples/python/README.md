@@ -23,20 +23,17 @@ source .env/bin/activate
 pip install --upgrade pip setuptools wheel
 ```
 
-### 4. Download and install the Scanbot SDK
-1. Go to [GitHub Releases](https://github.com/doo/scanbot-sdk-example-linux/releases)  
-2. Manually download the **Python package** for your platform (ARM64 or x86_64).  
-3. Install it with pip, for example:
+### 3. Install the Scanbot SDK
+Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you want to install.
+* **On ARM64 (Raspberry Pi, Jetson Nano, etc.):**
+  ```bash
+  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv<SCANBOT_SDK_VERSION>/scanbotsdk-<SCANBOT_SDK_VERSION>-py3-none-linux_aarch64.whl
+  ```
 
-```bash
-pip install ./scanbotsdk-<VERSION>-py3-none-linux_aarch64.whl
-```
-
-or
-
-```bash
-pip install ./scanbotsdk-<VERSION>-py3-none-linux_x86_64.whl
-```
+* **On x86_64 (Ubuntu/Debian Desktop, Servers):**
+  ```bash
+  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv<SCANBOT_SDK_VERSION>/scanbotsdk-<SCANBOT_SDK_VERSION>-py3-none-linux_x86_64.whl
+  ```
 
 ### 5. Verify installation
 ```bash
@@ -70,19 +67,16 @@ source .env/bin/activate
 pip install --upgrade pip setuptools wheel
 ```
 
-### 3. Download and install the Scanbot SDK
-1. Go to [GitHub Releases](https://github.com/doo/scanbot-sdk-example-linux/releases)  
-2. Manually download the **Python package** for your platform (ARM64 or x86_64).  
-3. Install it with pip, for example:
-
+### 3. Install the Scanbot SDK
+Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you want to install.
 * **On ARM64 (Raspberry Pi, Jetson Nano, etc.):**
   ```bash
-  pip install ./scanbotsdk-<VERSION>-py3-none-linux_aarch64.whl
+  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv<SCANBOT_SDK_VERSION>/scanbotsdk-<SCANBOT_SDK_VERSION>-py3-none-linux_aarch64.whl
   ```
 
 * **On x86_64 (Ubuntu/Debian Desktop, Servers):**
   ```bash
-  pip install ./scanbotsdk-<VERSION>-py3-none-linux_x86_64.whl
+  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv<SCANBOT_SDK_VERSION>/scanbotsdk-<SCANBOT_SDK_VERSION>-py3-none-linux_x86_64.whl
   ```
 
 ### 4. Verify installation

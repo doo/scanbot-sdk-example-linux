@@ -2,12 +2,12 @@ import * as ScanbotSDK from "scanbotsdk";
 
 export class DetectDocumentSnippet {
   public static async run(image: ScanbotSDK.ImageRef): Promise<void> {
-    var scanner_params = new ScanbotSDK.DocumentScannerParameters();
-    scanner_params.acceptedAngleScore = 75;
-    scanner_params.ignoreOrientationMismatch = false;
-
-    var config = new ScanbotSDK.DocumentScannerConfiguration();
-    config.parameters = scanner_params
+    var config = new ScanbotSDK.DocumentScannerConfiguration({
+      parameters: {
+        acceptedAngleScore: 75, 
+        ignoreOrientationMismatch: false
+      }
+    });
     // Configure other parameters as needed.
     
     // `await using` ensures the scanner is properly disposed

@@ -1,5 +1,5 @@
 {
-  "name": "nodejs",
+  "name": "scanbotsdk_nodejs_example",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -15,6 +15,6 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "scanbotsdk": "file:scanbotsdk-20.0.16.tgz"
+    "scanbotsdk": "https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv0.800.3/nodejs-scanbotsdk-0.800.3.tgz"
   }
 }

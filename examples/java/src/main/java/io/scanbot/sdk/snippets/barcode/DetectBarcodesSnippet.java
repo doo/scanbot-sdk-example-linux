@@ -21,17 +21,21 @@ public class DetectBarcodesSnippet {
             BarcodeScannerResult result = scanner.run(image);
         ) {
             List<BarcodeItem> barcodes = result.getBarcodes();
+            printBarcodes(barcodes);
+        }
+    }
 
-            for (int i = 0; i < barcodes.size(); i++) {
-                BarcodeItem barcode = barcodes.get(i);
-                System.out.printf("Barcode #%d:%n", i + 1);
-                System.out.printf("  Format: %s%n", barcode.getFormat().name());
-                System.out.printf("  Text:   %s%n", barcode.getText());
-            }
+    private static void printBarcodes(List<BarcodeItem> barcodes) {
+        if (barcodes.isEmpty()) {
+            System.out.println("No barcodes found.");
+            return;
+        }
 
-            if (barcodes.isEmpty()) {
-                System.out.println("No barcodes found.");
-            }
+        for (int i = 0; i < barcodes.size(); i++) {
+            BarcodeItem barcode = barcodes.get(i);
+            System.out.printf("Barcode #%d:%n", i + 1);
+            System.out.printf("  Format: %s%n", barcode.getFormat().name());
+            System.out.printf("  Text:   %s%n", barcode.getText());
         }
     }
 }

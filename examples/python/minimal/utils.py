@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 from scanbotsdk import *
 from pathlib import Path
 import sys
@@ -9,7 +9,11 @@ def create_image_ref(path: str) -> ImageRef:
         raise FileNotFoundError(f"Image file not found: {p}")
     return ImageRef.from_path(str(p))
 
-def print_generic_document(doc: GenericDocument):
+def print_generic_document(doc: Optional[GenericDocument]):
+    if doc is None:
+        print("Document is None")
+        return
+
     print(f"Type: {doc.type.name} {doc.type.full_name}")
     
     if doc.fields:
@@ -21,7 +25,7 @@ def print_generic_document(doc: GenericDocument):
     if doc.children:
         print("Children:")
         for child in doc.children:
-            print_generic_document(child) 
+            print_generic_document(child)
 
 def parse_flags(tokens) -> Dict:
     flags = {}

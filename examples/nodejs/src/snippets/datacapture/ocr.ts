@@ -10,18 +10,16 @@ export class OcrSnippet {
   }
 
   private static printResult(page: ScanbotSDK.Page): void {
-    if (page.blocks) {
-      for (const block of page.blocks) {
-        console.log(`Block: "${block.text}"`);
+    for (const block of page.blocks) {
+      console.log(`Block: "${block.text}"`);
 
-        if (block.lines) {
-          for (const line of block.lines) {
-            console.log(`  Line: "${line.text}"`);
+      if (block.lines) {
+        for (const line of block.lines) {
+          console.log(`  Line: "${line.text}"`);
 
-            if (line.words) {
-              for (const word of line.words) {
-                console.log(`    Word: "${word.text}"`);
-              }
+          if (line.words) {
+            for (const word of line.words) {
+              console.log(`    Word: "${word.text}"`);
             }
           }
         }

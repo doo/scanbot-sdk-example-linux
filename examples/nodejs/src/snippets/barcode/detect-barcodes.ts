@@ -20,11 +20,14 @@ export class DetectBarcodesSnippet {
       return;
     }
 
-    result.barcodes.forEach((barcode, idx) => {
+    this.printBarcodes(result.barcodes);
+  }
+
+  private static printBarcodes(barcodes: ScanbotSDK.BarcodeItem[]): void {
+    barcodes.forEach((barcode, idx) => {
       console.log(`Barcode #${idx + 1}:`);
       console.log(`  Format: ${barcode.format}`);
       console.log(`  Text:   ${barcode.text}`);
-
       printGenericDocument(barcode.extractedDocument);
     });
   }

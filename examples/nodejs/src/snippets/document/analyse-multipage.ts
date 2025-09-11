@@ -11,7 +11,7 @@ export class AnalyzeMultiPageSnippet {
     // configure other parameters as needed
 
     // Extract images from the multi-page file
-    const extractionResult = await extractImages(filePath);
+    await using extractionResult = await extractImages(filePath);
 
     // `await using` ensures the analyser is properly disposed
     // when the scope ends, as it holds unmanaged resources.
@@ -20,22 +20,19 @@ export class AnalyzeMultiPageSnippet {
     console.log("Pages in document: " + pages.length);
 
     for (let pageIndex = 0; pageIndex < pages.length; pageIndex++) {
-      const page = pages[pageIndex];
-      const images = page?.images;
+      const images = pages[pageIndex]!.images;
 
-      if (images && images.length > 0) {
-        for (let imageIndex = 0; imageIndex < images.length; imageIndex++) {
-          const extractedImage = images[imageIndex]?.image;
-          if (extractedImage) {
-            // `await using` ensures the result is properly disposed
-            // when the scope ends, as it holds unmanaged resources.
-            await using result = await analyzer.run(extractedImage);
-            console.log(
-              `Page ${pageIndex + 1}, Image ${imageIndex + 1} -> Found: ${
-                result.documentFound
-              }, Quality: ${result.quality}`
-            );
-          }
+      for (let imageIndex = 0; imageIndex < images.length; imageIndex++) {
+        // `await using` ensures the extractedImage is properly disposed when the scope ends, as it holds unmanaged resources.
+        await using extractedImage = images[imageIndex]?.image;
+        if (extractedImage) {
+          // `await using` ensures the result is properly disposed when the scope ends, as it holds unmanaged resources.
+          await using result = await analyzer.run(extractedImage);
+          console.log(
+            `Page ${pageIndex + 1}, Image ${imageIndex + 1} -> Found: ${
+              result.documentFound
+            }, Quality: ${result.quality}`
+          );
         }
       }
     }

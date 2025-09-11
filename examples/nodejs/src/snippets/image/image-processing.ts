@@ -1,6 +1,5 @@
 import * as ScanbotSDK from "scanbotsdk";
 
-
 export async function rotate90(image: ScanbotSDK.ImageRef): Promise<void> {
   await using imageProcessor = await ScanbotSDK.ImageProcessor.create();
   await using rotated = await imageProcessor.rotate(image, "CLOCKWISE_90");

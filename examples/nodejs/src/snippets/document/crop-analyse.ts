@@ -2,26 +2,26 @@ import * as ScanbotSDK from "scanbotsdk";
 
 export class CropAndAnalyzeSnippet {
   public static async run(filePath: string, savePath?: string): Promise<void> {
-    const scannerParams = new ScanbotSDK.DocumentScannerParameters();
-    scannerParams.acceptedAngleScore = 75;
-    scannerParams.ignoreOrientationMismatch = false;
+    const scannerConfig = new ScanbotSDK.DocumentScannerConfiguration(
+      { parameters: {
+        acceptedAngleScore: 75,
+        ignoreOrientationMismatch: false
+      }}
+    );
 
-    const scannerConfig = new ScanbotSDK.DocumentScannerConfiguration();
-    scannerConfig.parameters = scannerParams;
-
-    const analyzeConfig = new ScanbotSDK.DocumentQualityAnalyzerConfiguration();
-    analyzeConfig.tileSize = 300;
-    analyzeConfig.minEstimatedNumberOfSymbolsForDocument = 20;
+    const analyzerConfig = new ScanbotSDK.DocumentQualityAnalyzerConfiguration();
+    analyzerConfig.tileSize = 300;
+    analyzerConfig.minEstimatedNumberOfSymbolsForDocument = 20;
     // configure other parameters as needed
 
     // `await using` ensures both scanner and analyzer are properly disposed
     // when the scope ends, as they hold unmanaged resources.
     await using scanner = await ScanbotSDK.DocumentScanner.create(scannerConfig);
     await using analyzer = await ScanbotSDK.DocumentQualityAnalyzer.create(
-      analyzeConfig
+      analyzerConfig
     );
 
-    const image = await ScanbotSDK.ImageRef.fromPath(filePath);
+    await using image = await ScanbotSDK.ImageRef.fromPath(filePath);
 
     // `await using` ensures the result is properly disposed
     // when the scope ends, as it holds unmanaged resources.

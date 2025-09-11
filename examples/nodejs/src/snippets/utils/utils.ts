@@ -3,12 +3,10 @@ import * as ScanbotSDK from "scanbotsdk";
 export async function extractImages(
   filePath: string
 ): Promise<ScanbotSDK.PageExtractionResult> {
-  return await ScanbotSDK.autorelease(async () => {
-    const source = await ScanbotSDK.RandomAccessSource.fromPath(filePath);
-    const extractor = await ScanbotSDK.MultiPageImageExtractor.create();
+    await using source = await ScanbotSDK.RandomAccessSource.fromPath(filePath);
+    await using extractor = await ScanbotSDK.MultiPageImageExtractor.create();
 
-    return await extractor.run(source);;
-  });
+    return await extractor.run(source);
 }
 
 export function printGenericDocument(
