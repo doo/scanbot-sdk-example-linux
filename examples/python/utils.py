@@ -52,7 +52,7 @@ def print_usage():
     print("  python main.py classify <command> --file <path/to/file.jpg> [--license <KEY>]")
     print("  python main.py analyse <command> --file <path/to/file> --save <path/to/save> [--license <KEY>]")
     print("  python main.py parse <command> --text \"<input>\" [--license <KEY>]")
-    print("  python main.py live <command> --device <device_name> [--license <KEY>]\n")
+    print("  python main.py live <command> --device <device_name> [--license <KEY>] --preview\n")
 
     print("Available scan commands:")
     print("  barcode | document | check | credit_card | document_data_extractor | medical_certificate | mrz | ocr | text_pattern | vin\n")
@@ -63,7 +63,7 @@ def print_usage():
     print("Available parse commands:")
     print("  mrz | barcode_doc\n")
     print("Available live commands:")
-    print("  barcode\n")
+    print("  barcode | document\n")
 
     print("Note:")
     print("  --save is optional, only used with analyse/crop_analyze.")

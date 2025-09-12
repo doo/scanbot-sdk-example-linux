@@ -106,9 +106,6 @@ def main():
             if subcommand == "document":            document_live(device_input, show_preview)
             else: print_usage()
 
-if __name__ == "__main__":
-    main()
-    
 def barcode_live(device_input: str, show_preview: bool):
     cap = open_camera(device_input)
     scanner = create_barcode_scanner(use_tensorrt=False)
@@ -126,3 +123,5 @@ def document_live(device_input: str, show_preview: bool):
     else:
         run_scanner(cap, scanner.run, on_result=print_documents_text)
 
+if __name__ == "__main__":
+    main()

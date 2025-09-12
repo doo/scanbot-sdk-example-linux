@@ -11,17 +11,16 @@ from scanbotsdk import (
     TensorRtAccelerator
 )
 
-
 def create_barcode_scanner(use_tensorrt: bool = False) -> BarcodeScanner:
-    cfg = BarcodeScannerConfiguration(
+    config = BarcodeScannerConfiguration(
         processing_mode=ProcessingMode.AUTO,
         barcode_format_configurations=[
             BarcodeFormatCommonConfiguration(formats=BarcodeFormats.common)
         ],
     )
     if use_tensorrt:
-        cfg.accelerator = TensorRtAccelerator(engine_path=".")
-    return BarcodeScanner(cfg)
+        config.accelerator = TensorRtAccelerator(engine_path=".")
+    return BarcodeScanner(configuration=config)
 
 
 def print_barcodes_text(res: BarcodeScannerResult, frame):
@@ -38,14 +37,5 @@ def draw_barcodes_frame(res: BarcodeScannerResult, frame, color=(0, 255, 0), thi
         )
         cv.polylines(frame, [pts], True, color, thickness, cv.LINE_AA)
         txt = bc.text.replace(" ", "").replace("\n", "").replace("\t", "")
-        cv.putText(
-            frame,
-            txt,
-            (pts[0][0], max(0, pts[0][1] - 6)),
-            cv.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            color,
-            1,
-            cv.LINE_AA,
-        )
+        cv.putText(frame, txt, (pts[0][0], max(0, pts[0][1] - 6)), cv.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv.LINE_AA)
     return frame

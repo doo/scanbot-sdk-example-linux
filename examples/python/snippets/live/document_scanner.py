@@ -4,10 +4,10 @@ from scanbotsdk import DocumentDetectionResult, DocumentScanner, DocumentScanner
 
 
 def create_document_scanner() -> DocumentScanner:
-    cfg = DocumentScannerConfiguration(
+    config = DocumentScannerConfiguration(
         processing_mode=ProcessingMode.AUTO,
     )
-    return DocumentScanner(cfg)
+    return DocumentScanner(configuration=config)
 
 
 def print_documents_text(res: DocumentDetectionResult, frame):
@@ -16,18 +16,23 @@ def print_documents_text(res: DocumentDetectionResult, frame):
 
 
 def draw_documents_frame(res: DocumentDetectionResult, frame, color=(0, 255, 0), thickness=2):
-    pts = np.array([[p.x, p.y] for p in res.points], dtype=np.int32)
+    pts_list = list(res.points or [])
+    if not pts_list and res.points_normalized:
+        h, w = frame.shape[:2]
+        pts = np.array([[int(p.x * w), int(p.y * h)] for p in res.points_normalized], dtype=np.int32)
+    elif pts_list:
+        pts = np.array([[int(p.x), int(p.y)] for p in pts_list], dtype=np.int32)
+    else:
+        return frame
+
+    # Draw contour
     cv.polylines(frame, [pts], True, color, thickness, cv.LINE_AA)
+
+    # Put status label above the top-most vertex
+    top_idx = int(np.argmin(pts[:, 1]))
+    x, y = int(pts[top_idx, 0]), int(pts[top_idx, 1])
+    y = max(0, y - 6)
     label = res.status.name
-    anchor = pts[0]
-    cv.putText(
-        frame,
-        label,
-        (int(anchor[0]), max(0, int(anchor[1]) - 6)),
-        cv.FONT_HERSHEY_SIMPLEX,
-        0.5,
-        color,
-        1,
-        cv.LINE_AA,
-    )
+    cv.putText(frame, label, (x, y), cv.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv.LINE_AA)
+
     return frame

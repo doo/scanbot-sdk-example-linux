@@ -101,7 +101,7 @@ python main.py analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>]
 python main.py analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
 python main.py classify <subcommand> --file|--resource <path/to/file.jpg> [--license <KEY>]
 python main.py parse <subcommand> --text "<input>" [--license <KEY>]
-python main.py live <subcommand> --device "<device-input>" [--preview] [--license <KEY>]
+python main.py live <subcommand> --device "<device-input>" [--license <KEY>] [--preview]
 ```
 
 ## Example
@@ -110,7 +110,7 @@ python main.py scan barcode --file images/example.jpg --license <KEY>
 python main.py analyze analyse_multi_page --file files/doc.pdf --license <KEY>
 python main.py analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
 python main.py parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
-python main.py live barcode --device "0" --preview --license <KEY>
+python main.py live barcode --device "0" --license <KEY>
 ```
 
 ## API References
