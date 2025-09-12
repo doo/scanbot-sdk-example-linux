@@ -16,9 +16,13 @@ from snippets.datacapture.credit_card import scan_credit_card
 from snippets.barcode.detect_barcodes import scan_barcode
 from snippets.document.detect_document import scan_document
 from snippets.datacapture.check import scan_check
-from snippets.live.barcode_live import barcode_live
 
 from utils import create_image_ref, parse_flags, print_usage
+
+from snippets.live.camera import open_camera
+from snippets.live.barcode_scanner import *
+from snippets.live.document_scanner import *
+from snippets.live.runner import run_scanner
 
 SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS = 15000
 DEREGISTER_DEVICE_TIMEOUT_MS = 15000
@@ -62,6 +66,7 @@ def main():
         save_path     = flags.get("--save")
         text_input    = flags.get("--text")
         device_input  = flags.get("--device") # live only
+        show_preview  = bool(flags.get("--preview")) # live only
         
         if category == "scan":
             if not file_path: print_usage(); return
@@ -98,8 +103,27 @@ def main():
             
         elif category == "live":
             if not device_input: print_usage(); return
-            if subcommand == "barcode":         barcode_live(device_input)
+            if subcommand == "barcode":             barcode_live(device_input, show_preview)
+            if subcommand == "document":            document_live(device_input, show_preview)
             else: print_usage()
 
 if __name__ == "__main__":
     main()
+    
+def barcode_live(device_input: str, show_preview: bool):
+    cap = open_camera(device_input)
+    scanner = create_barcode_scanner(use_tensorrt=False)
+    if show_preview:
+        run_scanner(cap, scanner.run, on_result=draw_barcodes_frame)
+    else:
+        run_scanner(cap, scanner.run, on_result=print_barcodes_text)
+
+
+def document_live(device_input: str, show_preview: bool):
+    cap = open_camera(device_input)
+    scanner = create_document_scanner()
+    if show_preview:
+        run_scanner(cap, scanner.run, on_result=draw_documents_frame)
+    else:
+        run_scanner(cap, scanner.run, on_result=print_documents_text)
+

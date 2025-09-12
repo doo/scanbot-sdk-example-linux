@@ -1,5 +1,4 @@
 # Scanbot SDK for Linux – Java Example
-This repository demonstrates how to use the [Scanbot SDK for Linux](https://scanbot.io) with Java.  
 
 ### Setup
 
