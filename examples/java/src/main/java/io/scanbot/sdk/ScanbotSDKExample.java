@@ -33,7 +33,6 @@ public class ScanbotSDKExample {
         final String license  = f.get("--license");
 
         // TODO Add your Scanbot SDK trial license key here.
-        // The SDK and a trial license are available on request via beta@scanbot.io
         final String licenseKey = license != null ? license : "<SCANBOTSDK-LICENSE>";
         final String writablePath = ".";
 

@@ -13,8 +13,5 @@
     "@types/node": "^24.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
-  },
-  "dependencies": {
-    "scanbotsdk": "https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv0.800.3/nodejs-scanbotsdk-0.800.3.tgz"
   }
 }

@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
     char *license_arg = get_flag(argc, argv, "--license");
 
     // TODO Add your Scanbot SDK trial license key here.
-    // The SDK and a trial license are available on request via beta@scanbot.io
     char *scanbot_license_key = license_arg ? license_arg : "<SCANBOTSDK-LICENSE>";
 
     scanbotsdk_init_params_t params = {0};

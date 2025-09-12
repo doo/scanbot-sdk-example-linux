@@ -35,9 +35,9 @@ export async function resize(image: ScanbotSDK.ImageRef, maxSize: number): Promi
 export async function applyBinarizationFilter(image: ScanbotSDK.ImageRef, path: string): Promise<void> {
   await using imageProcessor = await ScanbotSDK.ImageProcessor.create();
   const filter = new ScanbotSDK.CustomBinarizationFilter({ preset: "PRESET_4" });
-  await using filtered_img = await imageProcessor.applyFilter(image, filter);
+  await using filteredImg = await imageProcessor.applyFilter(image, filter);
 
-  await filtered_img.saveImage(path);
+  await filteredImg.saveImage(path);
 }
 
 export async function detectAndCropDocument(image: ScanbotSDK.ImageRef): Promise<void> {

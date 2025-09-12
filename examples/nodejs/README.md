@@ -2,9 +2,13 @@
 
 ### Install the Scanbot SDK
 Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you want to install.
-  ```bash
-  npm install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv<SCANBOT_SDK_VERSION>/nodejs-scanbotsdk-<SCANBOT_SDK_VERSION>.tgz
-  ```
+```bash
+export SCANBOT_SDK_VERSION=<SCANBOT_SDK_VERSION>
+```
+
+```bash
+npm install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv${SCANBOT_SDK_VERSION}/nodejs-scanbotsdk-${SCANBOT_SDK_VERSION}.tgz
+```
 
 ### Verify installation
 ```bash

@@ -35,7 +35,6 @@ def main():
     flags = parse_flags(sys.argv[3:])
     
     # TODO Add your Scanbot SDK trial license key here.
-    # The SDK and a trial license are available on request via beta@scanbot.io
     license_key = flags.get("--license", "<SCANBOTSDK-LICENSE>")
 
     # Setup and initialize the Scanbot SDK

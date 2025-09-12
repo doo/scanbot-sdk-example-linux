@@ -3,8 +3,7 @@ import { extractImages } from "../utils/utils";
 
 export class AnalyzeMultiPageSnippet {
   public static async run(filePath: string): Promise<void> {
-    const analyzeConfig =
-      new ScanbotSDK.DocumentQualityAnalyzerConfiguration();
+    const analyzeConfig = new ScanbotSDK.DocumentQualityAnalyzerConfiguration();
     analyzeConfig.tileSize = 300;
     analyzeConfig.detectOrientation = true;
     analyzeConfig.minEstimatedNumberOfSymbolsForDocument = 20;
@@ -23,7 +22,10 @@ export class AnalyzeMultiPageSnippet {
       const images = pages[pageIndex]!.images;
 
       for (let imageIndex = 0; imageIndex < images.length; imageIndex++) {
-        // `await using` ensures the extractedImage is properly disposed when the scope ends, as it holds unmanaged resources.
+        // NOTE: Using `await using` on ImageRef is optional, because images are also
+        // released when their parent container is disposed. However, images are stored
+        // compressed and only decompressed on first access. Disposing them early
+        // prevents a large number of decompressed images from piling up in memory.
         await using extractedImage = images[imageIndex]?.image;
         if (extractedImage) {
           // `await using` ensures the result is properly disposed when the scope ends, as it holds unmanaged resources.

@@ -24,14 +24,19 @@ pip install --upgrade pip setuptools wheel
 
 ### 3. Install the Scanbot SDK
 Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you want to install.
+
+```bash
+export SCANBOT_SDK_VERSION=<SCANBOT_SDK_VERSION>
+```
+
 * **On ARM64 (Raspberry Pi, Jetson Nano, etc.):**
   ```bash
-  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv<SCANBOT_SDK_VERSION>/scanbotsdk-<SCANBOT_SDK_VERSION>-py3-none-linux_aarch64.whl
+  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv${SCANBOT_SDK_VERSION}/scanbotsdk-${SCANBOT_SDK_VERSION}-py3-none-linux_aarch64.whl
   ```
 
 * **On x86_64 (Ubuntu/Debian Desktop, Servers):**
   ```bash
-  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv<SCANBOT_SDK_VERSION>/scanbotsdk-<SCANBOT_SDK_VERSION>-py3-none-linux_x86_64.whl
+  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv${SCANBOT_SDK_VERSION}/scanbotsdk-${SCANBOT_SDK_VERSION}-py3-none-linux_x86_64.whl
   ```
 
 ### 5. Verify installation
@@ -67,14 +72,19 @@ pip install --upgrade pip setuptools wheel
 
 ### 3. Install the Scanbot SDK
 Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you want to install.
+
+```bash
+export SCANBOT_SDK_VERSION=<SCANBOT_SDK_VERSION>
+```
+
 * **On ARM64 (Raspberry Pi, Jetson Nano, etc.):**
   ```bash
-  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv<SCANBOT_SDK_VERSION>/scanbotsdk-<SCANBOT_SDK_VERSION>-py3-none-linux_aarch64.whl
+  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv${SCANBOT_SDK_VERSION}/scanbotsdk-${SCANBOT_SDK_VERSION}-py3-none-linux_aarch64.whl
   ```
 
 * **On x86_64 (Ubuntu/Debian Desktop, Servers):**
   ```bash
-  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv<SCANBOT_SDK_VERSION>/scanbotsdk-<SCANBOT_SDK_VERSION>-py3-none-linux_x86_64.whl
+  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv${SCANBOT_SDK_VERSION}/scanbotsdk-${SCANBOT_SDK_VERSION}-py3-none-linux_x86_64.whl
   ```
 
 ### 4. Verify installation
@@ -91,6 +101,7 @@ python main.py analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>]
 python main.py analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
 python main.py classify <subcommand> --file|--resource <path/to/file.jpg> [--license <KEY>]
 python main.py parse <subcommand> --text "<input>" [--license <KEY>]
+python main.py live <subcommand> --device "<device-input>" [--preview] [--license <KEY>]
 ```
 
 ## Example
@@ -99,6 +110,7 @@ python main.py scan barcode --file images/example.jpg --license <KEY>
 python main.py analyze analyse_multi_page --file files/doc.pdf --license <KEY>
 python main.py analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
 python main.py parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
+python main.py live barcode --device "0" --preview --license <KEY>
 ```
 
 ## API References
