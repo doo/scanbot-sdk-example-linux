@@ -67,7 +67,7 @@ The example supports four modes: **scan**, **analyze**, **classify**, and **pars
 ## Example
 ```bash
 ./scanbotsdk_example scan barcode --file images/example.jpg --license <KEY>
-./scanbotsdk_example analyze analyse_multi_page --file files/doc.pdf --license <KEY>
+./scanbotsdk_example analyze analyze_multi_page --file files/doc.pdf --license <KEY>
 ./scanbotsdk_example analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
 ./scanbotsdk_example parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
 ```

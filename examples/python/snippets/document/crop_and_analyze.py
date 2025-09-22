@@ -2,7 +2,7 @@ import os
 from scanbotsdk import *
 from utils import create_image_ref
 
-def crop_and_analyse(image_path: str, save_path: str | None = None):
+def crop_and_analyze(image_path: str, save_path: str | None = None):
     with create_image_ref(image_path) as image:
         # Configure scanner
         config = DocumentScannerConfiguration()
@@ -15,13 +15,6 @@ def crop_and_analyse(image_path: str, save_path: str | None = None):
 
         print(f"Detection status: {result.detection_result.status}")
         print(f"Total detection score: {result.detection_result.detection_scores.total_score}")
-
-        if result.points:
-            print("Detected points:")
-            for p in result.points:
-                print(f"\tx: {p.x}, y: {p.y}")
-        else:
-            print("No document corners detected.")
 
         cropped = result.cropped_image
         if cropped:

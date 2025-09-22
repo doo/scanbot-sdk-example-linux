@@ -1,6 +1,6 @@
 from scanbotsdk import *
 
-def analyse_multi_page(file_path: str):
+def analyze_multi_page(file_path: str):
     configuration = DocumentQualityAnalyzerConfiguration(
         tile_size=300,
         detect_orientation=True,
@@ -20,7 +20,7 @@ def analyse_multi_page(file_path: str):
             # This ensures that memory is released immediately after processing
             # instead of keeping all uncompressed images alive until the
             # entire extraction_result is garbage-collected.
-            with extracted_image:
+            with extracted_image.image:
                 analysis_result = analyser.run(image=extracted_image.image)
                 print(
                     f"Page {page_index + 1}, Image {image_index + 1} "

@@ -13,15 +13,15 @@ import io.scanbot.sdk.utils.Utils;
 
 public class AnalyzeMultiPageSnippet {
     public static void run(String filePath, String resourcePath) throws Exception {
-        DocumentQualityAnalyzerConfiguration analyse_config = new DocumentQualityAnalyzerConfiguration();
-        analyse_config.setTileSize(300);
-        analyse_config.setDetectOrientation(true);
-        analyse_config.setMinEstimatedNumberOfSymbolsForDocument(20);
+        DocumentQualityAnalyzerConfiguration analyze_config = new DocumentQualityAnalyzerConfiguration();
+        analyze_config.setTileSize(300);
+        analyze_config.setDetectOrientation(true);
+        analyze_config.setMinEstimatedNumberOfSymbolsForDocument(20);
         // Configure other parameters as needed.
 
         try (
             PageExtractionResult extractionResult = Utils.extractImages(filePath, resourcePath);
-            DocumentQualityAnalyzer analyzer = new DocumentQualityAnalyzer(analyse_config)
+            DocumentQualityAnalyzer analyzer = new DocumentQualityAnalyzer(analyze_config)
         ) {
             List<ExtractedPage> pages = extractionResult.getPages();
             System.out.println("Pages in document: " + pages.size());

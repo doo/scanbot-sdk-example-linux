@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <snippets/document/crop_and_analyse.h>
+#include <snippets/document/crop_and_analyze.h>
 #include <utils/utils.h>
 
 scanbotsdk_error_code_t detect_document_cropped(
@@ -105,37 +105,37 @@ void print_result(scanbotsdk_document_quality_analyzer_result_t *result) {
     }
 }
 
-static scanbotsdk_error_code_t analyse_document_quality(
+static scanbotsdk_error_code_t analyze_document_quality(
     scanbotsdk_image_t *cropped_image
 ) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
-    scanbotsdk_document_quality_analyzer_configuration_t *analyse_config = NULL;
+    scanbotsdk_document_quality_analyzer_configuration_t *analyze_config = NULL;
     scanbotsdk_document_quality_analyzer_t *analyzer = NULL;
-    scanbotsdk_document_quality_analyzer_result_t *analyse_result = NULL;
+    scanbotsdk_document_quality_analyzer_result_t *analyze_result = NULL;
 
     // region Setup analyzer
-    ec = scanbotsdk_document_quality_analyzer_configuration_create_with_defaults(&analyse_config);
+    ec = scanbotsdk_document_quality_analyzer_configuration_create_with_defaults(&analyze_config);
     // Configure other parameters as needed.
 
-    ec = scanbotsdk_document_quality_analyzer_create(analyse_config, &analyzer);
+    ec = scanbotsdk_document_quality_analyzer_create(analyze_config, &analyzer);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "analyzer_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     // endregion
 
-    // region Analyse quality
-    ec = scanbotsdk_document_quality_analyzer_run(analyzer, cropped_image, &analyse_result);
+    // region Analyze quality
+    ec = scanbotsdk_document_quality_analyzer_run(analyzer, cropped_image, &analyze_result);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "analyzer_run: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
-    print_result(analyse_result);
+    print_result(analyze_result);
     // endregion
 
 cleanup:
-    scanbotsdk_document_quality_analyzer_result_free(analyse_result);
+    scanbotsdk_document_quality_analyzer_result_free(analyze_result);
     scanbotsdk_document_quality_analyzer_free(analyzer);
-    scanbotsdk_document_quality_analyzer_configuration_free(analyse_config);
+    scanbotsdk_document_quality_analyzer_configuration_free(analyze_config);
     return ec;
 }
 
-scanbotsdk_error_code_t crop_and_analyse(
+scanbotsdk_error_code_t crop_and_analyze(
     scanbotsdk_image_t *image,
     char *save_path
 ) {
@@ -151,7 +151,7 @@ scanbotsdk_error_code_t crop_and_analyse(
         if (ec != SCANBOTSDK_OK) goto cleanup;
     }
 
-    ec = analyse_document_quality(cropped_image);
+    ec = analyze_document_quality(cropped_image);
     if (ec != SCANBOTSDK_OK) goto cleanup;
 
 cleanup:

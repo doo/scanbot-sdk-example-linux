@@ -22,7 +22,7 @@ The example supports four commands: **scan**, **analyze**, **classify**, and **p
 ## Example
 ```bash
 ./gradlew run --args='scan barcode --file images/example.jpg --license <KEY>'
-./gradlew run --args='analyze analyse_multi_page --resource files/doc.pdf --license <KEY>'
+./gradlew run --args='analyze analyze_multi_page --resource files/doc.pdf --license <KEY>'
 ./gradlew run --args='analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>'
 ./gradlew run --args='parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>'
 ```

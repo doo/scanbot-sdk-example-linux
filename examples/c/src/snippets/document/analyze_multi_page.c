@@ -42,15 +42,15 @@ static scanbotsdk_error_code_t process_page(scanbotsdk_extracted_page_t *page, s
 
     for (size_t j = 0; j < page_images_count; j++) {
         scanbotsdk_image_t *image = NULL;
-        scanbotsdk_document_quality_analyzer_result_t *analyse_result = NULL;
+        scanbotsdk_document_quality_analyzer_result_t *analyze_result = NULL;
 
         ec = scanbotsdk_extracted_image_get_image(images[j], &image);
         if (ec != SCANBOTSDK_OK) { fprintf(stderr, "extracted_image_get_image: %d: %s\n", ec, error_message(ec)); goto inner_cleanup; }
 
-        ec = scanbotsdk_document_quality_analyzer_run(analyzer, image, &analyse_result);
+        ec = scanbotsdk_document_quality_analyzer_run(analyzer, image, &analyze_result);
         if (ec != SCANBOTSDK_OK) { fprintf(stderr, "analyzer_run: %d: %s\n", ec, error_message(ec)); goto inner_cleanup; }
 
-        print_analyzer_result(analyse_result);
+        print_analyzer_result(analyze_result);
 
     inner_cleanup:
         if (ec != SCANBOTSDK_OK) { goto cleanup; }
@@ -61,7 +61,7 @@ cleanup:
     return ec;
 }
 
-scanbotsdk_error_code_t analyse_multi_page(char* path) {
+scanbotsdk_error_code_t analyze_multi_page(char* path) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
 
     scanbotsdk_random_access_source_t* access_source = NULL;

@@ -19,8 +19,8 @@
 #include <snippets/datacapture/mrz_parser.h>
 
 #include <snippets/document/detect_document.h>    
-#include <snippets/document/analyse_multi_page.h>
-#include <snippets/document/crop_and_analyse.h>
+#include <snippets/document/analyze_multi_page.h>
+#include <snippets/document/crop_and_analyze.h>
 #include <snippets/document/document_classifier.h>
 
 static const int SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS = 15000;
@@ -86,17 +86,17 @@ int main(int argc, char *argv[]) {
         if      (strcmp(command, "document") == 0) ec = classify_document(image);
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
     }
-    else if (strcmp(category, "analyse") == 0) {
+    else if (strcmp(category, "analyze") == 0) {
         if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
 
-        if (strcmp(command, "analyse_multi_page") == 0) {
-            ec = analyse_multi_page(file_path);
+        if (strcmp(command, "analyze_multi_page") == 0) {
+            ec = analyze_multi_page(file_path);
         }
         else if (strcmp(command, "crop_analyze") == 0) {
             ec = load_image_from_path(file_path, &image);
             if (ec != SCANBOTSDK_OK) goto cleanup;
 
-            ec = crop_and_analyse(image, save_path);
+            ec = crop_and_analyze(image, save_path);
         }
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
     }

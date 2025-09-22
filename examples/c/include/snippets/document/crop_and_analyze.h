@@ -3,6 +3,6 @@
 
 #include <ScanbotSDK.h>
 
-scanbotsdk_error_code_t crop_and_analyse(scanbotsdk_image_t *image, char* save_path);
+scanbotsdk_error_code_t crop_and_analyze(scanbotsdk_image_t *image, char* save_path);
 
 #endif

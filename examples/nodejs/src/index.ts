@@ -15,8 +15,8 @@ import { VinScannerSnippet } from "./snippets/datacapture/vin-scanner";
 import { DocumentClassifierSnippet } from "./snippets/document/document-classifier";
 import { MrzParserSnippet } from "./snippets/datacapture/mrz-parser";
 import { ParseBarcodeDocumentSnippet } from "./snippets/barcode/parse-barcode-document";
-import { AnalyzeMultiPageSnippet } from "./snippets/document/analyse-multipage";
-import { CropAndAnalyzeSnippet } from "./snippets/document/crop-analyse";
+import { AnalyzeMultiPageSnippet } from "./snippets/document/analyze-multipage";
+import { CropAndAnalyzeSnippet } from "./snippets/document/crop-analyze";
 
 async function awaitPromise(promise: Promise<void>, maxAwaitTimeMs: number = 60 * 1000): Promise<void> {
   const timer = setTimeout(() => {
@@ -92,11 +92,11 @@ async function main(): Promise<void> {
         break;
       }
 
-      case "analyse": {
+      case "analyze": {
         if (!file) { printUsage(); return; }
 
         switch (subcommand) {
-          case "analyse_multi_page":  await AnalyzeMultiPageSnippet.run(file); break;
+          case "analyze_multi_page":  await AnalyzeMultiPageSnippet.run(file); break;
           case "crop_analyze":        await CropAndAnalyzeSnippet.run(file, save); break;
           default: printUsage();
         }

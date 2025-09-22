@@ -2,8 +2,8 @@ import sys
 import scanbotsdk
 
 from snippets.document.document_classifier import classify_document
-from snippets.document import analyse_multi_page
-from snippets.document import crop_and_analyse
+from snippets.document.analyze_multi_page import analyze_multi_page
+from snippets.document.crop_and_analyze import crop_and_analyze
 from snippets.barcode.barcode_document_parser import parse_barcode_document
 from snippets.datacapture.mrz_parser import parse_mrz
 from snippets.datacapture.vin import scan_vin
@@ -88,10 +88,10 @@ def main():
                 if   subcommand == "document":            classify_document(image)
                 else: print_usage()
                 
-        elif category == "analyse":
+        elif category == "analyze":
             if not file_path: print_usage(); return
-            if   subcommand == "analyse_multi_page":      analyse_multi_page(file_path)
-            elif subcommand == "crop_analyze":            crop_and_analyse(file_path, save_path)
+            if   subcommand == "analyze_multi_page":      analyze_multi_page(file_path)
+            elif subcommand == "crop_analyze":            crop_and_analyze(file_path, save_path)
             else: print_usage()
             
         elif category == "parse":

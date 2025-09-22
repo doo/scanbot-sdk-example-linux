@@ -21,15 +21,15 @@ public class CropAndAnalyzeSnippet {
         DocumentScannerConfiguration config = new DocumentScannerConfiguration();
         config.setParameters(scanner_params);
 
-        DocumentQualityAnalyzerConfiguration analyse_config = new DocumentQualityAnalyzerConfiguration();
-        analyse_config.setTileSize(300);
-        analyse_config.setMinEstimatedNumberOfSymbolsForDocument(20);
+        DocumentQualityAnalyzerConfiguration analyze_config = new DocumentQualityAnalyzerConfiguration();
+        analyze_config.setTileSize(300);
+        analyze_config.setMinEstimatedNumberOfSymbolsForDocument(20);
         // Configure other parameters as needed.
 
         try (
             ImageRef image = Utils.createImageRef(filePath, resourcePath);
             DocumentScanner scanner = new DocumentScanner(config);
-            DocumentQualityAnalyzer analyzer = new DocumentQualityAnalyzer(analyse_config);
+            DocumentQualityAnalyzer analyzer = new DocumentQualityAnalyzer(analyze_config);
             DocumentScanningResult scanResult = scanner.scan(image);
         ) {
             DocumentDetectionResult detection = scanResult.getDetectionResult();

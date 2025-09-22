@@ -72,10 +72,10 @@ public class ScanbotSDKExample {
                     }
                     break;
                 }
-                case "analyse": {
+                case "analyze": {
                     if (file == null && resource == null) { ExampleUsage.print(); return; }
                     switch (subcommand) {
-                        case "analyse_multi_page":   AnalyzeMultiPageSnippet.run(file, resource); break;
+                        case "analyze_multi_page":   AnalyzeMultiPageSnippet.run(file, resource); break;
                         case "crop_analyze":        CropAndAnalyzeSnippet.run(file, resource, save); break;
                         default: ExampleUsage.print();
                     }

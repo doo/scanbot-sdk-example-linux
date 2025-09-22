@@ -107,7 +107,7 @@ python main.py live <subcommand> --device "<device-input>" [--license <KEY>] [--
 ## Example
 ```bash
 python main.py scan barcode --file images/example.jpg --license <KEY>
-python main.py analyze analyse_multi_page --file files/doc.pdf --license <KEY>
+python main.py analyze analyze_multi_page --file files/doc.pdf --license <KEY>
 python main.py analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
 python main.py parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
 python main.py live barcode --device "0" --license <KEY>

@@ -75,7 +75,7 @@ void print_usage(const char *prog) {
     printf("or\n");
     printf("  %s classify <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
-    printf("  %s analyse <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]\n", prog);
+    printf("  %s analyze <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
     printf("  %s parse <command> --text \"<input>\" [--license <KEY>]\n\n", prog);
 
@@ -86,21 +86,21 @@ void print_usage(const char *prog) {
     printf("Available classify commands:\n");
     printf("  document \n\n");
 
-    printf("Available analyse commands:\n");
-    printf("  analyse_multi_page | crop_analyze\n\n");
+    printf("Available analyze commands:\n");
+    printf("  analyze_multi_page | crop_analyze\n\n");
 
     printf("Available parse commands:\n");
     printf("  mrz | barcode_doc\n\n");
 
     printf("Note:\n");
-    printf("  The --save argument is optional and only used with analyse/crop_analyze.\n");
+    printf("  The --save argument is optional and only used with analyze/crop_analyze.\n");
     printf("  The --license argument is optional. If not provided, the program will\n");
     printf("  \tcheck the placeholder <SCANBOTSDK-LICENSE> in main.c\n");
 
     printf("Examples:\n");
     printf("  %s scan barcode --file images/example.jpg --license <KEY>\n", prog);
-    printf("  %s analyse analyse_multi_page --file files/doc.pdf --license <KEY>\n", prog);
-    printf("  %s analyse crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>\n", prog);
+    printf("  %s analyze analyze_multi_page --file files/doc.pdf --license <KEY>\n", prog);
+    printf("  %s analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>\n", prog);
     printf("  %s parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\" --license <KEY>\n", prog);
     printf("\n");
 }
