@@ -23,6 +23,8 @@
 #include <snippets/document/crop_and_analyze.h>
 #include <snippets/document/document_classifier.h>
 
+#include <snippets/live/live_barcode.h>
+
 static const int SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS = 15000;
 static const int DEREGISTER_DEVICE_TIMEOUT_MS = 15000;
 
@@ -38,7 +40,8 @@ int main(int argc, char *argv[]) {
     char *save_path  = get_flag(argc, argv, "--save");
     char *text_input = get_flag(argc, argv, "--text");
     char *license_arg = get_flag(argc, argv, "--license");
-
+    bool use_tensor_rt = false; // live only, tensor accelerator
+    
     // TODO Add your Scanbot SDK trial license key here.
     char *scanbot_license_key = license_arg ? license_arg : "<SCANBOTSDK-LICENSE>";
 
@@ -106,6 +109,11 @@ int main(int argc, char *argv[]) {
         if      (strcmp(command, "mrz")         == 0) ec = parse_mrz(text_input);
         else if (strcmp(command, "barcode_doc") == 0) ec = parse_barcode_document(text_input);
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
+    }
+    else if (strcmp(category, "live") == 0) {
+        if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
+
+        if (strcmp(command, "barcode") == 0) ec = run_live_barcode_scanner(file_path, use_tensor_rt);
     }
     else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
 

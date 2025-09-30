@@ -78,6 +78,8 @@ void print_usage(const char *prog) {
     printf("  %s analyze <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
     printf("  %s parse <command> --text \"<input>\" [--license <KEY>]\n\n", prog);
+    printf("or\n");
+    printf("  %s live <command> --file \"<input>\" [--license <KEY>]\n\n", prog);
 
     printf("Available scan commands:\n");
     printf("  barcode | document | check | credit_card | document_extractor |\n");
@@ -92,6 +94,16 @@ void print_usage(const char *prog) {
     printf("Available parse commands:\n");
     printf("  mrz | barcode_doc\n\n");
 
+    printf("Available live commands:\n");
+    printf("  barcode \n\n");
+    printf(
+        "This code uses a mock camera implementation" 
+        "The mock camera loads a single image from the given file path. \n");
+    printf(
+        "This allows you to test the barcode scanner "
+        "pipeline with a static image without needing access "
+        "to an actual camera or live video feed.\n");
+
     printf("Note:\n");
     printf("  The --save argument is optional and only used with analyze/crop_analyze.\n");
     printf("  The --license argument is optional. If not provided, the program will\n");
@@ -102,5 +114,6 @@ void print_usage(const char *prog) {
     printf("  %s analyze analyze_multi_page --file files/doc.pdf --license <KEY>\n", prog);
     printf("  %s analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>\n", prog);
     printf("  %s parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\" --license <KEY>\n", prog);
+    printf("  %s live barcode --file images/example.jpg --license <KEY>\n", prog);
     printf("\n");
 }

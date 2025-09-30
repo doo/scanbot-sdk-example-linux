@@ -62,6 +62,8 @@ The example supports four modes: **scan**, **analyze**, **classify**, and **pars
 ./scanbotsdk_example analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
 ./scanbotsdk_example classify <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 ./scanbotsdk_example parse <subcommand> --text "<input>" [--license <KEY>]
+./scanbotsdk_example live <subcommand> --file <path/to/file.jpg> [--license <KEY>]
+
 ```
 
 ## Example
@@ -70,6 +72,7 @@ The example supports four modes: **scan**, **analyze**, **classify**, and **pars
 ./scanbotsdk_example analyze analyze_multi_page --file files/doc.pdf --license <KEY>
 ./scanbotsdk_example analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
 ./scanbotsdk_example parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
+./scanbotsdk_example live barcode --file images/example.jpg --license <KEY>
 ```
 
 ## API References
