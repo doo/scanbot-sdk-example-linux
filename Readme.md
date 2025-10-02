@@ -59,8 +59,6 @@ Performance with a 1280x720 input image size and using the `NEXT_GEN` engine mod
 
 A trial license key is required for evaluation or testing. To get a free trial license, please contact us at csm@scanbot.io.
 
-Our pricing model is simple: Unlimited scanning for a flat annual license fee, full support included. There are no tiers, usage charges, or extra fees.
-
 [Contact our team](https://scanbot.io/contact-sales/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) to receive your quote.
 
 ## Other supported platforms
