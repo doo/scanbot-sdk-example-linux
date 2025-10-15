@@ -1,0 +1,2 @@
+ https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv0.800.3/scanbotsdk-0.800.3-py3-none-linux_x86_64.whl
+ 
