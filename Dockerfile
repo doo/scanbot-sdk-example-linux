@@ -35,17 +35,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get install -y nodejs \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64 \
-    PATH="/usr/lib/jvm/java-17-openjdk-arm64/bin:/opt/venv/bin:${PATH}"
+# Set JAVA_HOME
+RUN export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::") && \
+    echo "JAVA_HOME=$JAVA_HOME" >> /etc/environment
 
-# Verify installation and create architecture-agnostic symlink as fallback
-RUN set -eux; \
-    if [ ! -d "$JAVA_HOME" ]; then \
-        JAVA_HOME="$(dirname $(dirname $(readlink -f $(which java))))"; \
-    fi; \
-    ln -sf "$JAVA_HOME" /usr/local/java; \
-    java -version; \
-    javac -version
+ENV PATH="/opt/venv/bin:${PATH}"
+
+# Verify Java installation
+RUN java -version && javac -version
 
 # Set up Python virtual environment
 RUN python3 -m venv $VENV_PATH \
@@ -55,8 +52,10 @@ RUN python3 -m venv $VENV_PATH \
 # Install Python SDK
 RUN if [ "${ARCH}" = "linux-aarch64" ]; then \
         PYTHON_ARCH="linux_aarch64"; \
+        SDK_ARCH="linux-aarch64"; \
     else \
         PYTHON_ARCH="linux_x86_64"; \
+        SDK_ARCH="linux-x86_64"; \
     fi && \
     pip install "${SDK_BASE_URL}${SDK_VERSION}/scanbotsdk-${SDK_VERSION}-py3-none-${PYTHON_ARCH}.whl" && \
     echo "Python SDK installed successfully"
@@ -66,20 +65,26 @@ WORKDIR /workspaces/scanbot-sdk-example-linux
 COPY . .
 
 # Download and install all remaining SDKs in optimal locations
-RUN echo "Installing Node.js, Java, and C SDKs for architecture: ${ARCH}" && \
-    # Download platform-dependent SDKs (Java and C)
-    curl -L -O "${SDK_BASE_URL}${SDK_VERSION}/scanbotsdk-${SDK_VERSION}-${ARCH}.jar" && \
-    curl -L -O "${SDK_BASE_URL}${SDK_VERSION}/scanbotsdk-${SDK_VERSION}-${ARCH}.tar.gz" && \
-    # Install Node.js SDK
+RUN echo "Installing Java and C SDKs for architecture: ${ARCH}" && \
+    # Set the correct SDK architecture for downloads
+    if [ "${ARCH}" = "linux-aarch64" ]; then \
+        SDK_ARCH="linux-aarch64"; \
+    else \
+        SDK_ARCH="linux-x86_64"; \
+    fi && \
+    # Download platform-dependent SDKs (Java and C only)
+    curl -L -O "${SDK_BASE_URL}${SDK_VERSION}/scanbotsdk-${SDK_VERSION}-${SDK_ARCH}.jar" && \
+    curl -L -O "${SDK_BASE_URL}${SDK_VERSION}/scanbotsdk-${SDK_VERSION}-${SDK_ARCH}.tar.gz" && \
+    # Install Node.js SDK (platform-independent npm package)
     cd examples/nodejs && \
     npm install "${SDK_BASE_URL}${SDK_VERSION}/nodejs-scanbotsdk-${SDK_VERSION}.tgz" && \
     cd /workspaces/scanbot-sdk-example-linux && \
-    # Install Java SDK  
+    # Setup Java SDK  
     mkdir -p examples/java/build/libs && \
-    cp "scanbotsdk-${SDK_VERSION}-${ARCH}.jar" examples/java/build/libs/scanbotsdk.jar && \
-    # Install C SDK
+    cp "scanbotsdk-${SDK_VERSION}-${SDK_ARCH}.jar" examples/java/build/libs/scanbotsdk.jar && \
+    # Setup C SDK
     mkdir -p examples/c/build/scanbotsdk && \
-    tar -xzf "scanbotsdk-${SDK_VERSION}-${ARCH}.tar.gz" -C examples/c/build/scanbotsdk --strip-components=1 && \
+    tar -xzf "scanbotsdk-${SDK_VERSION}-${SDK_ARCH}.tar.gz" -C examples/c/build/scanbotsdk --strip-components=1 && \
     # Clean up downloads
     rm -f *.tar.gz *.jar && \
     echo "All SDKs installed successfully"

@@ -3,7 +3,7 @@ pipeline {
 
     options {
         timestamps()
-        timeout(time: 25, unit: 'MINUTES')
+        timeout(time: 35, unit: 'MINUTES')
     }
 
     parameters {
@@ -43,7 +43,7 @@ pipeline {
                         def dockerArch = ''
                         
                         if (agentArch == 'x86_64') {
-                            dockerArch = 'linux-x86-64'
+                            dockerArch = 'linux-x86_64'
                         } else if (agentArch == 'aarch64' || agentArch == 'arm64') {
                             dockerArch = 'linux-aarch64'
                         } else {

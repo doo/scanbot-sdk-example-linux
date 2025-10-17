@@ -36,15 +36,20 @@ echo "Testing SCAN commands..."
 # All failures are actual failures - no exceptions for license errors
 commands=(
     "scan barcode --file ../images/qrcode.png --license \"${LICENSE_KEY}\""
-    "scan document --file ../images/Document.JPG --license \"${LICENSE_KEY}\""
+    "scan document --file ../images/Document.png --license \"${LICENSE_KEY}\""
     "scan check --file ../images/check.jpg --license \"${LICENSE_KEY}\""
     "scan credit_card --file ../images/credit_card.png --license \"${LICENSE_KEY}\""
-    "scan mrz --file \"../images/MEXico MRZ passport old-1.jpg\" --license \"${LICENSE_KEY}\""
+    "scan document_data_extractor --file ../images/Document.png --license \"${LICENSE_KEY}\""
+    "scan medical_certificate --file \"../images/medical_certificate.png\" --license \"${LICENSE_KEY}\""
+    "scan mrz --file \"../images/MRZ_passport.png\" --license \"${LICENSE_KEY}\""
+    "scan ocr --file ../images/Document.png --license \"${LICENSE_KEY}\""
+    "scan text_pattern --file ../images/Document.png --license \"${LICENSE_KEY}\""
     "scan vin --file ../images/VIN.png --license \"${LICENSE_KEY}\""
-    "classify document --file ../images/Document.JPG --license \"${LICENSE_KEY}\""
+    "classify document --file ../images/toll_receipt.png --license \"${LICENSE_KEY}\""
     "analyze analyze_multi_page --file ../images/multi_page_document.pdf --license \"${LICENSE_KEY}\""
-    "analyze crop_analyze --file ../images/Document.JPG --license \"${LICENSE_KEY}\""
+    "analyze crop_analyze --file ../images/Document.png --license \"${LICENSE_KEY}\""
     "parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<<<<<<<<<<ERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<<<<<<<<<<\" --license \"${LICENSE_KEY}\""
+    "parse barcode_doc --text \"QR_CODE:https://example.com\" --license \"${LICENSE_KEY}\""
 )
 
 command_names=(
@@ -52,12 +57,17 @@ command_names=(
     "Document scan"
     "Check scan"
     "Credit card scan"
+    "Document data extractor scan"
+    "Medical certificate scan"
     "MRZ scan"
+    "OCR scan"
+    "Text pattern scan"
     "VIN scan"
     "Document classify"
     "Multi-page analyze"
     "Crop analyze"
     "MRZ parse"
+    "Barcode document parse"
 )
 
 for i in "${!commands[@]}"; do
