@@ -32,4 +32,4 @@ def crop_and_analyze(image_path: str, save_path: str | None = None):
 
             quality_result: DocumentQualityAnalyzerResult = analyser.run(image=cropped)
             print(f"Document Found: {quality_result.document_found}")
-            print(f"Quality: {quality_result.quality.name}")
+            print(f"Quality: {quality_result.quality}")
