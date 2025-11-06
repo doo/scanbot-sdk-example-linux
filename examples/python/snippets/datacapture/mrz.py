@@ -1,4 +1,3 @@
-
 from scanbotsdk import *
 
 from utils import print_generic_document
@@ -8,7 +7,7 @@ def scan_mrz(image: ImageRef):
         enable_detection=True,
         incomplete_result_handling=MrzIncompleteResultHandling.ACCEPT,
         frame_accumulation_configuration = AccumulatedResultsVerifierConfiguration(
-            minimum_number_of_required_frames_with_equal_scanning_result=1    
+            minimum_number_of_required_frames_with_equal_scanning_result=1
         )
     )
     # Configure other parameters as needed.

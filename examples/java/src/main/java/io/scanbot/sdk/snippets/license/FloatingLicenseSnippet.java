@@ -38,6 +38,6 @@ public class FloatingLicenseSnippet {
         // If you are not using floating license, it is not required to use io.scanbot.sdk.DeviceSession as there is no
         // need to notify server you are no longer using the license. Alternatively, you can manually call
         // io.scanbot.sdk.ScanbotSDK.deregisterDevice() and io.scanbot.sdk.ScanbotSDK.waitForDeviceDeregistrationCompletion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS) if you need asynchronous
-        // deregistration behaviour
+        // deregistration behavior
     }
 }

@@ -18,4 +18,3 @@ def classify_document(image: ImageRef):
     else:
         print("No document corners detected.")
 
-   
