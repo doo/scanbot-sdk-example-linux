@@ -2,16 +2,17 @@
 FROM debian:bookworm-slim AS base 
 
 # Build Arguments
-ARG ARCH=linux-aarch64
-ARG SDK_VERSION=0.800.3
+ARG ARCH
+ARG SDK_VERSION
 ARG JAVA_VERSION=17
-ARG SCANBOT_LICENSE=""
+ARG SCANBOT_LICENSE
 
 # Environment Variables
 ENV ARCH=${ARCH} \
     SDK_VERSION=${SDK_VERSION} \
     JAVA_VERSION=${JAVA_VERSION} \
-    VENV_PATH=/opt/venv \
+    PYENV_ROOT="/opt/pyenv" \
+    PATH="/opt/pyenv/bin:/opt/pyenv/shims:$PATH" \
     SDK_BASE_URL="https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv" \
     SCANBOT_LICENSE=${SCANBOT_LICENSE}
 
@@ -21,11 +22,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     make \
+    build-essential \
+    libssl-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libffi-dev \
+    liblzma-dev \
     # Languages  
     openjdk-${JAVA_VERSION}-jdk \
-    python3 \
-    python3-venv \
-    python3-pip \
     # Utilities
     curl \
     git \
@@ -34,6 +40,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && apt-get install -y nodejs \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+    # Install pyenv and Python 3.6.15
+RUN git clone --depth=1 https://github.com/pyenv/pyenv.git $PYENV_ROOT \
+    && pyenv install 3.6.15 \
+    && pyenv global 3.6.15 \
+    && pyenv rehash
 
 # Set JAVA_HOME
 RUN export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::") && \
@@ -44,10 +56,10 @@ ENV PATH="/opt/venv/bin:${PATH}"
 # Verify Java installation
 RUN java -version && javac -version
 
-# Set up Python virtual environment
-RUN python3 -m venv $VENV_PATH \
-    && pip install --upgrade pip setuptools wheel \
-    && pip install opencv-python
+# Set up Python packages
+RUN export PATH="/opt/pyenv/bin:/opt/pyenv/shims:$PATH" \
+    && eval "$(/opt/pyenv/bin/pyenv init -)" \
+    && python -m pip install --upgrade pip setuptools wheel    
 
 # Install Python SDK
 RUN if [ "${ARCH}" = "linux-aarch64" ]; then \
@@ -57,7 +69,7 @@ RUN if [ "${ARCH}" = "linux-aarch64" ]; then \
         PYTHON_ARCH="linux_x86_64"; \
         SDK_ARCH="linux-x86_64"; \
     fi && \
-    pip install "${SDK_BASE_URL}${SDK_VERSION}/scanbotsdk-${SDK_VERSION}-py3-none-${PYTHON_ARCH}.whl" && \
+    python -m pip install "${SDK_BASE_URL}${SDK_VERSION}/scanbotsdk-${SDK_VERSION}-py3-none-${PYTHON_ARCH}.whl" && \
     echo "Python SDK installed successfully"
 
 # Set working directory and copy source code
@@ -93,20 +105,13 @@ RUN echo "Installing Java and C SDKs for architecture: ${ARCH}" && \
 COPY test-scripts/ /tests/
 RUN chmod +x /tests/*.sh
 
-# Base verification - ensure all SDKs can be imported/built  
-RUN echo "=== SDK Integration Verification ===" \
-    && python3 -c "import scanbotsdk; print('Python SDK: OK')" \
-    && cd examples/nodejs && npm install && node -e "console.log('Node.js SDK:', require('scanbotsdk') ? 'OK' : 'FAIL')" \
-    && cd /workspaces/scanbot-sdk-example-linux/examples/java && ./gradlew build --no-daemon && echo "Java SDK: OK" \
-    && cd /workspaces/scanbot-sdk-example-linux/examples/c && mkdir -p build && cd build && cmake -DSCANBOTSDK_VERSION=${SDK_VERSION} .. && make && echo "C SDK: OK"
-
 # SDK Verification Stage
 FROM base AS sdk-verification
 RUN echo "=== Comprehensive SDK Verification ===" \
-    && python3 -c "import scanbotsdk; print('Python SDK: Verified')" \
-    && cd examples/nodejs && npm install && node -e "const sdk = require('scanbotsdk'); console.log('Node.js SDK: Verified')" \
+    && python -c "import scanbotsdk; print('Python SDK: Verified')" \
+    && cd examples/nodejs && npm install && node -e "const sdk = require('scanbotsdk'); console.log('Node.js SDK: Verified') ? 'OK' : 'FAIL')" \
     && cd /workspaces/scanbot-sdk-example-linux/examples/java && ./gradlew check --no-daemon && echo "Java SDK: Verified" \
-    && cd /workspaces/scanbot-sdk-example-linux/examples/c && cd build && echo "C SDK: Verified"
+    && cd /workspaces/scanbot-sdk-example-linux/examples/c && mkdir -p build && cd build && cmake -DSCANBOTSDK_VERSION=${SDK_VERSION} .. && make && echo "C SDK: OK"
 
 # Python Tests Stage
 FROM sdk-verification AS python-tests

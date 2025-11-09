@@ -13,17 +13,6 @@ else
     exit 1
 fi
 
-# Test basic build first
-echo "Testing C compilation..."
-mkdir -p build
-cd build
-if cmake -DSCANBOTSDK_VERSION=0.800.3 .. >/dev/null 2>&1 && make >/dev/null 2>&1; then
-    echo "PASS: C compilation: PASSED"
-else
-    echo "FAIL: C compilation: FAILED"
-    exit 1
-fi
-
 echo "Testing executable exists..."
 if [[ -x "./scanbotsdk_example" ]]; then
     echo "PASS: C executable: EXISTS"
@@ -84,7 +73,7 @@ for i in "${!commands[@]}"; do
     cmd="${commands[$i]}"
     name="${command_names[$i]}"
     
-    if timeout 30 ./scanbotsdk_example $cmd >/dev/null 2>&1; then
+    if timeout 30 ./scanbotsdk_example $cmd; then
         echo "PASS: $name: PASSED"
     elif [[ $? -eq 124 ]]; then
         echo "FAIL: $name: TIMEOUT"

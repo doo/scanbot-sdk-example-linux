@@ -13,15 +13,6 @@ else
     exit 1
 fi
 
-# Test basic functionality first
-echo "Testing Python imports..."
-if python3 -c "import scanbotsdk; print('Scanbot SDK imported successfully')" 2>/dev/null; then
-    echo "PASS: Python SDK import: PASSED"
-else
-    echo "FAIL: Python SDK import: FAILED"
-    exit 1
-fi
-
 # Check if license is available
 if [[ -z "${SCANBOT_LICENSE}" ]]; then
     echo "ERROR: No license available"
@@ -73,14 +64,14 @@ command_names=(
 for i in "${!commands[@]}"; do
     cmd="${commands[$i]}"
     name="${command_names[$i]}"
-    
-    if eval "timeout 30 python3 main.py $cmd" >/dev/null 2>&1; then
+
+    if timeout 30 python3 main.py $cmd; then
         echo "PASS: $name: PASSED"
     elif [[ $? -eq 124 ]]; then
         echo "FAIL: $name: TIMEOUT"
         exit 1
     else
-        echo "FAIL: $name: FAILED"
+        echo "FAIL: $name and $cmd : FAILED"
         exit 1
     fi
 done

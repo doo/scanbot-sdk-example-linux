@@ -13,15 +13,6 @@ else
     exit 1
 fi
 
-# Test basic functionality first
-echo "Testing Node.js SDK import..."
-if node -e "console.log(require('scanbotsdk') ? 'Scanbot SDK loaded successfully' : 'Error')" >/dev/null 2>&1; then
-    echo "PASS: Node.js SDK import: PASSED"
-else
-    echo "FAIL: Node.js SDK import: FAILED"
-    exit 1
-fi
-
 echo "Testing TypeScript compilation..."
 if npx tsc --noEmit >/dev/null 2>&1; then
     echo "PASS: TypeScript compilation: PASSED"

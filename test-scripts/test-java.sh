@@ -13,15 +13,6 @@ else
     exit 1
 fi
 
-# Test basic build first
-echo "Testing Java compilation..."
-if ./gradlew build --no-daemon >/dev/null 2>&1; then
-    echo "PASS: Java compilation: PASSED"
-else
-    echo "FAIL: Java compilation: FAILED"
-    exit 1
-fi
-
 # Check if license is available
 if [[ -z "${SCANBOT_LICENSE}" ]]; then
     echo "ERROR: No license available"
