@@ -29,26 +29,23 @@ if [[ -z "${SCANBOT_LICENSE}" ]]; then
     exit 1
 fi
 
-LICENSE_KEY="${SCANBOT_LICENSE}"
-
 echo "Testing NODEJS commands..."
-# All failures are actual failures - no exceptions for license errors
 commands=(
-    "scan barcode --file ../images/qrcode.png --license \"${LICENSE_KEY}\""
-    "scan document --file ../images/Document.png --license \"${LICENSE_KEY}\""
-    "scan check --file ../images/check.jpg --license \"${LICENSE_KEY}\""
-    "scan credit_card --file ../images/credit_card.png --license \"${LICENSE_KEY}\""
-    "scan document_extractor --file ../images/Document.png --license \"${LICENSE_KEY}\""
-    "scan medical_certificate --file ../images/medical_certificate.png --license \"${LICENSE_KEY}\""
-    "scan mrz --file ../images/MRZ_passport.png --license \"${LICENSE_KEY}\""
-    "scan ocr --file ../images/Document.png --license \"${LICENSE_KEY}\""
-    "scan text_pattern --file ../images/Document.png --license \"${LICENSE_KEY}\""
-    "scan vin --file ../images/VIN.png --license \"${LICENSE_KEY}\""
-    "classify document --file ../images/toll_receipt.png --license \"${LICENSE_KEY}\""
-    "analyze analyze_multi_page --file ../images/multi_page_document.pdf --license \"${LICENSE_KEY}\""
-    "analyze crop_analyze --file ../images/Document.png --license \"${LICENSE_KEY}\""
-    "parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<<<<<<<<<<ERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<<<<<<<<<<\" --license \"${LICENSE_KEY}\""
-    "parse barcode_doc --text \"QR_CODE:https://example.com\" --license \"${LICENSE_KEY}\""
+    "scan barcode --file ../images/qrcode.png --license \"${SCANBOT_LICENSE}\""
+    "scan document --file ../images/Document.png --license \"${SCANBOT_LICENSE}\""
+    "scan check --file ../images/check.jpg --license \"${SCANBOT_LICENSE}\""
+    "scan credit_card --file ../images/credit_card.png --license \"${SCANBOT_LICENSE}\""
+    "scan document_extractor --file ../images/Document.png --license \"${SCANBOT_LICENSE}\""
+    "scan medical_certificate --file ../images/medical_certificate.png --license \"${SCANBOT_LICENSE}\""
+    "scan mrz --file ../images/MRZ_passport.png --license \"${SCANBOT_LICENSE}\""
+    "scan ocr --file ../images/Document.png --license \"${SCANBOT_LICENSE}\""
+    "scan text_pattern --file ../images/Document.png --license \"${SCANBOT_LICENSE}\""
+    "scan vin --file ../images/VIN.png --license \"${SCANBOT_LICENSE}\""
+    "classify document --file ../images/toll_receipt.png --license \"${SCANBOT_LICENSE}\""
+    "analyze analyze_multi_page --file ../images/multi_page_document.pdf --license \"${SCANBOT_LICENSE}\""
+    "analyze crop_analyze --file ../images/Document.png --license \"${SCANBOT_LICENSE}\""
+    "parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<<<<<<<<<<ERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<<<<<<<<<<\" --license \"${SCANBOT_LICENSE}\""
+    "parse barcode_doc --text \"QR_CODE:https://example.com\" --license \"${SCANBOT_LICENSE}\""
 )
 
 command_names=(
@@ -73,7 +70,7 @@ for i in "${!commands[@]}"; do
     cmd="${commands[$i]}"
     name="${command_names[$i]}"
     
-    if timeout 30 npx ts-node src/index.ts $cmd >/dev/null 2>&1; then
+    if timeout 30 npx ts-node src/index.ts $cmd; then
         echo "PASS: $name: PASSED"
     elif [[ $? -eq 124 ]]; then
         echo "FAIL: $name: TIMEOUT"
