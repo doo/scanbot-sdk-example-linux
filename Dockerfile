@@ -59,7 +59,10 @@ RUN java -version && javac -version
 # Set up Python packages
 RUN export PATH="/opt/pyenv/bin:/opt/pyenv/shims:$PATH" \
     && eval "$(/opt/pyenv/bin/pyenv init -)" \
-    && python -m pip install --upgrade pip setuptools wheel    
+    && python -m pip install --upgrade pip setuptools wheel \
+    # The opencv-python version is specified to ensure compatibility with Python 3.6 and speed up docker builds
+    # Once the python is upgraded to 3.7+, this can be changed to just `opencv-python`
+    && python -m pip install opencv-python==4.5.5.64 numpy pillow    
 
 # Install Python SDK
 RUN if [ "${ARCH}" = "linux-aarch64" ]; then \
@@ -109,7 +112,7 @@ RUN chmod +x /tests/*.sh
 FROM base AS sdk-verification
 RUN echo "=== Comprehensive SDK Verification ===" \
     && python -c "import scanbotsdk; print('Python SDK: Verified')" \
-    && cd examples/nodejs && npm install && node -e "const sdk = require('scanbotsdk'); console.log('Node.js SDK: Verified') ? 'OK' : 'FAIL')" \
+    && cd examples/nodejs && npm install && node -e "const sdk = require('scanbotsdk'); console.log(sdk ? 'OK' : 'FAIL');" \
     && cd /workspaces/scanbot-sdk-example-linux/examples/java && ./gradlew check --no-daemon && echo "Java SDK: Verified" \
     && cd /workspaces/scanbot-sdk-example-linux/examples/c && mkdir -p build && cd build && cmake -DSCANBOTSDK_VERSION=${SDK_VERSION} .. && make && echo "C SDK: OK"
 
