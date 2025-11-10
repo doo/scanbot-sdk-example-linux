@@ -1,8 +1,9 @@
 import os
 from scanbotsdk import *
 from utils import create_image_ref
+from typing import Optional
 
-def crop_and_analyze(image_path: str, save_path: str | None = None):
+def crop_and_analyze(image_path: str, save_path: Optional[str] = None):
     with create_image_ref(image_path) as image:
         # Configure scanner
         config = DocumentScannerConfiguration()
