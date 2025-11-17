@@ -25,7 +25,7 @@ echo "Testing JAVA commands..."
 commands=(
     "scan barcode --file ../images/qrcode.png --license \"${SCANBOT_LICENSE}\""
     "scan document --file ../images/Document.png --license \"${SCANBOT_LICENSE}\""
-    "scan check --file ../images/check.jpg --license \"${SCANBOT_LICENSE}\""
+    "scan check --file ../images/check.png --license \"${SCANBOT_LICENSE}\""
     "scan credit_card --file ../images/credit_card.png --license \"${SCANBOT_LICENSE}\""
     "scan document_extractor --file ../images/Document.png --license \"${SCANBOT_LICENSE}\""
     "scan medical_certificate --file ../images/medical_certificate.png --license \"${SCANBOT_LICENSE}\""
@@ -35,7 +35,7 @@ commands=(
     "scan vin --file ../images/VIN.png --license \"${SCANBOT_LICENSE}\""
     "classify document --file ../images/toll_receipt.png --license \"${SCANBOT_LICENSE}\""
     "analyze analyze_multi_page --file ../images/multi_page_document.pdf --save /tmp/out.pdf --license \"${SCANBOT_LICENSE}\""
-    "analyze crop_analyze --file ../images/Document.png --save /tmp/crop.jpg --license \"${SCANBOT_LICENSE}\""
+    "analyze crop_analyze --file ../images/Document.png --save /tmp/crop.png --license \"${SCANBOT_LICENSE}\""
     "parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<<<<<<<<<<ERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<<<<<<<<<<\" --license \"${SCANBOT_LICENSE}\""
     "parse barcode_doc --text \"QR_CODE:https://example.com\" --license \"${SCANBOT_LICENSE}\""
 )
@@ -87,3 +87,4 @@ for i in "${!commands[@]}"; do
 done
 
 echo "PASS: Java tests PASSED"
+

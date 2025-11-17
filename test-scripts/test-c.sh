@@ -38,7 +38,7 @@ echo "Testing SCAN commands..."
 commands=(
     "scan barcode --file ../../images/qrcode.png --license \"${SCANBOT_LICENSE}\""
     "scan document --file ../../images/Document.png --license \"${SCANBOT_LICENSE}\""
-    "scan check --file ../../images/check.jpg --license \"${SCANBOT_LICENSE}\""
+    "scan check --file ../../images/check.png --license \"${SCANBOT_LICENSE}\""
     "scan credit_card --file ../../images/credit_card.png --license \"${SCANBOT_LICENSE}\""
     "scan document_extractor --file ../../images/Document.png --license \"${SCANBOT_LICENSE}\""
     "scan medical_certificate --file ../../images/medical_certificate.png --license \"${SCANBOT_LICENSE}\""
@@ -87,3 +87,4 @@ for i in "${!commands[@]}"; do
 done
 
 echo "PASS: C tests PASSED"
+
