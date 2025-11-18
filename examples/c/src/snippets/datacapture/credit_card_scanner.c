@@ -16,7 +16,7 @@ scanbotsdk_error_code_t print_credit_card_result(scanbotsdk_credit_card_scanning
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_detection_status: %d\n", ec); return ec; }
 
     const char *detection_status_str = NULL;
-    ec = scanbotsdk_document_detection_status_t_to_string(detection_status, &detection_status_str);
+    scanbotsdk_document_detection_status_t_to_string(detection_status, &detection_status_str);
     printf("Document Detection status: %s\n", detection_status_str);
 
     ec = print_generic_document_fields(credit_card);
@@ -30,7 +30,7 @@ scanbotsdk_error_code_t detect_credit_card(scanbotsdk_image_t *image) {
     scanbotsdk_credit_card_scanner_t *scanner = NULL;
     scanbotsdk_credit_card_scanning_result_t *result = NULL;
 
-    ec = scanbotsdk_credit_card_scanner_configuration_create_with_defaults(&config);
+    scanbotsdk_credit_card_scanner_configuration_create_with_defaults(&config);
     // Configure other parameters as needed.
 
     ec = scanbotsdk_credit_card_scanner_create(config, &scanner);

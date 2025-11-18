@@ -49,6 +49,8 @@ int main(int argc, char *argv[]) {
     params.license_key   = scanbot_license_key;
     params.writeable_path = ".";
 
+    scanbotsdk_image_t *image = NULL;
+
     scanbotsdk_error_code_t ec = scanbotsdk_initialize(&params);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "initialize: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
@@ -59,8 +61,6 @@ int main(int argc, char *argv[]) {
     // about license validity.
     ec = scanbotsdk_wait_for_online_license_check_completion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "license_wait: %d: %s\n", ec, error_message(ec)); goto cleanup; }
-
-    scanbotsdk_image_t *image = NULL;
 
     if (strcmp(category, "scan") == 0) {
         if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
