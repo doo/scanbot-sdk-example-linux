@@ -44,7 +44,7 @@ static scanbotsdk_error_code_t process_line(scanbotsdk_line_t *line) {
     if (ec != SCANBOTSDK_OK) goto cleanup;
 
     for (size_t k = 0; k < word_count; k++) {
-        scanbotsdk_error_code_t ec = process_word(words[k]);
+        ec = process_word(words[k]);
         if (ec != SCANBOTSDK_OK) goto cleanup;
     }
 
@@ -74,7 +74,7 @@ static scanbotsdk_error_code_t process_block(scanbotsdk_block_t *block) {
     if (ec != SCANBOTSDK_OK) goto cleanup;
 
     for (size_t j = 0; j < line_count; j++) {
-        scanbotsdk_error_code_t ec = process_line(lines[j]);
+        ec = process_line(lines[j]);
         if (ec != SCANBOTSDK_OK) goto cleanup;
     }
 
@@ -103,7 +103,7 @@ static scanbotsdk_error_code_t print_ocr_result(scanbotsdk_page_t *page) {
     if (ec != SCANBOTSDK_OK) goto cleanup;
 
     for (size_t i = 0; i < block_count; i++) {
-        scanbotsdk_error_code_t ec = process_block(blocks[i]);
+        ec = process_block(blocks[i]);
         if (ec != SCANBOTSDK_OK) goto cleanup;
     }
 

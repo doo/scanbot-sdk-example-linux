@@ -14,12 +14,13 @@ scanbotsdk_error_code_t load_image_from_path(const char *path, scanbotsdk_image_
 
 scanbotsdk_error_code_t print_generic_document_fields(scanbotsdk_generic_document_t *doc) {
     size_t fields_count = 0;
+    scanbotsdk_field_t **fields = NULL;
     scanbotsdk_error_code_t ec = scanbotsdk_generic_document_get_fields_size(doc, &fields_count);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_fields_size: %d\n", ec); goto cleanup; }
 
     printf("Fields count: %zu\n", fields_count);
 
-    scanbotsdk_field_t **fields = calloc(fields_count, sizeof(*fields));
+    fields = calloc(fields_count, sizeof(*fields));
     if (!fields) { fprintf(stderr, "alloc fields failed\n"); ec = SCANBOTSDK_ERROR_OUT_OF_MEMORY; goto cleanup; }
 
     ec = scanbotsdk_generic_document_get_fields(doc, fields, fields_count);

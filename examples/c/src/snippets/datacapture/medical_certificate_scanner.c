@@ -8,6 +8,7 @@ scanbotsdk_error_code_t print_medical_certificate_result(scanbotsdk_medical_cert
     scanbotsdk_error_code_t ec;
     scanbotsdk_medical_certificate_patient_info_box_t* patient_info = NULL;
     bool status;
+    scanbotsdk_medical_certificate_patient_info_field_t **fields = NULL;
     
     ec = scanbotsdk_medical_certificate_scanning_result_get_scanning_successful(result, &status);
     printf("Medical Certificate scanning status = %d\n", status);
@@ -18,7 +19,7 @@ scanbotsdk_error_code_t print_medical_certificate_result(scanbotsdk_medical_cert
     ec = scanbotsdk_medical_certificate_patient_info_box_get_fields_size(patient_info, &count);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_fields_size: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
-    scanbotsdk_medical_certificate_patient_info_field_t **fields = calloc(count, sizeof(*fields));
+    fields = calloc(count, sizeof(*fields));
     ec = scanbotsdk_medical_certificate_patient_info_box_get_fields(patient_info, fields, count);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_patient_info_box_get_fields: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 

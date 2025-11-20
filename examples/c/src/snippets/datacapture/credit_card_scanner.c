@@ -18,8 +18,9 @@ scanbotsdk_error_code_t print_credit_card_result(scanbotsdk_credit_card_scanning
     const char *detection_status_str = NULL;
     scanbotsdk_document_detection_status_t_to_string(detection_status, &detection_status_str);
     printf("Document Detection status: %s\n", detection_status_str);
-
-    ec = print_generic_document_fields(credit_card);
+    if (credit_card != NULL) {
+        ec = print_generic_document_fields(credit_card);
+    }
     return ec;
 }
 
