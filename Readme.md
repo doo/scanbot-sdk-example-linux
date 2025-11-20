@@ -61,6 +61,11 @@ A trial license key is required for evaluation or testing. To get a free trial l
 
 [Contact our team](https://scanbot.io/contact-sales/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) to receive your quote.
 
+## Running Tests
+
+The test scripts validate SDK integration, detect compilation errors, and check license issues across all supported languages (Python, Java, Node.js, C).
+[Detailed documentation] ( )
+
 ## Other supported platforms
 
 The Scanbot SDK is also available on Android, iOS, and most common cross-platform environments, such as React Native, Flutter, and .NET MAUI:
