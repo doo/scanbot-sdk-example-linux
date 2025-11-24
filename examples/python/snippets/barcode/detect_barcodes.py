@@ -1,4 +1,6 @@
 from scanbotsdk import *
+from typing import List
+
 
 def scan_barcode(image: ImageRef):
     configuration = BarcodeScannerConfiguration(
@@ -16,7 +18,7 @@ def scan_barcode(image: ImageRef):
     print_barcodes(result.barcodes)
 
 
-def print_barcodes(barcodes: list[BarcodeItem]):
+def print_barcodes(barcodes: List[BarcodeItem]):
     if not barcodes:
         print("No barcodes found")
         return
