@@ -9,7 +9,7 @@ These test scripts validate the Scanbot SDK integration across all supported lan
 - **Test commands**: Run SDK functions to catch integration issues
 - **Quick validation**: Fast checks for development workflow
 
-**Note: No asserts are setup to validate the tests results
+**Note: No asserts are setup to validate the tests results.**
 
 ## Test Structure
 
