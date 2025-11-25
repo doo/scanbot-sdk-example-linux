@@ -58,23 +58,6 @@ command_names=(
     "Barcode document parse"
 )
 
-command_names=(
-    "Barcode scan"
-    "Document scan"
-    "Check scan"
-    "Credit card scan"
-    "Document extractor scan"
-    "Medical certificate scan"
-    "MRZ scan"
-    "OCR scan"
-    "Text pattern scan"
-    "VIN scan"
-    "Document classify"
-    "Multi-page analyze"
-    "Crop analyze"
-    "MRZ parse"
-    "Barcode document parse"
-)
 
 for i in "${!commands[@]}"; do
     cmd="${commands[$i]}"
