@@ -22,7 +22,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     make \
-    build-essential \
     libssl-dev \
     zlib1g-dev \
     libbz2-dev \
