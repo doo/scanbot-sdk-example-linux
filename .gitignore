@@ -4,3 +4,6 @@ examples/python/__pycache__
 examples/c/build/*
 examples/nodejs/node_modules
 examples/java/libs/*.jar
+get-pip.py
+.env
+.venv

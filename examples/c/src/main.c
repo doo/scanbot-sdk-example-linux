@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
     char *save_path  = get_flag(argc, argv, "--save");
     char *text_input = get_flag(argc, argv, "--text");
     char *license_arg = get_flag(argc, argv, "--license");
-    bool use_tensor_rt = false; // live only, tensor accelerator
+    bool use_tensor_rt = get_flag(argc, argv, "--use_tensorrt") != NULL; // live only, tensor accelerator
     
     // TODO Add your Scanbot SDK trial license key here.
     char *scanbot_license_key = license_arg ? license_arg : "<SCANBOTSDK-LICENSE>";

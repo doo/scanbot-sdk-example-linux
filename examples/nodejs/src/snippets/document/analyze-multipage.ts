@@ -4,7 +4,7 @@ import { extractImages } from "../utils/utils";
 export class AnalyzeMultiPageSnippet {
   public static async run(filePath: string): Promise<void> {
     const analyzeConfig = new ScanbotSDK.DocumentQualityAnalyzerConfiguration();
-    analyzeConfig.tileSize = 300;
+    analyzeConfig.processByTileConfiguration.tileSize = 300;
     analyzeConfig.detectOrientation = true;
     analyzeConfig.minEstimatedNumberOfSymbolsForDocument = 20;
     // configure other parameters as needed

@@ -14,7 +14,7 @@ import io.scanbot.sdk.utils.Utils;
 public class AnalyzeMultiPageSnippet {
     public static void run(String filePath, String resourcePath) throws Exception {
         DocumentQualityAnalyzerConfiguration analyze_config = new DocumentQualityAnalyzerConfiguration();
-        analyze_config.setTileSize(300);
+        analyze_config.getProcessByTileConfiguration().setTileSize(300);;
         analyze_config.setDetectOrientation(true);
         analyze_config.setMinEstimatedNumberOfSymbolsForDocument(20);
         // Configure other parameters as needed.

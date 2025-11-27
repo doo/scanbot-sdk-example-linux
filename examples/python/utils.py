@@ -52,7 +52,7 @@ def print_usage():
     print("  python main.py classify <command> --file <path/to/file.jpg> [--license <KEY>]")
     print("  python main.py analyze <command> --file <path/to/file> --save <path/to/save> [--license <KEY>]")
     print("  python main.py parse <command> --text \"<input>\" [--license <KEY>]")
-    print("  python main.py live <command> --device <device_name> [--license <KEY>] --preview\n")
+    print("  python main.py live <command> --device <device_name> [--license <KEY>] --preview --use_tensorrt\n")
 
     print("Available scan commands:")
     print("  barcode | document | check | credit_card | document_data_extractor | medical_certificate | mrz | ocr | text_pattern | vin\n")
@@ -69,6 +69,7 @@ def print_usage():
     print("  --save is optional, only used with analyze/crop_analyze.")
     print("  --license is optional, default is \"<SCANBOTSDK-LICENSE>\".")
     print("  --device is required for live command (e.g. libcamera or jetson_csi).\n")
+    print("  --use_tensorrt is optional for live command to enable TensorRtAccelerator")
 
     print("Examples:")
     print("  python main.py scan barcode --file images/example.jpg --license <KEY>")
