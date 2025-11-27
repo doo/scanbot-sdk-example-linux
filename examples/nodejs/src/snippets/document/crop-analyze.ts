@@ -10,7 +10,7 @@ export class CropAndAnalyzeSnippet {
     );
 
     const analyzerConfig = new ScanbotSDK.DocumentQualityAnalyzerConfiguration();
-    analyzerConfig.tileSize = 300;
+    analyzerConfig.processByTileConfiguration.tileSize = 300;
     analyzerConfig.minEstimatedNumberOfSymbolsForDocument = 20;
     // configure other parameters as needed
 

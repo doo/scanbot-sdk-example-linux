@@ -61,15 +61,25 @@ const char *error_message(scanbotsdk_error_code_t ec) {
 }
 
 
-char* get_flag(int argc, char *argv[], const char *flag) {
-    for (int i = 3; i < argc; i++) {
-        if (strcmp(argv[i], flag) == 0 && i + 1 < argc) {
-            return argv[i+1];
+const char* get_flag(int argc, char *argv[], const char *flag) {
+    size_t len = strlen(flag);
+
+    for (int i = 1; i < argc; i++) {
+
+        // "--flag"
+        if (strcmp(argv[i], flag) == 0) {
+            if (i + 1 < argc && strncmp(argv[i+1], "--", 2) != 0)
+                return argv[i+1];
+
+            return "";
         }
-        if (strncmp(argv[i], flag, strlen(flag)) == 0 && argv[i][strlen(flag)] == '=') {
-            return argv[i] + strlen(flag) + 1;
+
+         // "--flag=value"
+        if (strncmp(argv[i], flag, len) == 0 && argv[i][len] == '=') {
+            return argv[i] + len + 1;
         }
     }
+
     return NULL;
 }
 
@@ -84,7 +94,7 @@ void print_usage(const char *prog) {
     printf("or\n");
     printf("  %s parse <command> --text \"<input>\" [--license <KEY>]\n\n", prog);
     printf("or\n");
-    printf("  %s live <command> --file \"<input>\" [--license <KEY>]\n\n", prog);
+    printf("  %s live <command> --file \"<input>\" [--license <KEY>] [--use_tensorrt]\n\n", prog);
 
     printf("Available scan commands:\n");
     printf("  barcode | document | check | credit_card | document_extractor |\n");

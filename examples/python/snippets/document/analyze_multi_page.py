@@ -2,9 +2,11 @@ from scanbotsdk import *
 
 def analyze_multi_page(file_path: str):
     configuration = DocumentQualityAnalyzerConfiguration(
-        tile_size=300,
         detect_orientation=True,
         min_estimated_number_of_symbols_for_document=20,
+        process_by_tile_configuration=ProcessByTileConfiguration(
+            tile_size=300
+        )
     )
     # Configure other parameters as needed.
 

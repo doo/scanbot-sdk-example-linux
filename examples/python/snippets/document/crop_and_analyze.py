@@ -25,8 +25,10 @@ def crop_and_analyze(image_path: str, save_path: str | None = None):
 
             # Configure analyzer
             analyser_config = DocumentQualityAnalyzerConfiguration(
-                tile_size=300,
-                min_estimated_number_of_symbols_for_document=20
+                min_estimated_number_of_symbols_for_document=20,
+                process_by_tile_configuration=ProcessByTileConfiguration(
+                    tile_size=300
+                )
             )
             analyser = DocumentQualityAnalyzer(configuration=analyser_config)
 

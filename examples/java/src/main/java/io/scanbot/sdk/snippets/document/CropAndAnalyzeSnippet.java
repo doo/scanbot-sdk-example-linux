@@ -22,7 +22,7 @@ public class CropAndAnalyzeSnippet {
         config.setParameters(scanner_params);
 
         DocumentQualityAnalyzerConfiguration analyze_config = new DocumentQualityAnalyzerConfiguration();
-        analyze_config.setTileSize(300);
+        analyze_config.getProcessByTileConfiguration().setTileSize(300);
         analyze_config.setMinEstimatedNumberOfSymbolsForDocument(20);
         // Configure other parameters as needed.
 

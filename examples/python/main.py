@@ -65,7 +65,8 @@ def main():
         save_path     = flags.get("--save")
         text_input    = flags.get("--text")
         device_input  = flags.get("--device") # live only
-        show_preview  = bool(flags.get("--preview")) # live only
+        show_preview  = "--preview" in flags # live only
+        use_tensorrt =  "--use_tensorrt" in flags # live barcode only
         
         if category == "scan":
             if not file_path: print_usage(); return
@@ -102,13 +103,13 @@ def main():
             
         elif category == "live":
             if not device_input: print_usage(); return
-            if subcommand == "barcode":             barcode_live(device_input, show_preview)
+            if subcommand == "barcode":             barcode_live(device_input, show_preview, use_tensorrt)
             if subcommand == "document":            document_live(device_input, show_preview)
             else: print_usage()
 
-def barcode_live(device_input: str, show_preview: bool):
+def barcode_live(device_input: str, show_preview: bool, use_tensorrt: bool):
     cap = open_camera(device_input)
-    scanner = create_barcode_scanner(use_tensorrt=False)
+    scanner = create_barcode_scanner(use_tensorrt=use_tensorrt)
     if show_preview:
         run_scanner(cap, scanner.run, on_result=draw_barcodes_frame)
     else:
