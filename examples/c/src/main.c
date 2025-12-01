@@ -25,9 +25,6 @@
 
 #include <snippets/live/live_barcode.h>
 
-static const int SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS = 15000;
-static const int DEREGISTER_DEVICE_TIMEOUT_MS = 15000;
-
 int main(int argc, char *argv[]) {
     if (argc < 3) {
         print_usage(argv[0]);
@@ -53,14 +50,6 @@ int main(int argc, char *argv[]) {
 
     scanbotsdk_error_code_t ec = scanbotsdk_initialize(&params);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "initialize: %d: %s\n", ec, error_message(ec)); goto cleanup; }
-
-    // Wait for the online license check to complete.
-    // scanbotsdk_initialize() is non-blocking and triggers the license validation
-    // asynchronously in the background. Without waiting here, the license status
-    // may still be unknown or incomplete, which can lead to incorrect assumptions
-    // about license validity.
-    ec = scanbotsdk_wait_for_online_license_check_completion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "license_wait: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     if (strcmp(category, "scan") == 0) {
         if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
@@ -119,18 +108,5 @@ int main(int argc, char *argv[]) {
 
 cleanup:
     scanbotsdk_image_free(image);
-    // For floating licenses it is highly recommended to call device deregistration.
-    // This releases the license slot on the server, allowing other devices to activate.
-    // If scanbotsdk_deregister_device() is not called, the license will remain occupied
-    // by this device for some time that corresponds to the interval between license
-    // checks (usually about 15 minutes). During this period other devices may not be
-    // able to activate and "device slots exceeded" errors can occur.
-    scanbotsdk_deregister_device();
-
-    // Wait for deregistration to complete to ensure the slot is actually released.
-    // If this call returns SCANBOTSDK_ERROR_TIMEOUT, the deregistration did not
-    // finish within the timeout (e.g. due to network issues), and the license may remain
-    // locked on the server.
-    scanbotsdk_wait_for_device_deregistration_completion(DEREGISTER_DEVICE_TIMEOUT_MS);
     return (ec == SCANBOTSDK_OK) ? 0 : 1;
 }

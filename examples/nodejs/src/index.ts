@@ -54,14 +54,6 @@ async function main(): Promise<void> {
   const licenseInfo = await ScanbotSDK.getLicenseInfo();
   console.log("License Status:", licenseInfo.status);
 
-  const isFloatingLicense = !!licenseInfo.devices;
-  if (isFloatingLicense) {
-    console.log(
-      `Using floating license with ${licenseInfo.devices} devices. Do not forget to call deregisterDevice ` +
-        `when you no longer need the license.`
-    );
-  }
-
   // `ScanbotSDK.autorelease` automatically disposes all unmanaged resources
   // (e.g. ImageRefs, scanners, results) created inside this block when it ends.
   // This prevents memory leaks and avoids having to call `.release()` manually.

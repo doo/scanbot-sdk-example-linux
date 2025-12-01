@@ -24,9 +24,6 @@ from snippets.live.barcode_scanner import *
 from snippets.live.document_scanner import *
 from snippets.live.runner import run_scanner
 
-SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS = 15000
-DEREGISTER_DEVICE_TIMEOUT_MS = 15000
-
 def main():
     if len(sys.argv) < 3:
         print_usage()
@@ -41,71 +38,58 @@ def main():
     print(f"Initializing Scanbot SDK...")
     
     scanbotsdk.initialize(license_key)
-    scanbotsdk.wait_for_online_license_check_completion(SCANBOTSDK_LICENSE_CHECK_TIMEOUT_MS)
     
     license_info = scanbotsdk.get_license_info()
     print(f"License Status: {license_info.status}")
-    
-    is_floating_license = license_info.devices is not None
-    if is_floating_license:
-        print(
-            f"Using floating license with {license_info.devices} devices. Do not forget to call "
-            f"scanbotsdk.deregister_device and scanbotsdk.wait_for_device_deregistration_completion when you no "
-            f"longer need the license or use scanbotsdk.DeviceSession context manager.")
 
-    # If you are not using floating license, it is not required to use scanbotsdk.DeviceSession context manager as there
-    # is no need to notify server you are no longer using the license. Alternatively, you can manually call
-    # scanbotsdk.deregister_device and scanbotsdk.wait_for_device_deregistration_completion if you need asynchronous
-    # deregistration behaviour
-    with scanbotsdk.DeviceSession(deregister_timeout_ms=DEREGISTER_DEVICE_TIMEOUT_MS):
-        category   = sys.argv[1].lower()
-        subcommand = sys.argv[2].lower()
+    category   = sys.argv[1].lower()
+    subcommand = sys.argv[2].lower()
 
-        file_path     = flags.get("--file")
-        save_path     = flags.get("--save")
-        text_input    = flags.get("--text")
-        device_input  = flags.get("--device") # live only
-        show_preview  = "--preview" in flags # live only
-        use_tensorrt =  "--use_tensorrt" in flags # live barcode only
-        
-        if category == "scan":
-            if not file_path: print_usage(); return
-            with create_image_ref(file_path) as image:
-                if   subcommand == "barcode":             scan_barcode(image)
-                elif subcommand == "document":            scan_document(image)
-                elif subcommand == "check":               scan_check(image)
-                elif subcommand == "credit_card":         scan_credit_card(image)
-                elif subcommand == "document_data_extractor": extract_document_data(image)
-                elif subcommand == "medical_certificate": scan_medical_certificate(image)
-                elif subcommand == "mrz":                 scan_mrz(image)
-                elif subcommand == "ocr":                 run_ocr(image)
-                elif subcommand == "text_pattern":        scan_text_pattern(image)
-                elif subcommand == "vin":                 scan_vin(image)
-                else: print_usage()
+    file_path     = flags.get("--file")
+    save_path     = flags.get("--save")
+    text_input    = flags.get("--text")
+    device_input  = flags.get("--device") # live only
+    show_preview  = "--preview" in flags # live only
+    use_tensorrt =  "--use_tensorrt" in flags # live barcode only
 
-        if category == "classify":
-            if not file_path: print_usage(); return
-            with create_image_ref(file_path) as image:
-                if   subcommand == "document":            classify_document(image)
-                else: print_usage()
-                
-        elif category == "analyze":
-            if not file_path: print_usage(); return
-            if   subcommand == "analyze_multi_page":      analyze_multi_page(file_path)
-            elif subcommand == "crop_analyze":            crop_and_analyze(file_path, save_path)
+    if category == "scan":
+        if not file_path: print_usage(); return
+        with create_image_ref(file_path) as image:
+            if   subcommand == "barcode":             scan_barcode(image)
+            elif subcommand == "document":            scan_document(image)
+            elif subcommand == "check":               scan_check(image)
+            elif subcommand == "credit_card":         scan_credit_card(image)
+            elif subcommand == "document_data_extractor": extract_document_data(image)
+            elif subcommand == "medical_certificate": scan_medical_certificate(image)
+            elif subcommand == "mrz":                 scan_mrz(image)
+            elif subcommand == "ocr":                 run_ocr(image)
+            elif subcommand == "text_pattern":        scan_text_pattern(image)
+            elif subcommand == "vin":                 scan_vin(image)
             else: print_usage()
-            
-        elif category == "parse":
-            if not text_input or not text_input.strip(): print_usage(); return
-            if   subcommand == "mrz":           parse_mrz(text_input)
-            elif subcommand == "barcode_doc":   parse_barcode_document(text_input)
+
+    if category == "classify":
+        if not file_path: print_usage(); return
+        with create_image_ref(file_path) as image:
+            if   subcommand == "document":            classify_document(image)
             else: print_usage()
-            
-        elif category == "live":
-            if not device_input: print_usage(); return
-            if subcommand == "barcode":             barcode_live(device_input, show_preview, use_tensorrt)
-            if subcommand == "document":            document_live(device_input, show_preview)
-            else: print_usage()
+
+    elif category == "analyze":
+        if not file_path: print_usage(); return
+        if   subcommand == "analyze_multi_page":      analyze_multi_page(file_path)
+        elif subcommand == "crop_analyze":            crop_and_analyze(file_path, save_path)
+        else: print_usage()
+
+    elif category == "parse":
+        if not text_input or not text_input.strip(): print_usage(); return
+        if   subcommand == "mrz":           parse_mrz(text_input)
+        elif subcommand == "barcode_doc":   parse_barcode_document(text_input)
+        else: print_usage()
+
+    elif category == "live":
+        if not device_input: print_usage(); return
+        if subcommand == "barcode":             barcode_live(device_input, show_preview, use_tensorrt)
+        if subcommand == "document":            document_live(device_input, show_preview)
+        else: print_usage()
 
 def barcode_live(device_input: str, show_preview: bool, use_tensorrt: bool):
     cap = open_camera(device_input)
