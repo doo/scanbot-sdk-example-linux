@@ -64,7 +64,7 @@ A trial license key is required for evaluation or testing. To get a free trial l
 ## Running Tests
 
 The test scripts validate SDK integration, detect compilation errors, and check license issues across all supported languages (Python, Java, Node.js, C).
-[Detailed documentation] ( )
+[Detailed documentation](test-scripts/README.md)
 
 ## Other supported platforms
 
