@@ -33,10 +33,10 @@ int main(int argc, char *argv[]) {
 
     char *category   = argv[1];
     char *command    = argv[2];
-    char *file_path  = get_flag(argc, argv, "--file");
-    char *save_path  = get_flag(argc, argv, "--save");
-    char *text_input = get_flag(argc, argv, "--text");
-    char *license_arg = get_flag(argc, argv, "--license");
+    const char *file_path  = get_flag(argc, argv, "--file");
+    const char *save_path  = get_flag(argc, argv, "--save");
+    const char *text_input = get_flag(argc, argv, "--text");
+    const char *license_arg = get_flag(argc, argv, "--license");
     bool use_tensor_rt = get_flag(argc, argv, "--use_tensorrt") != NULL; // live only, tensor accelerator
     
     // TODO Add your Scanbot SDK trial license key here.

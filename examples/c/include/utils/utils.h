@@ -11,6 +11,6 @@ scanbotsdk_error_code_t print_generic_document_fields(scanbotsdk_generic_documen
 
 void print_usage(const char *prog);
 
-char* get_flag(int argc, char *argv[], const char *flag);
+const char* get_flag(int argc, char *argv[], const char *flag);
 
 #endif
