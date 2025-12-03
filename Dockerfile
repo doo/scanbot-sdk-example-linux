@@ -14,7 +14,9 @@ ENV ARCH=${ARCH} \
     PYENV_ROOT="/opt/pyenv" \
     PATH="/opt/pyenv/bin:/opt/pyenv/shims:$PATH" \
     SDK_BASE_URL="https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv" \
-    SCANBOT_LICENSE=${SCANBOT_LICENSE}
+    SCANBOT_LICENSE=${SCANBOT_LICENSE} \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -112,7 +114,7 @@ FROM base AS sdk-verification
 RUN echo "=== Comprehensive SDK Verification ===" \
     && python -c "import scanbotsdk; print('Python SDK: Verified')" \
     && cd examples/nodejs && npm install && node -e "const sdk = require('scanbotsdk'); console.log(sdk ? 'OK' : 'FAIL');" \
-    && cd /workspaces/scanbot-sdk-example-linux/examples/java && ./gradlew check --no-daemon && echo "Java SDK: Verified" \
+    && cd /workspaces/scanbot-sdk-example-linux/examples/java && GRADLE_OPTS="-Dfile.encoding=UTF-8" ./gradlew check --no-daemon && echo "Java SDK: Verified" \
     && cd /workspaces/scanbot-sdk-example-linux/examples/c && mkdir -p build && cd build && cmake -DSCANBOTSDK_VERSION=${SDK_VERSION} .. && make && echo "C SDK: OK"
 
 # Python Tests Stage
