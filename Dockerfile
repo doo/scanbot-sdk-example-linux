@@ -145,3 +145,5 @@ RUN echo "=== Running Complete Test Suite ===" \
     && echo "Java compilation and commands verified" \
     && echo "Node.js compilation and commands verified" \
     && echo "C compilation and commands verified"
+    
+    
