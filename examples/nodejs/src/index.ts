@@ -73,7 +73,7 @@ async function main(): Promise<void> {
           case "document":            await DetectDocumentSnippet.run(image); break;
           case "check":               await CheckScannerSnippet.run(image); break;
           case "credit_card":         await CreditCardScannerSnippet.run(image); break;
-          case "document_extractor":  await DocumentDataExtractorSnippet.run(image); break;
+          case "document_data_extractor":  await DocumentDataExtractorSnippet.run(image); break;
           case "medical_certificate": await MedicalCertificateScannerSnippet.run(image); break;
           case "mrz":                 await MrzScannerSnippet.run(image); break;
           case "ocr":                 await OcrSnippet.run(image); break;

@@ -27,7 +27,7 @@ commands=(
     "scan document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan check --file ../../test-scripts/test-images/check.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan credit_card --file ../../test-scripts/test-images/credit_card.jpeg --license \"${SCANBOT_LICENSE}\""
-    "scan document_extractor --file ../../test-scripts/test-images/EHIC.jpeg --license \"${SCANBOT_LICENSE}\""
+    "scan document_data_extractor --file ../../test-scripts/test-images/EHIC.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan medical_certificate --file ../../test-scripts/test-images/medical_certificate.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan mrz --file ../../test-scripts/test-images/MRZ_passport.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan ocr --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""

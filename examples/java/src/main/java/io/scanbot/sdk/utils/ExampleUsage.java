@@ -18,7 +18,7 @@ public class ExampleUsage {
         System.out.println("  ./gradlew run --args='parse <command> --text \"<input>\" [--license <KEY>]'");
         System.out.println();
         System.out.println("Available scan commands:");
-        System.out.println("  barcode | document | check | credit_card | document_extractor | medical_certificate | mrz | ocr | text_pattern | vin");
+        System.out.println("  barcode | document | check | credit_card | document_data_extractor | medical_certificate | mrz | ocr | text_pattern | vin");
         System.out.println();
         System.out.println("Available analyze commands:");
         System.out.println("  analyze_multi_page | crop_analyze");

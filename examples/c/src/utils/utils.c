@@ -97,7 +97,7 @@ void print_usage(const char *prog) {
     printf("  %s live <command> --file \"<input>\" [--license <KEY>] [--use_tensorrt]\n\n", prog);
 
     printf("Available scan commands:\n");
-    printf("  barcode | document | check | credit_card | document_extractor |\n");
+    printf("  barcode | document | check | credit_card | document_data_extractor |\n");
     printf("  medical_certificate | mrz | ocr | text_pattern | vin\n\n");
 
     printf("Available classify commands:\n");

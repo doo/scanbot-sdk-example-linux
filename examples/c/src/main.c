@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
         else if (strcmp(command, "document")           == 0) ec = detect_document(image);
         else if (strcmp(command, "check")              == 0) ec = detect_check(image);
         else if (strcmp(command, "credit_card")        == 0) ec = detect_credit_card(image);
-        else if (strcmp(command, "document_extractor") == 0) ec = extract_document_data(image);
+        else if (strcmp(command, "document_data_extractor") == 0) ec = extract_document_data(image);
         else if (strcmp(command, "medical_certificate")== 0) ec = detect_medical_certificate(image);
         else if (strcmp(command, "mrz")                == 0) ec = detect_mrz(image);
         else if (strcmp(command, "ocr")                == 0) ec = ocr_run(image);

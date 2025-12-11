@@ -53,7 +53,7 @@ public class ScanbotSDKExample {
                         case "document":            DetectDocumentSnippet.run(image); break;
                         case "check":               CheckScannerSnippet.run(image); break;
                         case "credit_card":         CreditCardScannerSnippet.run(image); break;
-                        case "document_extractor":  DocumentDataExtractorSnippet.run(image); break;
+                        case "document_data_extractor":  DocumentDataExtractorSnippet.run(image); break;
                         case "medical_certificate": MedicalCertificateScannerSnippet.run(image); break;
                         case "mrz":                 MrzScannerSnippet.run(image); break;
                         case "ocr":                 OcrSnippet.run(image); break;
