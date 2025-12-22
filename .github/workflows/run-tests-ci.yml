@@ -6,7 +6,7 @@ name: Run Tests CI
 on:
   # Run on pushes to main branch
   push:
-    branches: [ "main", "setup_github_actions" ]  # Add for testing
+    branches: [ "main", "setup_github_actions" ]  # Add for testing, TODO: remove later
     paths:
       - 'examples/**'
       - 'test-scripts/**'
@@ -14,7 +14,7 @@ on:
       - '.github/workflows/run-tests-ci.yml'
   # Run on pull requests to main branch
   pull_request:
-    branches: [ "main", "yk/restructure_snippets" ]  # Add target branch
+    branches: [ "main" ]
     paths:
       - 'examples/**'
       - 'test-scripts/**'
