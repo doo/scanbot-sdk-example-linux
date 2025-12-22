@@ -26,7 +26,6 @@ on:
       sdk_version:
         description: 'SDK Version to test'
         required: false
-        default: '0.800.5'
         type: string
       test_suite:
         description: 'Test suite to run'
@@ -42,7 +41,7 @@ on:
 
 # Global environment variables
 env:
-  DEFAULT_SDK_VERSION: '0.800.5'
+  SDK_VERSION: '0.800.5'
 
 jobs:
   test-x86_64:
@@ -59,7 +58,7 @@ jobs:
       - name: Build Docker image (x86_64)
         run: |
           docker build \
-            --build-arg SDK_VERSION=${{ inputs.sdk_version || env.DEFAULT_SDK_VERSION }} \
+            --build-arg SDK_VERSION=${{ inputs.sdk_version || env.SDK_VERSION }} \
             --build-arg ARCH=linux-x86_64 \
             --build-arg SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
             --target all-tests \
