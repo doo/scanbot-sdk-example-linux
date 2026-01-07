@@ -69,7 +69,7 @@ cleanup:
 
 scanbotsdk_error_code_t save_cropped_image(
     scanbotsdk_image_t *cropped_image,
-    char *save_path
+    const char *save_path
 ) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
     scanbotsdk_save_image_options_t *save_options = NULL;
@@ -137,7 +137,7 @@ cleanup:
 
 scanbotsdk_error_code_t crop_and_analyze(
     scanbotsdk_image_t *image,
-    char *save_path
+    const char *save_path
 ) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
     scanbotsdk_image_t *cropped_image = NULL;

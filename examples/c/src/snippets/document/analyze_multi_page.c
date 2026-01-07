@@ -61,7 +61,7 @@ cleanup:
     return ec;
 }
 
-scanbotsdk_error_code_t analyze_multi_page(char* path) {
+scanbotsdk_error_code_t analyze_multi_page(const char* path) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
 
     scanbotsdk_random_access_source_t* access_source = NULL;

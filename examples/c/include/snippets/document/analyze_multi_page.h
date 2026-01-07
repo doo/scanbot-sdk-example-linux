@@ -3,6 +3,6 @@
 
 #include <ScanbotSDK.h>
 
-scanbotsdk_error_code_t analyze_multi_page(char* path);
+scanbotsdk_error_code_t analyze_multi_page(const char* path);
 
 #endif
