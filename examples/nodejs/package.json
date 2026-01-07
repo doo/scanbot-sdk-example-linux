@@ -1,0 +1,20 @@
+{
+  "name": "scanbotsdk_nodejs_example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "scanbotsdk": "https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv8.0.0/nodejs-scanbotsdk-8.0.0.tgz"
+  }
+}

@@ -1,50 +1,31 @@
-# Scanbot SDK for Linux - Java Wrapper Example
+# Scanbot SDK for Linux – Java Example
 
-The [Scanbot SDK for Linux](https://scanbot.io) is currently in closed beta. 
-The SDK and a trial license are available on request via beta@scanbot.io.
+### Setup
 
-## How to run the example
+Open `build.gradle` and replace the constant with the actual version number of the SDK you want to install.
 
-This example app can be run only on the Linux platform.
+```groovy
+def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>" // ex: 0.800.3
+```  
 
-To run the example you need to
+## Usage
+The example supports four commands: **scan**, **analyze**, **classify**, and **parse**.
+```bash
+./gradlew run --args='scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]'
+./gradlew run --args='scan <subcommand> --resource <path/to/resource.jpg> [--license <KEY>]'
+./gradlew run --args='analyze <subcommand> --file <path/to/file.jpg> --save <out.jpg> [--license <KEY>]'
+./gradlew run --args='analyze <subcommand> --resource <path/to/resource.jpg> --save <out.jpg> [--license <KEY>]'
+./gradlew run --args='classify <subcommand> --file|--resource <path/to/file.jpg> [--license <KEY>]'
+./gradlew run --args='parse <subcommand> --text "<input>" [--license <KEY>]'
+```
 
-1. Specify values of `SCANBOTSDK_VERSION` and `SCANBOTSDK_API_TOKEN` in the `build.gradle` file with the values you received
-   from us.
-2. Specify your license key in the `io.scanbot.sdk.ScanbotSDKExample` class with the value you received
-   from us.
-
-`SCANBOTSDK_VERSION` and `SCANBOTSDK_API_TOKEN`, and a trial license key  available on request via beta@scanbot.io.
-
-You can run the example on an image by its file path or its resource path. 
-
-To run the example on an image by its file path, run the following command:
-
-`./gradlew run --args='<command> --file "path/to/file.jpg" --save "path/to/save/image.jpg"'`
-
-To run the example on an image by its resource path, run the following command:
-
-`./gradlew run --args='<command> --resource "path/to/bundle/resource.jpg" --save "path/to/save/image.jpg"'`
-
-The `<command>` can be one of the following:
-
-* `analyzeMultiPageDocument`: analyze document quality in the images in a multi page document (PDF, TIFF) or a single page document (JPEG, PNG). Quality analysis is performed individually for each image in the document.
-* `detectDocument`: detect document in the image.
-* `cropAndAnalyzeDocument`: detect document in the image and analyze document quality in the crop. Additionally, allows to save the detected document crop to the path specified with `--save` parameter.
-
-In particular, the example comes with test images that can be used to run the example. To run the example on a test image run the following command:
-
-`./gradlew run --args='cropAndAnalyzeDocument --resource "/img2.jpg" --save "/tmp/scanbotsdk/cropped.jpg"'`
-
-During the script run all needed artifacts will be downloaded and the example will be executed.
-
-Note: The Scanbot SDK is distributed as a jar that contains native shared library. Each time when you run the example,
-the native shared library will be extracted to a temporary directory.
-If you want to avoid this, you can extract the native shared library and locate them in a path that is specified in
-the `java.library.path` system property. In order to prevent the extraction of the native shared library, you should set
-system property `unpack_scanbotsdk_resources` to `false`.
-
+## Example
+```bash
+./gradlew run --args='scan barcode --file images/example.jpg --license <KEY>'
+./gradlew run --args='analyze analyze_multi_page --resource files/doc.pdf --license <KEY>'
+./gradlew run --args='analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>'
+./gradlew run --args='parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>'
+```
 
 ## API References
-
-You can find the Java API docs [here](https://scanbotsdk.github.io/documentation/document-scanner-sdk/linux/java-api/).
+👉 [Scanbot SDK Java API Documentation](https://scanbotsdk.github.io/documentation/document-scanner-sdk/linux/java-api/)
