@@ -1,5 +1,5 @@
 from scanbotsdk import *
-from typing import List
+from typing import Sequence
 
 
 def scan_barcode(image: ImageRef):
@@ -18,7 +18,7 @@ def scan_barcode(image: ImageRef):
     print_barcodes(result.barcodes)
 
 
-def print_barcodes(barcodes: List[BarcodeItem]):
+def print_barcodes(barcodes: Sequence[BarcodeItem]):
     if not barcodes:
         print("No barcodes found")
         return

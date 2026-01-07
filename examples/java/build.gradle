@@ -4,7 +4,7 @@ plugins {
 }
 
 // TODO Add your SCANBOTSDK_VERSION here.
-def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>"
+def SCANBOTSDK_VERSION = "8.0.0"
 
 def arch = System.getProperty("os.arch")
 def SCANBOTSDK_ARCHITECTURE = (arch.contains("arm") || arch.contains("aarch64")) ? "aarch64" : "x86_64"
