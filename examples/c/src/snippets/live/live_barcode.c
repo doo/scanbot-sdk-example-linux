@@ -209,12 +209,16 @@ scanbotsdk_error_code_t run_live_barcode_scanner(const char *mock_frame_path, bo
     scanbotsdk_error_code_t ec;
 
     ec = create_barcode_scanner(use_tensor_rt, &scanner);
-    if (ec != SCANBOTSDK_OK)
-        return ec;
+    if (ec != SCANBOTSDK_OK) {
+        fprintf(stderr, "Failed to create barcode scanner: %d: %s\n", ec, error_message(ec));
+        goto exit;
+    }
 
     ec = init_camera(mock_frame_path, &camera);
-    if (ec != SCANBOTSDK_OK)
-        return ec;
+    if (ec != SCANBOTSDK_OK) {
+        fprintf(stderr, "Failed to initialize camera: %d: %s\n", ec, error_message(ec));
+        goto exit;
+    }
 
     for (size_t frame_number = 0; frame_number < 10; frame_number++) 
     {

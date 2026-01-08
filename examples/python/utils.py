@@ -3,11 +3,13 @@ from scanbotsdk import *
 from pathlib import Path
 import sys
 
+
 def create_image_ref(path: str) -> ImageRef:
     p = Path(path).expanduser().resolve()
     if not p.is_file():
         raise FileNotFoundError(f"Image file not found: {p}")
     return ImageRef.from_path(str(p))
+
 
 def print_generic_document(doc: Optional[GenericDocument]):
     if doc is None:
@@ -15,7 +17,7 @@ def print_generic_document(doc: Optional[GenericDocument]):
         return
 
     print(f"Type: {doc.type.name} {doc.type.full_name}")
-    
+
     if doc.fields:
         print("Fields:")
         for field in doc.fields:
@@ -27,23 +29,26 @@ def print_generic_document(doc: Optional[GenericDocument]):
         for child in doc.children:
             print_generic_document(child)
 
+
 def parse_flags(tokens) -> Dict:
     flags = {}
-    it = iter(tokens)
-    for token in it:
+    tokens_list = list(tokens)
+    i = 0
+    while i < len(tokens_list):
+        token = tokens_list[i]
         if not token.startswith("--"):
             sys.stderr.write(f"Unexpected token: {token}\n")
             break
         # get next value if present and not another flag
-        next_val = next(it, None)
+        next_val = tokens_list[i + 1] if i < len(tokens_list) - 1 else None
         if next_val is None or next_val.startswith("--"):
             flags[token] = "true"
-            if next_val and next_val.startswith("--"):
-                # rewind iterator by one if it's another flag
-                it = (v for v in [next_val] + list(it))
+            i += 1
         else:
             flags[token] = next_val
+            i += 2
     return flags
+
 
 def print_usage():
     print("Scanbot SDK Example\n")
@@ -55,7 +60,8 @@ def print_usage():
     print("  python main.py live <command> --device <device_name> [--license <KEY>] --preview --use_tensorrt\n")
 
     print("Available scan commands:")
-    print("  barcode | document | check | credit_card | document_data_extractor | medical_certificate | mrz | ocr | text_pattern | vin\n")
+    print(
+        "  barcode | document | check | credit_card | document_data_extractor | medical_certificate | mrz | ocr | text_pattern | vin\n")
     print("Available analyze commands:")
     print("  analyze_multi_page | crop_analyze\n")
     print("Available classify commands:")
