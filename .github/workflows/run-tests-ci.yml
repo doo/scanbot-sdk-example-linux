@@ -1,0 +1,106 @@
+# GitHub Actions workflow for testing the SDK example project
+# Supports x86_64 architecture
+name: Run Tests CI
+
+# Trigger conditions
+on:
+  # Run on pushes to main branch
+  push:
+    branches: [ "main"]
+    paths:
+      - 'examples/**'
+      - 'test-scripts/**'
+      - 'Dockerfile'
+      - '.github/workflows/run-tests-ci.yml'
+  # Run on pull requests to main branch
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'examples/**'
+      - 'test-scripts/**'
+      - 'Dockerfile'
+      - '.github/workflows/run-tests-ci.yml'
+  # Allow manual triggering with custom parameters
+  workflow_dispatch:
+    inputs:
+      sdk_version:
+        description: 'SDK Version to test'
+        required: false
+        type: string
+      test_suite:
+        description: 'Test suite to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - python
+          - java
+          - nodejs
+          - c
+
+# Global environment variables
+env:
+  SDK_VERSION: '0.800.5'
+
+jobs:
+  test-x86_64:
+    name: Test x86_64 Architecture
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      # Get the source code
+      - name: Checkout repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      # Build the Docker image using the existing Dockerfile
+      - name: Build Docker image (x86_64)
+        run: |
+          docker build \
+            --build-arg SDK_VERSION=${{ inputs.sdk_version || env.SDK_VERSION }} \
+            --build-arg ARCH=linux-x86_64 \
+            --build-arg SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
+            --target all-tests \
+            -t scanbot-linux-x86_64:latest .
+
+      # Run the test suite with secure stdin approach
+      - name: Run test suite (x86_64)
+        run: |
+          case "${{ inputs.test_suite || 'all' }}" in
+            "python")
+              echo "Running Python tests..."
+              docker run --rm \
+                -e SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
+                scanbot-linux-x86_64:latest \
+                bash -c '/workspace/test-scripts/test-python.sh 2>&1 | tee /workspace/test.log'
+              ;;
+            "java")
+              echo "Running Java tests..."
+              docker run --rm \
+                -e SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
+                scanbot-linux-x86_64:latest \
+                bash -c '/workspace/test-scripts/test-java.sh 2>&1 | tee /workspace/test.log'
+              ;;
+            "nodejs")
+              echo "Running Node.js tests..."
+              docker run --rm \
+                -e SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
+                scanbot-linux-x86_64:latest \
+                bash -c '/workspace/test-scripts/test-nodejs.sh 2>&1 | tee /workspace/test.log'
+              ;;
+            "c")
+              echo "Running C tests..."
+              docker run --rm \
+                -e SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
+                scanbot-linux-x86_64:latest \
+                bash -c '/workspace/test-scripts/test-c.sh 2>&1 | tee /workspace/test.log'
+              ;;
+            "all"|*)
+              echo "Running all tests..."
+              docker run --rm \
+                -e SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
+                scanbot-linux-x86_64:latest \
+                bash -c '/workspace/test-scripts/run-all-tests.sh 2>&1 | tee /workspace/test.log'
+              ;;
+          esac
