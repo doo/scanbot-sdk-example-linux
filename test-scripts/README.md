@@ -25,21 +25,22 @@ test-scripts/
 
 ## Running Tests
 
-### 1. Build Test Container
-
-```bash
-docker build \
-    --build-arg SDK_VERSION=0.800.3 \
-    --build-arg ARCH=linux-aarch64 \
-    --build-arg SCANBOT_LICENSE=$SCANBOT_LICENSE \
-    --target sdk-verification \
-    -t scanbot-test .
-```
-
-### 2. Set License Key
+### 1. Set License Key & Version
 
 ```bash
 export SCANBOT_LICENSE="your-license-key-here"
+export SDK_VERSION=0.800.5
+```
+
+### 2. Build Test Container
+
+```bash
+docker build \
+    --build-arg SDK_VERSION=$SDK_VERSION \
+    --build-arg ARCH=linux-aarch64 \
+    --build-arg SCANBOT_LICENSE=$SCANBOT_LICENSE \
+    --target base \
+    -t scanbot-test .
 ```
 
 ### 3. Run Tests
