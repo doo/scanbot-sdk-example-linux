@@ -73,34 +73,34 @@ jobs:
               docker run --rm \
                 -e SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
                 scanbot-linux-x86_64:latest \
-                bash -c '/workspace/test-scripts/test-python.sh 2>&1 | tee /workspace/test.log'
+                bash -c '/tests/test-python.sh 2>&1 | tee /tmp/test.log'
               ;;
             "java")
               echo "Running Java tests..."
               docker run --rm \
                 -e SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
                 scanbot-linux-x86_64:latest \
-                bash -c '/workspace/test-scripts/test-java.sh 2>&1 | tee /workspace/test.log'
+                bash -c '/tests/test-java.sh 2>&1 | tee /tmp/test.log'
               ;;
             "nodejs")
               echo "Running Node.js tests..."
               docker run --rm \
                 -e SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
                 scanbot-linux-x86_64:latest \
-                bash -c '/workspace/test-scripts/test-nodejs.sh 2>&1 | tee /workspace/test.log'
+                bash -c '/tests/test-nodejs.sh 2>&1 | tee /tmp/test.log'
               ;;
             "c")
               echo "Running C tests..."
               docker run --rm \
                 -e SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
                 scanbot-linux-x86_64:latest \
-                bash -c '/workspace/test-scripts/test-c.sh 2>&1 | tee /workspace/test.log'
+                bash -c '/tests/test-c.sh 2>&1 | tee /tmp/test.log'
               ;;
             "all"|*)
               echo "Running all tests..."
               docker run --rm \
                 -e SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
                 scanbot-linux-x86_64:latest \
-                bash -c '/workspace/test-scripts/run-all-tests.sh 2>&1 | tee /workspace/test.log'
+                bash -c '/tests/run-all-tests.sh 2>&1 | tee /tmp/test.log'
               ;;
           esac
