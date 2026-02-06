@@ -45,7 +45,7 @@ Performance with a 1280x720 input image size and using the `NEXT_GEN` engine mod
 
 - [Barcode scanning](https://docs.scanbot.io/linux/barcode-scanner-sdk/introduction/)
 - [Document scanning](https://docs.scanbot.io/linux/document-scanner-sdk/introduction/)
-- [Document quality analysis](https://docs.scanbot.io/linux/document-scanner-sdk/08-document-quality-analyzer/introduction/)
+- [Document quality analysis](https://docs.scanbot.io/linux/document-scanner-sdk/document-quality-analyzer/introduction/)
 - [OCR (optical character recognition)](https://docs.scanbot.io/linux/data-capture-modules/ocr/introduction/)
 - [Text pattern scanning](https://docs.scanbot.io/linux/data-capture-modules/text-pattern-scanner/introduction/)
 - [MRZ scanning](https://docs.scanbot.io/linux/data-capture-modules/mrz-scanner/introduction/)
