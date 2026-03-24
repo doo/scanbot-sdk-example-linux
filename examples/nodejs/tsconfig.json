@@ -14,7 +14,7 @@
     "exactOptionalPropertyTypes": true,
 
     "strict": true,
-    "jsx": "react-jsx",
+  
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
@@ -24,6 +24,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
 
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": ["node"]
   }
 }

@@ -41,7 +41,7 @@ on:
 
 # Global environment variables
 env:
-  SDK_VERSION: '0.800.5'
+  SDK_VERSION: '0.810.7'
 
 jobs:
   test-x86_64:
