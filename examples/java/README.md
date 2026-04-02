@@ -5,7 +5,7 @@
 Open `build.gradle` and replace the constant with the actual version number of the SDK you want to install.
 
 ```groovy
-def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>" // ex: 0.810.7
+def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>" // e.g., 8.1.0
 ```  
 
 ## Usage
