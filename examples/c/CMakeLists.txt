@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.20)
+# 3.10 is the version shipped with Ubuntu 18.04, which is the base of NVIDIA JetPack 4.6.
+cmake_minimum_required(VERSION 3.10)
 project(scanbotsdk_c_example C)
 set(CMAKE_C_STANDARD 99)
 
@@ -6,10 +7,10 @@ set(CMAKE_C_STANDARD 99)
 if(NOT SCANBOTSDK_VERSION)
     set(SCANBOTSDK_VERSION "9.0.0")
 endif()
-list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 find_package(ScanbotSDK REQUIRED)
 
-file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
+file(GLOB_RECURSE SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 add_executable(scanbotsdk_example ${SOURCE_FILES})
 target_include_directories(scanbotsdk_example PRIVATE include)
 target_link_libraries(scanbotsdk_example PRIVATE ScanbotSDK::ScanbotSDK)
