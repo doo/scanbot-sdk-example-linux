@@ -1,33 +1,33 @@
-# Scanbot SDK – Python on Linux
+# Scanbot SDK – Python on Linux/Windows
 
 ## NVidia Jetson
 
 > Requires **Jetpack 6.1**, **CUDA 12.6**, and **TensorRT 10.3** for GPU acceleration.
 
 ### 1. Install Python and OpenCV
-```bash
-sudo apt install -y python3-venv nvidia-opencv
-```
+  ```bash
+  sudo apt install -y python3-venv nvidia-opencv
+  ```
 
 ### 2. (Optional) Install CUDA + TensorRT
 Make sure you are running a supported Jetpack version:
-```bash
-sudo apt install -y nvidia-l4t-cuda libnvinfer10 libnvinfer-plugin10 libnvonnxparsers10
-```
+  ```bash
+  sudo apt install -y nvidia-l4t-cuda libnvinfer10 libnvinfer-plugin10 libnvonnxparsers10
+  ```
 
 ### 3. Create and activate a virtual environment
-```bash
-python3 -m venv .env --system-site-packages
-source .env/bin/activate
-pip install --upgrade pip setuptools wheel
-```
+  ```bash
+  python3 -m venv .env --system-site-packages
+  source .env/bin/activate
+  pip install --upgrade pip setuptools wheel
+  ```
 
 ### 3. Install the Scanbot SDK
 Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you want to install.
 
-```bash
-export SCANBOT_SDK_VERSION=<SCANBOT_SDK_VERSION>
-```
+  ```bash
+  export SCANBOT_SDK_VERSION=<SCANBOT_SDK_VERSION>
+  ```
 
 * **On ARM64 (Raspberry Pi, Jetson Nano, etc.):**
   ```bash
@@ -40,42 +40,42 @@ export SCANBOT_SDK_VERSION=<SCANBOT_SDK_VERSION>
   ```
 
 ### 5. Verify installation
-```bash
-python -c "import scanbotsdk"
-```
+  ```bash
+  python -c "import scanbotsdk"
+  ```
 
 
 ### ⚡ Performance notes (Jetson)
 To avoid throttling, set max GPU/CPU/memory clocks:
-```bash
-sudo jetson_clocks --store
-sudo jetson_clocks
-```
+  ```bash
+  sudo jetson_clocks --store
+  sudo jetson_clocks
+  ```
 Restore defaults later:
-```bash
-sudo jetson_clocks --restore
-```
+  ```bash
+  sudo jetson_clocks --restore
+  ```
 
 ## Raspberry Pi OS, Ubuntu, Debian
 
 ### 1. Install Python and OpenCV
-```bash
-sudo apt install -y python3-venv python3-opencv
-```
+  ```bash
+  sudo apt install -y python3-venv python3-opencv
+  ```
 
 ### 2. Create and activate a virtual environment
-```bash
-python3 -m venv .env --system-site-packages
-source .env/bin/activate
-pip install --upgrade pip setuptools wheel
-```
+  ```bash
+  python3 -m venv .env --system-site-packages
+  source .env/bin/activate
+  pip install --upgrade pip setuptools wheel
+  ```
 
 ### 3. Install the Scanbot SDK
 Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you want to install.
 
-```bash
-export SCANBOT_SDK_VERSION=<SCANBOT_SDK_VERSION>
-```
+  ```bash
+  export SCANBOT_SDK_VERSION=<SCANBOT_SDK_VERSION>
+  ```
 
 * **On ARM64 (Raspberry Pi, Jetson Nano, etc.):**
   ```bash
@@ -88,16 +88,53 @@ export SCANBOT_SDK_VERSION=<SCANBOT_SDK_VERSION>
   ```
 
 ### 4. Verify installation
-```bash
-python -c "import scanbotsdk"
-```
+  ```bash
+  python -c "import scanbotsdk"
+  ```
+
+## Windows
+
+### 1. Prerequisites
+* x86/x86_64 CPU
+* Python 3.6+ (32/64-bit)
+* PowerShell
+* OpenCV (only for examples)
+
+The snippets below are written for PowerShell, not cmd.
+
+### 2. Create and activate a virtual environment:
+   ```powershell
+  python -m venv .env --system-site-packages
+  . .\.env\Scripts\Activate.ps1
+  python -m pip install --upgrade pip setuptools wheel
+  python -m pip install opencv-python
+  ```
+
+### 3. Install the Scanbot SDK
+Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you want to install.
+  ```powershell
+  $SCANBOT_SDK_VERSION = "<SCANBOT_SDK_VERSION>"
+  ```
+
+* **Python x86_64 (64-bit):**
+  ```powershell
+  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv${SCANBOT_SDK_VERSION}/scanbotsdk-${SCANBOT_SDK_VERSION}-py3-none-win_amd64.whl
+  ```
+
+* **Python x86 (32-bit):**
+  ```powershell
+  pip install https://github.com/doo/scanbot-sdk-example-linux/releases/download/standalone-sdk%2Fv${SCANBOT_SDK_VERSION}/scanbotsdk-${SCANBOT_SDK_VERSION}-py3-none-win32.whl
+  ```
+
+### 4. Verify installation
+  ```powershell
+  python -c "import scanbotsdk"
+  ```
 
 ## Usage
 The example supports four modes: **scan**, **analyze**, **classify**, and **parse**.
 ```bash
 python main.py scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
-python main.py scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
-python main.py analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
 python main.py analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
 python main.py classify <subcommand> --file|--resource <path/to/file.jpg> [--license <KEY>]
 python main.py parse <subcommand> --text "<input>" [--license <KEY>]
