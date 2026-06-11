@@ -29,8 +29,6 @@ sudo jetson_clocks --restore
 
 * You're now ready to run the examples.
 
-----
-
 ### Raspberry Pi OS, Ubuntu, Debian
 
 * Install a C compiler, CMake and wget:
@@ -41,17 +39,48 @@ sudo apt install -y cmake build-essential wget
 
 * You're now ready to build the examples.
 
+### Windows
+
+Requirements:
+
+* Visual Studio C++ Build Tools
+* CMake 3.10+
+* Recommended: ninja
+
 ## Building the Examples
 
 In order to build all examples, run the following commands:
 
-```bash
-mkdir build
-cd build
-# Replace `<SCANBOTSDK_VERSION>` with the actual version number of the SDK you want to install.
-cmake -DSCANBOTSDK_VERSION=<SCANBOTSDK_VERSION> ..
-make
-```
+* With ninja (recommended):
+    ```bash
+    mkdir build
+    cd build
+    # Replace `<SCANBOTSDK_VERSION>` with the actual version number of the SDK you want to install.
+    cmake -GNinja -DSCANBOTSDK_VERSION=<SCANBOTSDK_VERSION> ..
+    ninja
+    ```
+
+* With make:
+
+    ```bash
+    mkdir build
+    cd build
+    # Replace `<SCANBOTSDK_VERSION>` with the actual version number of the SDK you want to install.
+    cmake -DSCANBOTSDK_VERSION=<SCANBOTSDK_VERSION> ..
+    make
+    ```
+
+* With MS Visual Studio (Windows-only):
+
+    ```powershell
+    mkdir build
+    cd build
+    # Replace `<SCANBOTSDK_VERSION>` with the actual version number of the SDK you want to install.
+    cmake "-DSCANBOTSDK_VERSION=<SCANBOTSDK_VERSION>" ..
+    msbuild scanbotsdk_c_example.sln
+    # scanbotsdk_example.exe will be created under Debug\
+    ```
+
 
 ## Usage
 The example supports four modes: **scan**, **analyze**, **classify**, and **parse**.
