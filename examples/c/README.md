@@ -4,10 +4,10 @@
 
 > Scanbot SDK requires Jetpack 6.1, CUDA 12.6 and TensorRT 10.3 to run with GPU acceleration.
 
-* Install a C compiler, CMake and wget:
+* Install a C compiler and CMake:
 
 ```bash
-sudo apt install -y cmake build-essential wget
+sudo apt install -y cmake build-essential
 ```
 
 * Optionally, install CUDA and TensorRT for GPU acceleration. Make sure that you're running a supported Jetpack version.
@@ -31,10 +31,10 @@ sudo jetson_clocks --restore
 
 ### Raspberry Pi OS, Ubuntu, Debian
 
-* Install a C compiler, CMake and wget:
+* Install a C compiler and CMake:
 
 ```bash
-sudo apt install -y cmake build-essential wget
+sudo apt install -y cmake build-essential
 ```
 
 * You're now ready to build the examples.
