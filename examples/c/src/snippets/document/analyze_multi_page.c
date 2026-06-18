@@ -5,22 +5,16 @@
 #include <utils/utils.h>
 
 void print_analyzer_result(scanbotsdk_document_quality_analyzer_result_t *result) {
-    char* quality_str[] = { "Very poor", "Poor", "Reasonable", "Good", "Excellent"};
+    char* quality_str[] = { "ACCEPTABLE", "UNACCEPTABLE", "UNCERTAIN"};
 
     bool document_found;
-    scanbotsdk_document_quality_t *quality = NULL;
+    scanbotsdk_document_quality_assessment_t quality;
 
     scanbotsdk_document_quality_analyzer_result_get_document_found(result, &document_found);
     scanbotsdk_document_quality_analyzer_result_get_quality(result, &quality);
 
     printf("Document detection: %s\n", document_found ? "Found" : "Not found");
-
-    if (quality)
-    {
-        printf("Document quality: %s\n", quality_str[*quality]);
-    } else {
-        printf("No document found.\n");
-    }
+    printf("Document quality: %s\n", quality_str[quality]);
 }
 
 static scanbotsdk_error_code_t process_page(scanbotsdk_extracted_page_t *page, scanbotsdk_document_quality_analyzer_t *analyzer) 

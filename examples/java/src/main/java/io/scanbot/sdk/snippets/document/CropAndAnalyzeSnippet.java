@@ -46,8 +46,7 @@ public class CropAndAnalyzeSnippet {
                 }
 
                 DocumentQualityAnalyzerResult result = analyzer.run(cropped);
-                System.out.printf("Found: %b, Quality: %s%n",
-                        result.getDocumentFound(), result.getQuality());
+                System.out.printf("Quality: %s%n", result.getQuality());
             }
         }
     }

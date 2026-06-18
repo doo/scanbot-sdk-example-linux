@@ -15,7 +15,6 @@ public class AnalyzeMultiPageSnippet {
     public static void run(String filePath, String resourcePath) throws Exception {
         DocumentQualityAnalyzerConfiguration analyze_config = new DocumentQualityAnalyzerConfiguration();
         analyze_config.getProcessByTileConfiguration().setTileSize(300);;
-        analyze_config.setDetectOrientation(true);
         analyze_config.setMinEstimatedNumberOfSymbolsForDocument(20);
         // Configure other parameters as needed.
 
@@ -37,9 +36,8 @@ public class AnalyzeMultiPageSnippet {
                     // early to avoid keeping too many decompressed images in memory.
                     try (ImageRef image = images.get(imageIndex).getImage()) {
                         DocumentQualityAnalyzerResult result = analyzer.run(image);
-                        System.out.printf("Page %d, Image %d -> Found: %b, Quality: %s%n",
-                                pageIndex + 1, imageIndex + 1,
-                                result.getDocumentFound(), result.getQuality());
+                        System.out.printf("Page %d, Image %d -> Quality: %s%n",
+                                pageIndex + 1, imageIndex + 1, result.getQuality());
                         System.out.printf("Orientation: %f", result.getOrientation());
                     }
                 }

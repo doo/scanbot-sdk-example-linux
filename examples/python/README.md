@@ -132,11 +132,12 @@ Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you wa
   ```
 
 ## Usage
-The example supports four modes: **scan**, **analyze**, **classify**, and **parse**.
+The example supports five modes: **scan**, **analyze**, **classify**, **enhance**, and **parse**.
 ```bash
 python main.py scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 python main.py analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
 python main.py classify <subcommand> --file|--resource <path/to/file.jpg> [--license <KEY>]
+python main.py enhance <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 python main.py parse <subcommand> --text "<input>" [--license <KEY>]
 python main.py live <subcommand> --device "<device-input>" [--license <KEY>] [--preview] [--use_tensorrt]
 ```
@@ -146,6 +147,7 @@ python main.py live <subcommand> --device "<device-input>" [--license <KEY>] [--
 python main.py scan barcode --file images/example.jpg --license <KEY>
 python main.py analyze analyze_multi_page --file files/doc.pdf --license <KEY>
 python main.py analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
+python main.py enhance document --file images/doc.jpg --license <KEY>
 python main.py parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
 python main.py live barcode --device "0" --license <KEY>
 ```

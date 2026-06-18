@@ -5,7 +5,6 @@ export class AnalyzeMultiPageSnippet {
   public static async run(filePath: string): Promise<void> {
     const analyzeConfig = new ScanbotSDK.DocumentQualityAnalyzerConfiguration();
     analyzeConfig.processByTileConfiguration.tileSize = 300;
-    analyzeConfig.detectOrientation = true;
     analyzeConfig.minEstimatedNumberOfSymbolsForDocument = 20;
     // configure other parameters as needed
 
@@ -31,9 +30,7 @@ export class AnalyzeMultiPageSnippet {
           // `await using` ensures the result is properly disposed when the scope ends, as it holds unmanaged resources.
           await using result = await analyzer.run(extractedImage);
           console.log(
-            `Page ${pageIndex + 1}, Image ${imageIndex + 1} -> Found: ${
-              result.documentFound
-            }, Quality: ${result.quality}`
+            `Page ${pageIndex + 1}, Image ${imageIndex + 1} -> Quality: ${result.quality}`
           );
         }
       }

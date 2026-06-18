@@ -88,21 +88,16 @@ cleanup:
 }
 
 void print_result(scanbotsdk_document_quality_analyzer_result_t *result) {
-    const char* quality_str[] = { "Very poor", "Poor", "Reasonable", "Good", "Excellent" };
+    const char* quality_str[] = { "ACCEPTABLE", "UNACCEPTABLE", "UNCERTAIN"};
 
     bool document_found = false;
-    scanbotsdk_document_quality_t *quality = NULL;
+    scanbotsdk_document_quality_assessment_t quality;
 
     scanbotsdk_document_quality_analyzer_result_get_document_found(result, &document_found);
     scanbotsdk_document_quality_analyzer_result_get_quality(result, &quality);
 
     printf("Document detection: %s\n", document_found ? "Found" : "Not found");
-
-    if (quality) {
-        printf("Document quality: %s (%d)\n", quality_str[*quality], *quality);
-    } else {
-        printf("No document found.\n");
-    }
+    printf("Document quality: %s (%d)\n", quality_str[quality], quality);
 }
 
 static scanbotsdk_error_code_t analyze_document_quality(
