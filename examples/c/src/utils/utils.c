@@ -90,6 +90,8 @@ void print_usage(const char *prog) {
     printf("or\n");
     printf("  %s classify <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
+    printf("  %s enhance <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
+    printf("or\n");
     printf("  %s analyze <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
     printf("  %s parse <command> --text \"<input>\" [--license <KEY>]\n\n", prog);
@@ -101,6 +103,9 @@ void print_usage(const char *prog) {
     printf("  medical_certificate | mrz | ocr | text_pattern | vin\n\n");
 
     printf("Available classify commands:\n");
+    printf("  document \n\n");
+
+    printf("Available enhance commands:\n");
     printf("  document \n\n");
 
     printf("Available analyze commands:\n");

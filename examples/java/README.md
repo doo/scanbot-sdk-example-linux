@@ -9,13 +9,14 @@ def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>" // e.g., 8.1.0
 ```  
 
 ## Usage
-The example supports four commands: **scan**, **analyze**, **classify**, and **parse**.
+The example supports five commands: **scan**, **analyze**, **classify**, **enhance**, and **parse**.
 ```bash
 ./gradlew run --args='scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]'
 ./gradlew run --args='scan <subcommand> --resource <path/to/resource.jpg> [--license <KEY>]'
 ./gradlew run --args='analyze <subcommand> --file <path/to/file.jpg> --save <out.jpg> [--license <KEY>]'
 ./gradlew run --args='analyze <subcommand> --resource <path/to/resource.jpg> --save <out.jpg> [--license <KEY>]'
 ./gradlew run --args='classify <subcommand> --file|--resource <path/to/file.jpg> [--license <KEY>]'
+./gradlew run --args='enhance <subcommand> --file <path/to/file.jpg> [--license <KEY>]'
 ./gradlew run --args='parse <subcommand> --text "<input>" [--license <KEY>]'
 ```
 
@@ -24,6 +25,7 @@ The example supports four commands: **scan**, **analyze**, **classify**, and **p
 ./gradlew run --args='scan barcode --file images/example.jpg --license <KEY>'
 ./gradlew run --args='analyze analyze_multi_page --resource files/doc.pdf --license <KEY>'
 ./gradlew run --args='analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>'
+./gradlew run --args='enhance document --file images/doc.jpg --license <KEY>'
 ./gradlew run --args='parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>'
 ```
 

@@ -17,6 +17,7 @@ import { MrzParserSnippet } from "./snippets/datacapture/mrz-parser";
 import { ParseBarcodeDocumentSnippet } from "./snippets/barcode/parse-barcode-document";
 import { AnalyzeMultiPageSnippet } from "./snippets/document/analyze-multipage";
 import { CropAndAnalyzeSnippet } from "./snippets/document/crop-analyze";
+import { DocumentEnhancerSnippet } from "./snippets/enhancer/document-enhancer";
 
 async function awaitPromise(promise: Promise<void>, maxAwaitTimeMs: number = 60 * 1000): Promise<void> {
   const timer = setTimeout(() => {
@@ -101,6 +102,17 @@ async function main(): Promise<void> {
 
         switch (subcommand) {
           case "document":            await DocumentClassifierSnippet.run(image); break;
+          default: printUsage();
+        }
+        break;
+      }
+
+      case "enhance": {
+        if (!file) { printUsage(); return; }
+        const image = await ScanbotSDK.ImageRef.fromPath(file);
+
+        switch (subcommand) {
+          case "document":            await DocumentEnhancerSnippet.run(image); break;
           default: printUsage();
         }
         break;
