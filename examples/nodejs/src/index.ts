@@ -12,7 +12,6 @@ import { MrzScannerSnippet } from "./snippets/datacapture/mrz-scanner";
 import { TextPatternScannerSnippet } from "./snippets/datacapture/text-pattern-scanner";
 import { OcrSnippet } from "./snippets/datacapture/ocr";
 import { VinScannerSnippet } from "./snippets/datacapture/vin-scanner";
-import { DocumentClassifierSnippet } from "./snippets/document/document-classifier";
 import { MrzParserSnippet } from "./snippets/datacapture/mrz-parser";
 import { ParseBarcodeDocumentSnippet } from "./snippets/barcode/parse-barcode-document";
 import { AnalyzeMultiPageSnippet } from "./snippets/document/analyze-multipage";
@@ -95,18 +94,7 @@ async function main(): Promise<void> {
         }
         break;
       }
-
-      case "classify": {
-        if (!file) { printUsage(); return; }
-        const image = await ScanbotSDK.ImageRef.fromPath(file);
-
-        switch (subcommand) {
-          case "document":            await DocumentClassifierSnippet.run(image); break;
-          default: printUsage();
-        }
-        break;
-      }
-
+      
       case "enhance": {
         if (!file) { printUsage(); return; }
         const image = await ScanbotSDK.ImageRef.fromPath(file);

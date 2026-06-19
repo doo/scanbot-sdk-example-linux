@@ -74,16 +74,6 @@ public class ScanbotSDKExample {
                 }
                 break;
             }
-            case "classify": {
-                if (file == null && resource == null) { ExampleUsage.print(); return; }
-                try (ImageRef image = Utils.createImageRef(file, resource)) {
-                    switch (subcommand) {
-                        case "document":   DocumentClassifierSnippet.run(image); break;
-                        default: ExampleUsage.print();
-                    }
-                    break;
-                }
-            }
             case "enhance": {
                 if (file == null && resource == null) { ExampleUsage.print(); return; }
                 try (ImageRef image = Utils.createImageRef(file, resource)) {

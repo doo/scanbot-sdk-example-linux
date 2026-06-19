@@ -9,13 +9,12 @@ def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>" // e.g., 8.1.0
 ```  
 
 ## Usage
-The example supports five commands: **scan**, **analyze**, **classify**, **enhance**, and **parse**.
+The example supports five commands: **scan**, **analyze**, **enhance**, and **parse**.
 ```bash
 ./gradlew run --args='scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]'
 ./gradlew run --args='scan <subcommand> --resource <path/to/resource.jpg> [--license <KEY>]'
 ./gradlew run --args='analyze <subcommand> --file <path/to/file.jpg> --save <out.jpg> [--license <KEY>]'
 ./gradlew run --args='analyze <subcommand> --resource <path/to/resource.jpg> --save <out.jpg> [--license <KEY>]'
-./gradlew run --args='classify <subcommand> --file|--resource <path/to/file.jpg> [--license <KEY>]'
 ./gradlew run --args='enhance <subcommand> --file <path/to/file.jpg> [--license <KEY>]'
 ./gradlew run --args='parse <subcommand> --text "<input>" [--license <KEY>]'
 ```

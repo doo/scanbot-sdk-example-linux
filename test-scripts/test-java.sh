@@ -33,7 +33,6 @@ commands=(
     "scan ocr --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan text_pattern --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan vin --file ../../test-scripts/test-images/VIN.jpeg --license \"${SCANBOT_LICENSE}\""
-    "classify document --file ../../test-scripts/test-images/toll_receipt.jpeg --license \"${SCANBOT_LICENSE}\""
     "analyze analyze_multi_page --file ../../test-scripts/test-images/multi_page_document.pdf --save /tmp/out.pdf --license \"${SCANBOT_LICENSE}\""
     "analyze crop_analyze --file ../../test-scripts/test-images/Document.jpeg --save /tmp/crop.jpeg --license \"${SCANBOT_LICENSE}\""
     # TODO: Fix C SDK parse test,which currently returns success 0 only in tests
@@ -52,7 +51,6 @@ command_names=(
     "OCR scan"
     "Text pattern scan"
     "VIN scan"
-    "Document classify"
     "Multi-page analyze"
     "Crop analyze"
     "MRZ parse"

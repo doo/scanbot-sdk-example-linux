@@ -21,7 +21,6 @@
 #include <snippets/document/detect_document.h>    
 #include <snippets/document/analyze_multi_page.h>
 #include <snippets/document/crop_and_analyze.h>
-#include <snippets/document/document_classifier.h>
 #include <snippets/enhancer/document_enhancer.h>
 
 #include <snippets/live/live_barcode.h>
@@ -68,15 +67,6 @@ int main(int argc, char *argv[]) {
         else if (strcmp(command, "ocr")                == 0) ec = ocr_run(image);
         else if (strcmp(command, "text_pattern")       == 0) ec = detect_text_pattern(image);
         else if (strcmp(command, "vin")                == 0) ec = detect_vin(image);
-        else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
-    }
-    else if (strcmp(category, "classify") == 0) {
-        if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
-
-        ec = load_image_from_path(file_path, &image);
-        if (ec != SCANBOTSDK_OK) goto cleanup;
-
-        if      (strcmp(command, "document") == 0) ec = classify_document(image);
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
     }
     else if (strcmp(category, "enhance") == 0) {
