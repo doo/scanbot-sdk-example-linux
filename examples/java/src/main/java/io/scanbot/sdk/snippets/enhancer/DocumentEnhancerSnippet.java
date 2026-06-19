@@ -20,11 +20,10 @@ public class DocumentEnhancerSnippet {
         ));
 
         try (
-            DocumentEnhancer enhancer = new DocumentEnhancer()
+            DocumentEnhancer enhancer = new DocumentEnhancer();
+            DocumentStraighteningResult result = enhancer.straighten(image, params, List.of())
         ) {
-            DocumentStraighteningResult result = enhancer.straighten(image, params, List.of());
             // The straightened image can be accessed via result.getStraightenedImage() and saved or further processed as needed.
-    
         }
     }
 }
