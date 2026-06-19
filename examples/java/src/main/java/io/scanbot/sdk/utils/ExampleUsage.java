@@ -13,9 +13,9 @@ public class ExampleUsage {
         System.out.println("or");
         System.out.println("  ./gradlew run --args='analyze <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]'");
         System.out.println("or");
-        System.out.println("  ./gradlew run --args='enhance <command> --resource <path/to/resource.jpg> --save <path/to/save.jpg> [--license <KEY>]'");
+        System.out.println("  ./gradlew run --args='enhance <command> --resource <path/to/resource.jpg> [--license <KEY>]'");
         System.out.println("or");
-        System.out.println("  ./gradlew run --args='enhance <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]'");
+        System.out.println("  ./gradlew run --args='enhance <command> --file <path/to/file.jpg> [--license <KEY>]'");
         System.out.println();
         System.out.println("  ./gradlew run --args='parse <command> --text \"<input>\" [--license <KEY>]'");
         System.out.println();
@@ -39,7 +39,7 @@ public class ExampleUsage {
         System.out.println("  ./gradlew run --args='scan barcode --file images/example.jpg --license <KEY>'");
         System.out.println("  ./gradlew run --args='analyze analyze_multi_page --resource files/doc.pdf --license <KEY>'");
         System.out.println("  ./gradlew run --args='analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>'");
-        System.out.println("  ./gradlew run --args='enhance document --file images/doc.jpg --save out/enhanced.jpg --license <KEY>'");
+        System.out.println("  ./gradlew run --args='enhance document --file images/doc.jpg --license <KEY>'");
         System.out.println("  ./gradlew run --args='parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\" --license <KEY>'");
         System.out.println();
     }
