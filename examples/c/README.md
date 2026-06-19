@@ -54,7 +54,7 @@ make
 ```
 
 ## Usage
-The example supports five modes: **scan**, **analyze**, **enhance**, and **parse**.
+The example supports five modes: **scan**, **analyze**, **enhance**, **parse**, and **live**.
 ```bash
 ./scanbotsdk_example scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 ./scanbotsdk_example analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]

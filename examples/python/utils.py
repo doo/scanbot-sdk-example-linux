@@ -55,14 +55,20 @@ def print_usage():
     print("Usage:")
     print("  python main.py scan <command> --file <path/to/file.jpg> [--license <KEY>]")
     print("  python main.py analyze <command> --file <path/to/file> --save <path/to/save> [--license <KEY>]")
+    print("  python main.py enhance <command> --file <path/to/file.jpg> [--license <KEY>]")
     print("  python main.py parse <command> --text \"<input>\" [--license <KEY>]")
     print("  python main.py live <command> --device <device_name> [--license <KEY>] --preview --use_tensorrt\n")
+
+    print("Available commands:")
+    print("  scan | analyze | enhance | parse | live\n")
 
     print("Available scan commands:")
     print(
         "  barcode | document | check | credit_card | document_data_extractor | medical_certificate | mrz | ocr | text_pattern | vin\n")
     print("Available analyze commands:")
     print("  analyze_multi_page | crop_analyze\n")
+    print("Available enhance commands:")
+    print("  document \n")
     print("Available parse commands:")
     print("  mrz | barcode_doc\n")
     print("Available live commands:")

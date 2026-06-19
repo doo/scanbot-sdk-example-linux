@@ -5,11 +5,11 @@
 Open `build.gradle` and replace the constant with the actual version number of the SDK you want to install.
 
 ```groovy
-def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>" // e.g., 8.1.0
+def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>" // e.g., 9.0.0
 ```  
 
 ## Usage
-The example supports five commands: **scan**, **analyze**, **enhance**, and **parse**.
+The example supports four commands: **scan**, **analyze**, **enhance**, and **parse**.
 ```bash
 ./gradlew run --args='scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]'
 ./gradlew run --args='scan <subcommand> --resource <path/to/resource.jpg> [--license <KEY>]'
