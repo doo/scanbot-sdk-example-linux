@@ -1,8 +1,7 @@
 import sys
 import scanbotsdk
 
-from examples.python.snippets.enhancer.document_enhancer import enhance_document
-from snippets.document.document_classifier import classify_document
+from snippets.enhancer.document_enhancer import enhance_document
 from snippets.document.analyze_multi_page import analyze_multi_page
 from snippets.document.crop_and_analyze import crop_and_analyze
 from snippets.barcode.barcode_document_parser import parse_barcode_document
@@ -66,12 +65,6 @@ def main():
             elif subcommand == "ocr":                 run_ocr(image)
             elif subcommand == "text_pattern":        scan_text_pattern(image)
             elif subcommand == "vin":                 scan_vin(image)
-            else: print_usage()
-
-    if category == "classify":
-        if not file_path: print_usage(); return
-        with create_image_ref(file_path) as image:
-            if   subcommand == "document":            classify_document(image)
             else: print_usage()
     
     elif category == "enhance":

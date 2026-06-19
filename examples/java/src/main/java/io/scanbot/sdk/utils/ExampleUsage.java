@@ -9,8 +9,6 @@ public class ExampleUsage {
         System.out.println("or");
         System.out.println("  ./gradlew run --args='scan <command> --file <path/to/file.jpg> [--license <KEY>]'");
         System.out.println("or");
-        System.out.println("  ./gradlew run --args='classify <command> --file|--resource <path/to/file.jpg> [--license <KEY>]'");
-        System.out.println();
         System.out.println("  ./gradlew run --args='analyze <command> --resource <path/to/resource.jpg> --save <path/to/save.jpg> [--license <KEY>]'");
         System.out.println("or");
         System.out.println("  ./gradlew run --args='analyze <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]'");
@@ -22,9 +20,6 @@ public class ExampleUsage {
         System.out.println();
         System.out.println("Available analyze commands:");
         System.out.println("  analyze_multi_page | crop_analyze");
-        System.out.println();
-        System.out.println("Available classify commands:");
-        System.out.println("  document");
         System.out.println();
         System.out.println("Available parse commands:");
         System.out.println("  mrz | barcode_doc");

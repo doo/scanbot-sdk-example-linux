@@ -6,7 +6,6 @@ Usage:
 Categories & subcommands:
   scan <barcode | document  | check | credit_card | document_data_extractor  | medical_certificate | mrz | ocr | text_pattern  | vin>
   analyze <analyze_multi_page | crop_analyze>
-  classify <document>
   parse <mrz  | barcode_doc>
 
 Flags:

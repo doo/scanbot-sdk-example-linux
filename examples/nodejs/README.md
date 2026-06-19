@@ -16,11 +16,10 @@ node -e "console.log(require('scanbotsdk') ? 'Scanbot SDK loaded' : 'Error')"
 ```
 
 ## Usage
-The example supports five modes: **scan**, **analyze**, **classify**, **enhance**, and **parse**.
+The example supports five modes: **scan**, **analyze**, **enhance**, and **parse**.
 ```bash
 npx ts-node src/index.ts scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 npx ts-node src/index.ts analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
-npx ts-node src/index.ts classify <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 npx ts-node src/index.ts enhance <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 npx ts-node src/index.ts parse <subcommand> --text "<input>" [--license <KEY>]
 ```
