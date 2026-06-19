@@ -132,7 +132,7 @@ Replace `<SCANBOT_SDK_VERSION>` with the actual version number of the SDK you wa
   ```
 
 ## Usage
-The example supports five modes: **scan**, **analyze**, **enhance**, and **parse**.
+The example supports five modes: **scan**, **analyze**, **enhance**, **parse**, and **live**.
 ```bash
 python main.py scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 python main.py analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
