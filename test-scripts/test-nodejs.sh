@@ -3,6 +3,9 @@ set -e
 
 echo "=== Node.js SDK Command Tests ==="
 
+echo "Checking Node.js version..."
+node -v
+
 # Find the project root directory
 if [[ -d "/workspaces/scanbot-sdk-example-linux/examples/nodejs" ]]; then
     cd /workspaces/scanbot-sdk-example-linux/examples/nodejs
