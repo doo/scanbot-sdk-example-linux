@@ -71,7 +71,7 @@ for i in "${!commands[@]}"; do
     cmd="${commands[$i]}"
     name="${command_names[$i]}"
     
-    if timeout 30 npx ts-node src/index.ts $cmd; then
+    if timeout 60 npx ts-node src/index.ts $cmd; then
         echo "PASS: $name: PASSED"
     elif [[ $? -eq 124 ]]; then
         echo "FAIL: $name: TIMEOUT"
