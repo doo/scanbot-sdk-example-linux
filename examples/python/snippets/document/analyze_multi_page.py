@@ -24,6 +24,5 @@ def analyze_multi_page(file_path: str):
                     analysis_result = analyser.run(image=extracted_image.image)
                     print(
                         f"Page {page_index + 1}, Image {image_index + 1} "
-                        f"-> Found: {analysis_result.document_found}, "
-                        f"Quality: {analysis_result.quality}"
+                        f"-> Quality: {analysis_result.quality}"
                     )
