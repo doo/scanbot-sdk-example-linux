@@ -7,3 +7,4 @@ examples/java/libs/*.jar
 get-pip.py
 .env
 .venv
+.vscode/
