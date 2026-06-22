@@ -1,0 +1,6 @@
+{
+    "cmake.sourceDirectory": "/home/workspace/temp/scanbot-sdk-example-linux/examples/c",
+    "chat.tools.terminal.autoApprove": {
+        "npm install": true
+    }
+}
