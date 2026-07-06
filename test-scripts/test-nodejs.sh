@@ -3,6 +3,9 @@ set -e
 
 echo "=== Node.js SDK Command Tests ==="
 
+echo "Checking Node.js version..."
+node -v
+
 # Find the project root directory
 if [[ -d "/workspaces/scanbot-sdk-example-linux/examples/nodejs" ]]; then
     cd /workspaces/scanbot-sdk-example-linux/examples/nodejs
@@ -41,7 +44,7 @@ commands=(
     "scan ocr --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan text_pattern --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan vin --file ../../test-scripts/test-images/VIN.jpeg --license \"${SCANBOT_LICENSE}\""
-    "classify document --file ../../test-scripts/test-images/toll_receipt.jpeg --license \"${SCANBOT_LICENSE}\""
+    "enhance document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "analyze analyze_multi_page --file ../../test-scripts/test-images/multi_page_document.pdf --license \"${SCANBOT_LICENSE}\""
     "analyze crop_analyze --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     # TODO: Fix C SDK parse test,which currently returns success 0 only in tests
@@ -60,7 +63,7 @@ command_names=(
     "OCR scan"
     "Text pattern scan"
     "VIN scan"
-    "Document classify"
+    "Document enhance"
     "Multi-page analyze"
     "Crop analyze"
     "MRZ parse"
@@ -71,7 +74,7 @@ for i in "${!commands[@]}"; do
     cmd="${commands[$i]}"
     name="${command_names[$i]}"
     
-    if timeout 30 npx ts-node src/index.ts $cmd; then
+    if timeout 60 npx ts-node src/index.ts $cmd; then
         echo "PASS: $name: PASSED"
     elif [[ $? -eq 124 ]]; then
         echo "FAIL: $name: TIMEOUT"

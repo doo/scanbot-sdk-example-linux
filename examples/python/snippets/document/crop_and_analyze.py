@@ -35,5 +35,4 @@ def crop_and_analyze(image_path: str, save_path: Optional[str] = None):
             analyser = DocumentQualityAnalyzer(configuration=analyser_config)
 
             quality_result: DocumentQualityAnalyzerResult = analyser.run(image=cropped)
-            print(f"Document Found: {quality_result.document_found}")
             print(f"Quality: {quality_result.quality}")

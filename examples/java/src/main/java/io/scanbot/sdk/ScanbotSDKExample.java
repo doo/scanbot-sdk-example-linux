@@ -7,6 +7,7 @@ import io.scanbot.sdk.licensing.LicenseInfo;
 import io.scanbot.sdk.snippets.barcode.*;
 import io.scanbot.sdk.snippets.datacapture.*;
 import io.scanbot.sdk.snippets.document.*;
+import io.scanbot.sdk.snippets.enhancer.DocumentEnhancerSnippet;
 import io.scanbot.sdk.utils.*;
 
 import java.util.Arrays;
@@ -73,11 +74,11 @@ public class ScanbotSDKExample {
                 }
                 break;
             }
-            case "classify": {
+            case "enhance": {
                 if (file == null && resource == null) { ExampleUsage.print(); return; }
                 try (ImageRef image = Utils.createImageRef(file, resource)) {
                     switch (subcommand) {
-                        case "document":   DocumentClassifierSnippet.run(image); break;
+                        case "document":  DocumentEnhancerSnippet.run(image); break;
                         default: ExampleUsage.print();
                     }
                     break;

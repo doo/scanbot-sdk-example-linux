@@ -43,7 +43,7 @@ export class CropAndAnalyzeSnippet {
 
       await using result = await analyzer.run(cropped);
       console.log(
-        `Found: ${result.documentFound}, Quality: ${result.quality}`
+        `Quality: ${result.quality}`
       );
     }
   }
