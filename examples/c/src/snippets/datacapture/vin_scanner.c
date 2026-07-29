@@ -7,10 +7,11 @@
 scanbotsdk_error_code_t print_vin_result(scanbotsdk_vin_scanner_result_t *result) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
     scanbotsdk_text_pattern_scanner_result_t *text_result;
-    const char* raw_text;
+    scanbotsdk_u8string_ref_t raw_text_ref = {0};
 
     scanbotsdk_vin_scanner_result_get_text_result(result, &text_result);
-    scanbotsdk_text_pattern_scanner_result_get_raw_text(text_result, &raw_text);
+    scanbotsdk_text_pattern_scanner_result_get_raw_text(text_result, &raw_text_ref);
+    const char* raw_text = scanbotsdk_u8string_ref_assume_cstring(raw_text_ref);
 
     printf("Text: %s\n", raw_text);
     return ec;
