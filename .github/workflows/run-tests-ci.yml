@@ -58,10 +58,11 @@ jobs:
       - name: Build Docker image (x86_64)
         run: |
           docker build \
+            -f test-scripts/linux/Dockerfile \
             --build-arg SDK_VERSION=${{ inputs.sdk_version || env.SDK_VERSION }} \
             --build-arg ARCH=linux-x86_64 \
             --build-arg SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
-            --target all-tests \
+            --target sdk-verification \
             -t scanbot-linux-x86_64:latest .
 
       # Run the test suite with secure stdin approach
