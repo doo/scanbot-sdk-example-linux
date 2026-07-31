@@ -89,9 +89,7 @@ RUN $ErrorActionPreference = 'Stop'; \
       $wheelUrl = $env:PYTHON_SDK_WHL_URL; \
     }; \
     Write-Host ('Installing Python SDK from: {0}' -f $wheelUrl); \
-    # TODO: Uncomment the following line to install from URL instead of local wheel file
-    # & $pythonExe -m pip install $wheelUrl; \
-    & $pythonExe -m pip install scanbotsdk-0.1000.0-py3-none-win_amd64.whl; \
+    & $pythonExe -m pip install $wheelUrl; \
     Write-Host 'Python SDK installed successfully'
 
 RUN $ErrorActionPreference = 'Stop'; \
@@ -103,18 +101,12 @@ RUN $ErrorActionPreference = 'Stop'; \
       $cSdkUrl = $env:C_SDK_ARCHIVE_URL; \
     }; \
     $archiveName = ('scanbotsdk-{0}-{1}.tar.gz' -f $env:SDK_VERSION, $cSdkArch); \
-    $localArchive = Join-Path 'C:\workspaces\scanbot-sdk-example-linux' $archiveName; \
     $archivePath = 'C:\scanbotsdk-c.tar.gz'; \
     $sdkRoot = 'C:\scanbotsdk-cache'; \
     if (Test-Path $sdkRoot) { Remove-Item $sdkRoot -Recurse -Force }; \
     New-Item -ItemType Directory -Path $sdkRoot | Out-Null; \
-    if (Test-Path $localArchive) { \
-      Write-Host ('Using local debug C SDK archive: {0}' -f $localArchive); \
-      Copy-Item -Path $localArchive -Destination $archivePath -Force; \
-    } else { \
-      Write-Host ('Downloading C SDK from: {0}' -f $cSdkUrl); \
-      Invoke-WebRequest -Uri $cSdkUrl -OutFile $archivePath; \
-    }; \
+    Write-Host ('Downloading C SDK from: {0}' -f $cSdkUrl); \
+    Invoke-WebRequest -Uri $cSdkUrl -OutFile $archivePath; \
     Push-Location $sdkRoot; \
     cmake -E tar -xf $archivePath; \
     Pop-Location; \

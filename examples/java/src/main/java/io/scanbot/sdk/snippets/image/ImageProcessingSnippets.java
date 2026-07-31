@@ -73,7 +73,7 @@ public class ImageProcessingSnippets {
             System.out.println("Detection status: " + detectionResult.getStatus());
             System.out.println("Detected points: " + detectionResult.getPoints().size());
 
-            try (ImageRef cropped = processor.crop(image, detectionResult.getPointsNormalized())) {
+            try (ImageRef cropped = processor.crop(image, detectionResult.getPointsNormalized(), null)) {
                 ImageInfo croppedInfo = cropped.imageInfo();
                 System.out.println("Cropped WxH: " + croppedInfo.getWidth() + "x" + croppedInfo.getHeight());
             }
