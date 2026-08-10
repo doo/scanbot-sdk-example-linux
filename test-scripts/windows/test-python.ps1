@@ -29,6 +29,21 @@ if ([string]::IsNullOrWhiteSpace($env:SCANBOT_LICENSE)) {
 
 Set-Location (Join-Path $repoRoot 'examples/python')
 
+$pythonCmd = $null
+if (-not [string]::IsNullOrWhiteSpace($env:PYTHON_EXE) -and (Test-Path $env:PYTHON_EXE)) {
+    $pythonCmd = $env:PYTHON_EXE
+} elseif (Get-Command python -ErrorAction SilentlyContinue) {
+    $pythonCmd = 'python'
+} elseif (Get-Command py -ErrorAction SilentlyContinue) {
+    $pythonCmd = 'py'
+} else {
+    Write-Host 'ERROR: Python executable not found'
+    Write-Host ('PYTHON_EXE env value: ' + $env:PYTHON_EXE)
+    exit 1
+}
+
+Write-Host ("Using Python executable: {0}" -f $pythonCmd)
+
 function Invoke-WithTimeout {
     param(
         [Parameter(Mandatory = $true)][string]$FilePath,
@@ -37,6 +52,7 @@ function Invoke-WithTimeout {
     )
 
     $proc = Start-Process -FilePath $FilePath -ArgumentList $ArgumentList -NoNewWindow -PassThru
+    
     $null = Wait-Process -Id $proc.Id -Timeout $TimeoutSec -ErrorAction SilentlyContinue
 
     if (-not $proc.HasExited) {
@@ -69,7 +85,7 @@ $commands = @(
 )
 
 foreach ($entry in $commands) {
-    $exitCode = Invoke-WithTimeout -FilePath 'python' -ArgumentList $entry.Args -TimeoutSec 30
+    $exitCode = Invoke-WithTimeout -FilePath $pythonCmd -ArgumentList $entry.Args -TimeoutSec 30
     if ($exitCode -eq 0) {
         Write-Host ("PASS: {0}: PASSED" -f $entry.Name)
     } elseif ($exitCode -eq 124) {

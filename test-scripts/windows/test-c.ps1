@@ -29,7 +29,7 @@ if ([string]::IsNullOrWhiteSpace($env:SCANBOT_LICENSE)) {
 
 Set-Location (Join-Path $repoRoot 'examples/c')
 
-$exePath = Join-Path (Get-Location) 'build/scanbotsdk_example.exe'
+$exePath = Join-Path (Get-Location) 'build/Release/scanbotsdk_example.exe'
 if (-not (Test-Path $exePath)) {
     Write-Host 'FAIL: C executable: NOT FOUND'
     Write-Host 'Looking for executable in current directory:'
