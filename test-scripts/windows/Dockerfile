@@ -28,6 +28,7 @@ RUN $ErrorActionPreference = 'Stop'; \
   if (-not (Test-Path $pythonExe)) { throw ('Expected Python executable not found: ' + $pythonExe) }; \
     & $pythonExe --version; \
     & $pythonExe -m pip install --upgrade pip setuptools wheel; \
+    & $pythonExe -m pip install --no-cache-dir --no-deps 'opencv-python-headless==4.5.5.64'; \
     & $pythonExe -m pip install --no-cache-dir 'numpy==1.26.4' pillow;
 
 # Set workspace path (source is copied later to improve layer caching)
