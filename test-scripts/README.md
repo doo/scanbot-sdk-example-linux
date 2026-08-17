@@ -29,7 +29,7 @@ test-scripts/
 
 ```bash
 export SCANBOT_LICENSE="your-license-key-here"
-export SDK_VERSION=0.810.7
+export SDK_VERSION=9.0.0
 ```
 
 ### 2. Build Test Container

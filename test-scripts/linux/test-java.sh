@@ -1,15 +1,15 @@
 #!/bin/bash
 set -e
 
-echo "=== Python SDK Command Tests ==="
+echo "=== Java SDK Command Tests ==="
 
 # Find the project root directory
-if [[ -d "/workspaces/scanbot-sdk-example-linux/examples/python" ]]; then
-    cd /workspaces/scanbot-sdk-example-linux/examples/python
-elif [[ -d "examples/python" ]]; then
-    cd examples/python
+if [[ -d "/workspaces/scanbot-sdk-example-linux/examples/java" ]]; then
+    cd /workspaces/scanbot-sdk-example-linux/examples/java
+elif [[ -d "examples/java" ]]; then
+    cd examples/java
 else
-    echo "ERROR: Cannot find Python examples directory"
+    echo "ERROR: Cannot find Java examples directory"
     exit 1
 fi
 
@@ -21,7 +21,7 @@ if [[ -z "${SCANBOT_LICENSE}" ]]; then
     exit 1
 fi
 
-echo "Testing SCAN commands..."
+echo "Testing JAVA commands..."
 commands=(
     "scan barcode --file ../../test-scripts/test-images/qrcode.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
@@ -33,9 +33,9 @@ commands=(
     "scan ocr --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan text_pattern --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan vin --file ../../test-scripts/test-images/VIN.jpeg --license \"${SCANBOT_LICENSE}\""
-    "classify document --file ../../test-scripts/test-images/toll_receipt.jpeg --license \"${SCANBOT_LICENSE}\""
-    "analyze analyze_multi_page --file ../../test-scripts/test-images/multi_page_document.pdf --license \"${SCANBOT_LICENSE}\""
-    "analyze crop_analyze --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
+    "enhance document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
+    "analyze analyze_multi_page --file ../../test-scripts/test-images/multi_page_document.pdf --save /tmp/out.pdf --license \"${SCANBOT_LICENSE}\""
+    "analyze crop_analyze --file ../../test-scripts/test-images/Document.jpeg --save /tmp/crop.jpeg --license \"${SCANBOT_LICENSE}\""
     # TODO: Fix C SDK parse test,which currently returns success 0 only in tests
     "parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<L898902C36UTO7408122F1204159ZE184226B<<<<<10\" --license \"${SCANBOT_LICENSE}\""
     "parse barcode_doc --text \"(01)03453120000011(17)191125(10)ABCD1234\" --license \"${SCANBOT_LICENSE}\""
@@ -46,24 +46,25 @@ command_names=(
     "Document scan"
     "Check scan"
     "Credit card scan"
-    "Document data extractor scan"
+    "Document extractor scan"
     "Medical certificate scan"
     "MRZ scan"
     "OCR scan"
     "Text pattern scan"
     "VIN scan"
-    "Document classify"
+    "Document enhance"
     "Multi-page analyze"
     "Crop analyze"
     "MRZ parse"
     "Barcode document parse"
 )
 
+
 for i in "${!commands[@]}"; do
     cmd="${commands[$i]}"
     name="${command_names[$i]}"
-
-    if timeout 30 python3 main.py $cmd; then
+    
+    if timeout 30 ./gradlew run --no-daemon --args="$cmd"; then
         echo "PASS: $name: PASSED"
     elif [[ $? -eq 124 ]]; then
         echo "FAIL: $name: TIMEOUT"
@@ -74,5 +75,5 @@ for i in "${!commands[@]}"; do
     fi
 done
 
-echo "PASS: Python tests PASSED"
+echo "PASS: Java tests PASSED"
 

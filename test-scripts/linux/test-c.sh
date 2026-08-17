@@ -1,23 +1,28 @@
 #!/bin/bash
 set -e
 
-echo "=== Node.js SDK Command Tests ==="
+echo "=== C SDK Command Tests ==="
 
 # Find the project root directory
-if [[ -d "/workspaces/scanbot-sdk-example-linux/examples/nodejs" ]]; then
-    cd /workspaces/scanbot-sdk-example-linux/examples/nodejs
-elif [[ -d "examples/nodejs" ]]; then
-    cd examples/nodejs
+if [[ -d "/workspaces/scanbot-sdk-example-linux/examples/c" ]]; then
+    cd /workspaces/scanbot-sdk-example-linux/examples/c
+elif [[ -d "examples/c" ]]; then
+    cd examples/c
 else
-    echo "ERROR: Cannot find Node.js examples directory"
+    echo "ERROR: Cannot find C examples directory"
     exit 1
 fi
 
-echo "Testing TypeScript compilation..."
-if npx tsc --noEmit >/dev/null 2>&1; then
-    echo "PASS: TypeScript compilation: PASSED"
+echo "Testing executable exists..."
+if [[ -x "./build/scanbotsdk_example" ]]; then
+    echo "PASS: C executable: EXISTS"
+    ls -la build/scanbotsdk_example
 else
-    echo "FAIL: TypeScript compilation: FAILED"
+    echo "FAIL: C executable: NOT FOUND"
+    echo "Looking for executable in current directory:"
+    ls -la
+    echo "Looking for executable in build directory:"
+    ls -la build/ || echo "Build directory not found"
     exit 1
 fi
 
@@ -29,7 +34,7 @@ if [[ -z "${SCANBOT_LICENSE}" ]]; then
     exit 1
 fi
 
-echo "Testing NODEJS commands..."
+echo "Testing SCAN commands..."
 commands=(
     "scan barcode --file ../../test-scripts/test-images/qrcode.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
@@ -41,11 +46,11 @@ commands=(
     "scan ocr --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan text_pattern --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan vin --file ../../test-scripts/test-images/VIN.jpeg --license \"${SCANBOT_LICENSE}\""
-    "classify document --file ../../test-scripts/test-images/toll_receipt.jpeg --license \"${SCANBOT_LICENSE}\""
+    "enhance document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "analyze analyze_multi_page --file ../../test-scripts/test-images/multi_page_document.pdf --license \"${SCANBOT_LICENSE}\""
     "analyze crop_analyze --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     # TODO: Fix C SDK parse test,which currently returns success 0 only in tests
-    "parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<L898902C36UTO7408122F1204159ZE184226B<<<<<10\" --license \"${SCANBOT_LICENSE}\""
+    "parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<L898902C36UTO7408122F1204159ZE184226B<<<<<10\" --license \"${SCANBOT_LICENSE}\""     
     "parse barcode_doc --text \"(01)03453120000011(17)191125(10)ABCD1234\" --license \"${SCANBOT_LICENSE}\""
 )
 
@@ -60,7 +65,7 @@ command_names=(
     "OCR scan"
     "Text pattern scan"
     "VIN scan"
-    "Document classify"
+    "Document enhance"
     "Multi-page analyze"
     "Crop analyze"
     "MRZ parse"
@@ -71,7 +76,7 @@ for i in "${!commands[@]}"; do
     cmd="${commands[$i]}"
     name="${command_names[$i]}"
     
-    if timeout 30 npx ts-node src/index.ts $cmd; then
+    if timeout 30 ./build/scanbotsdk_example $cmd; then
         echo "PASS: $name: PASSED"
     elif [[ $? -eq 124 ]]; then
         echo "FAIL: $name: TIMEOUT"
@@ -82,5 +87,5 @@ for i in "${!commands[@]}"; do
     fi
 done
 
-echo "PASS: Node.js tests PASSED"
+echo "PASS: C tests PASSED"
 

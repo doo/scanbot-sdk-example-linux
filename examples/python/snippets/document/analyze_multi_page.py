@@ -2,7 +2,6 @@ from scanbotsdk import *
 
 def analyze_multi_page(file_path: str):
     configuration = DocumentQualityAnalyzerConfiguration(
-        detect_orientation=True,
         min_estimated_number_of_symbols_for_document=20,
         process_by_tile_configuration=ProcessByTileConfiguration(
             tile_size=300
@@ -25,6 +24,5 @@ def analyze_multi_page(file_path: str):
                     analysis_result = analyser.run(image=extracted_image.image)
                     print(
                         f"Page {page_index + 1}, Image {image_index + 1} "
-                        f"-> Found: {analysis_result.document_found}, "
-                        f"Quality: {analysis_result.quality}"
+                        f"-> Quality: {analysis_result.quality}"
                     )

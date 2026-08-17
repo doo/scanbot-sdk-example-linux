@@ -19,7 +19,8 @@ scanbotsdk_error_code_t parse_mrz(const char* text) {
     ec = scanbotsdk_mrz_parser_create(config, &parser);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "create_parser: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     
-    ec = scanbotsdk_mrz_parser_parse(parser, text, &result);
+    scanbotsdk_u8string_ref_t text_ref = scanbotsdk_u8string_ref_from_cstring(text);
+    ec = scanbotsdk_mrz_parser_parse(parser, text_ref, &result);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "parse: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     ec = scanbotsdk_mrz_scanner_result_get_document(result, &mrz);

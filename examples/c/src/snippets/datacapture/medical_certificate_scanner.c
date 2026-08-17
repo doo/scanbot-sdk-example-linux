@@ -25,12 +25,13 @@ scanbotsdk_error_code_t print_medical_certificate_result(scanbotsdk_medical_cert
 
     for (size_t i = 0; i < count; ++i) {
         scanbotsdk_medical_certificate_patient_info_field_type_t type;
-        const char* value = NULL;
+        scanbotsdk_u8string_ref_t value_ref = {0};
 
         scanbotsdk_medical_certificate_patient_info_field_get_type(fields[i], &type);
-        scanbotsdk_medical_certificate_patient_info_field_get_value(fields[i], &value);
+        scanbotsdk_medical_certificate_patient_info_field_get_value(fields[i], &value_ref);
 
-        fprintf(stderr, "Type: %d Value: %s\n", type, value);
+        const char *value = scanbotsdk_u8string_ref_assume_cstring(value_ref);
+        fprintf(stderr, "Type: %d Value: %s\n", type, value ? value : "");
     }
     
 cleanup:

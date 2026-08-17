@@ -16,13 +16,11 @@ node -e "console.log(require('scanbotsdk') ? 'Scanbot SDK loaded' : 'Error')"
 ```
 
 ## Usage
-The example supports four modes: **scan**, **analyze**, **classify**, and **parse**.
+The example supports four modes: **scan**, **analyze**, **enhance**, and **parse**.
 ```bash
 npx ts-node src/index.ts scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
-npx ts-node src/index.ts scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 npx ts-node src/index.ts analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
-npx ts-node src/index.ts analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
-npx ts-node src/index.ts classify <subcommand> --file <path/to/file.jpg> [--license <KEY>]
+npx ts-node src/index.ts enhance <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 npx ts-node src/index.ts parse <subcommand> --text "<input>" [--license <KEY>]
 ```
 
@@ -31,6 +29,7 @@ npx ts-node src/index.ts parse <subcommand> --text "<input>" [--license <KEY>]
 npx ts-node src/index.ts scan barcode --file images/example.jpg --license <KEY>
 npx ts-node src/index.ts analyze analyze_multi_page --file files/doc.pdf --license <KEY>
 npx ts-node src/index.ts analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
+npx ts-node src/index.ts enhance document --file images/doc.jpg --license <KEY>
 npx ts-node src/index.ts parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
 ```
 

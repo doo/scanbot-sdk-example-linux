@@ -34,13 +34,15 @@ scanbotsdk_error_code_t print_generic_document_fields(scanbotsdk_generic_documen
         scanbotsdk_field_type_t *field_type = NULL;
         scanbotsdk_field_get_type(fields[i], &field_type);
 
-        const char *type_name = NULL;
-        scanbotsdk_field_type_get_name(field_type, &type_name);
+        scanbotsdk_u8string_ref_t type_name_ref = {0};
+        scanbotsdk_field_type_get_name(field_type, &type_name_ref);
+        const char *type_name = scanbotsdk_u8string_ref_assume_cstring(type_name_ref);
 
       scanbotsdk_ocr_result_t *ocr_result = NULL;
         if (scanbotsdk_field_get_value(fields[i], &ocr_result) == SCANBOTSDK_OK && ocr_result) {
-            const char *text = NULL;
-            scanbotsdk_ocr_result_get_text(ocr_result, &text);
+            scanbotsdk_u8string_ref_t text_ref = {0};
+            scanbotsdk_ocr_result_get_text(ocr_result, &text_ref);
+            const char *text = scanbotsdk_u8string_ref_assume_cstring(text_ref);
             printf("Field[%zu]: type=%s, value=\"%s\"\n",
                 i, type_name, text ? text : "text value n/a");
         } else {
@@ -88,7 +90,7 @@ void print_usage(const char *prog) {
     printf("Usage:\n");
     printf("  %s scan <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
-    printf("  %s classify <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
+    printf("  %s enhance <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
     printf("  %s analyze <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
@@ -100,7 +102,7 @@ void print_usage(const char *prog) {
     printf("  barcode | document | check | credit_card | document_data_extractor |\n");
     printf("  medical_certificate | mrz | ocr | text_pattern | vin\n\n");
 
-    printf("Available classify commands:\n");
+    printf("Available enhance commands:\n");
     printf("  document \n\n");
 
     printf("Available analyze commands:\n");

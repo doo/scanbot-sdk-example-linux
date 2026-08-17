@@ -1,15 +1,26 @@
 #!/bin/bash
 set -e
 
-echo "=== Java SDK Command Tests ==="
+echo "=== Node.js SDK Command Tests ==="
+
+echo "Checking Node.js version..."
+node -v
 
 # Find the project root directory
-if [[ -d "/workspaces/scanbot-sdk-example-linux/examples/java" ]]; then
-    cd /workspaces/scanbot-sdk-example-linux/examples/java
-elif [[ -d "examples/java" ]]; then
-    cd examples/java
+if [[ -d "/workspaces/scanbot-sdk-example-linux/examples/nodejs" ]]; then
+    cd /workspaces/scanbot-sdk-example-linux/examples/nodejs
+elif [[ -d "examples/nodejs" ]]; then
+    cd examples/nodejs
 else
-    echo "ERROR: Cannot find Java examples directory"
+    echo "ERROR: Cannot find Node.js examples directory"
+    exit 1
+fi
+
+echo "Testing TypeScript compilation..."
+if npx tsc --noEmit >/dev/null 2>&1; then
+    echo "PASS: TypeScript compilation: PASSED"
+else
+    echo "FAIL: TypeScript compilation: FAILED"
     exit 1
 fi
 
@@ -21,7 +32,7 @@ if [[ -z "${SCANBOT_LICENSE}" ]]; then
     exit 1
 fi
 
-echo "Testing JAVA commands..."
+echo "Testing NODEJS commands..."
 commands=(
     "scan barcode --file ../../test-scripts/test-images/qrcode.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
@@ -33,9 +44,9 @@ commands=(
     "scan ocr --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan text_pattern --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan vin --file ../../test-scripts/test-images/VIN.jpeg --license \"${SCANBOT_LICENSE}\""
-    "classify document --file ../../test-scripts/test-images/toll_receipt.jpeg --license \"${SCANBOT_LICENSE}\""
-    "analyze analyze_multi_page --file ../../test-scripts/test-images/multi_page_document.pdf --save /tmp/out.pdf --license \"${SCANBOT_LICENSE}\""
-    "analyze crop_analyze --file ../../test-scripts/test-images/Document.jpeg --save /tmp/crop.jpeg --license \"${SCANBOT_LICENSE}\""
+    "enhance document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
+    "analyze analyze_multi_page --file ../../test-scripts/test-images/multi_page_document.pdf --license \"${SCANBOT_LICENSE}\""
+    "analyze crop_analyze --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     # TODO: Fix C SDK parse test,which currently returns success 0 only in tests
     "parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<L898902C36UTO7408122F1204159ZE184226B<<<<<10\" --license \"${SCANBOT_LICENSE}\""
     "parse barcode_doc --text \"(01)03453120000011(17)191125(10)ABCD1234\" --license \"${SCANBOT_LICENSE}\""
@@ -52,19 +63,18 @@ command_names=(
     "OCR scan"
     "Text pattern scan"
     "VIN scan"
-    "Document classify"
+    "Document enhance"
     "Multi-page analyze"
     "Crop analyze"
     "MRZ parse"
     "Barcode document parse"
 )
 
-
 for i in "${!commands[@]}"; do
     cmd="${commands[$i]}"
     name="${command_names[$i]}"
     
-    if timeout 30 ./gradlew run --no-daemon --args="$cmd"; then
+    if timeout 60 npx ts-node src/index.ts $cmd; then
         echo "PASS: $name: PASSED"
     elif [[ $? -eq 124 ]]; then
         echo "FAIL: $name: TIMEOUT"
@@ -75,5 +85,5 @@ for i in "${!commands[@]}"; do
     fi
 done
 
-echo "PASS: Java tests PASSED"
+echo "PASS: Node.js tests PASSED"
 

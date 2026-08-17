@@ -12,11 +12,11 @@ import { MrzScannerSnippet } from "./snippets/datacapture/mrz-scanner";
 import { TextPatternScannerSnippet } from "./snippets/datacapture/text-pattern-scanner";
 import { OcrSnippet } from "./snippets/datacapture/ocr";
 import { VinScannerSnippet } from "./snippets/datacapture/vin-scanner";
-import { DocumentClassifierSnippet } from "./snippets/document/document-classifier";
 import { MrzParserSnippet } from "./snippets/datacapture/mrz-parser";
 import { ParseBarcodeDocumentSnippet } from "./snippets/barcode/parse-barcode-document";
 import { AnalyzeMultiPageSnippet } from "./snippets/document/analyze-multipage";
 import { CropAndAnalyzeSnippet } from "./snippets/document/crop-analyze";
+import { DocumentEnhancerSnippet } from "./snippets/enhancer/document-enhancer";
 
 async function awaitPromise(promise: Promise<void>, maxAwaitTimeMs: number = 60 * 1000): Promise<void> {
   const timer = setTimeout(() => {
@@ -94,13 +94,13 @@ async function main(): Promise<void> {
         }
         break;
       }
-
-      case "classify": {
+      
+      case "enhance": {
         if (!file) { printUsage(); return; }
         const image = await ScanbotSDK.ImageRef.fromPath(file);
 
         switch (subcommand) {
-          case "document":            await DocumentClassifierSnippet.run(image); break;
+          case "document":            await DocumentEnhancerSnippet.run(image); break;
           default: printUsage();
         }
         break;
