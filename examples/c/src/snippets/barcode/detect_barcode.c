@@ -65,4 +65,3 @@ cleanup:
     scanbotsdk_barcode_scanner_configuration_free(config);
     return ec;
 }
-

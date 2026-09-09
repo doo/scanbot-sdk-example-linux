@@ -12,10 +12,10 @@ export class DocumentEnhancerSnippet {
       new AspectRatio({ width: 3.0, height: 4.0 })
     ];
 
-    // `await using` ensures both enhancer and result are properly disposed
+    // `await using` ensures both straightener and result are properly disposed
     // when the scope ends, as they hold unmanaged resources.
-    await using enhancer = await ScanbotSDK.DocumentEnhancer.create();
-    await using result = await enhancer.straighten(image, params);
+    await using straightener = await ScanbotSDK.DocumentStraightener.create();
+    await using result = await straightener.run(image, params);
 
     // The straightened image can be accessed via result.straightenedImage and saved or further processed as needed.
   }

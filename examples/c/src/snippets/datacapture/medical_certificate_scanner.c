@@ -29,8 +29,8 @@ scanbotsdk_error_code_t print_medical_certificate_result(scanbotsdk_medical_cert
 
         scanbotsdk_medical_certificate_patient_info_field_get_type(fields[i], &type);
         scanbotsdk_medical_certificate_patient_info_field_get_value(fields[i], &value_ref);
-
         const char *value = scanbotsdk_u8string_ref_assume_cstring(value_ref);
+
         fprintf(stderr, "Type: %d Value: %s\n", type, value ? value : "");
     }
     

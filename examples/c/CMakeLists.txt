@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 99)
 
 # Find or download Scanbot SDK
 if(NOT SCANBOTSDK_VERSION)
-    set(SCANBOTSDK_VERSION "9.0.0")
+    set(SCANBOTSDK_VERSION "0.1000.3")
 endif()
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 find_package(ScanbotSDK REQUIRED)
@@ -22,4 +22,3 @@ if(WIN32)
             "$<TARGET_FILE_DIR:scanbotsdk_example>"
     )
 endif()
-

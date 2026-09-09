@@ -50,4 +50,3 @@ cleanup:
     scanbotsdk_barcode_document_parser_free(parser);
     return ec;
 }
-

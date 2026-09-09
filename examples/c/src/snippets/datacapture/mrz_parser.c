@@ -39,4 +39,3 @@ cleanup:
     scanbotsdk_mrz_scanner_result_free(result);
     return ec;
 }
-
