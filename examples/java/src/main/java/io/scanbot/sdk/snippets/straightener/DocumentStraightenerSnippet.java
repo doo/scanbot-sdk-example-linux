@@ -1,14 +1,14 @@
-package io.scanbot.sdk.snippets.enhancer;
+package io.scanbot.sdk.snippets.straightener;
 import java.util.List;
 
-import io.scanbot.sdk.documentscanner.DocumentEnhancer;
+import io.scanbot.sdk.documentscanner.DocumentStraightener;
 import io.scanbot.sdk.documentscanner.DocumentStraighteningMode;
 import io.scanbot.sdk.documentscanner.DocumentStraighteningParameters;
 import io.scanbot.sdk.documentscanner.DocumentStraighteningResult;
 import io.scanbot.sdk.geometry.AspectRatio;
 import io.scanbot.sdk.image.ImageRef;
 
-public class DocumentEnhancerSnippet {
+public class DocumentStraightenerSnippet {
    public static void run(ImageRef image) throws Exception {
         DocumentStraighteningParameters params = new DocumentStraighteningParameters();
         params.setStraighteningMode(DocumentStraighteningMode.STRAIGHTEN);
@@ -20,8 +20,8 @@ public class DocumentEnhancerSnippet {
         ));
 
         try (
-            DocumentEnhancer enhancer = new DocumentEnhancer();
-            DocumentStraighteningResult result = enhancer.straighten(image, params, List.of())
+            DocumentStraightener straightener = new DocumentStraightener();
+            DocumentStraighteningResult result = straightener.run(image, params, List.of())
         ) {
             // The straightened image can be accessed via result.getStraightenedImage() and saved or further processed as needed.
         }

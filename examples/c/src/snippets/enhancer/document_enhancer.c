@@ -9,7 +9,7 @@ scanbotsdk_error_code_t enhance_document(scanbotsdk_image_t *image) {
 
     scanbotsdk_document_straightening_result_t *result = NULL;
     scanbotsdk_document_straightening_parameters_t *straightening_params = NULL;
-    scanbotsdk_document_enhancer_t *enhancer = NULL;
+    scanbotsdk_document_straightener_t *straightener = NULL;
     scanbotsdk_image_t *straightened_image = NULL;
 
     scanbotsdk_aspect_ratio_t *aspect_ratios[4] = {0};
@@ -34,18 +34,18 @@ scanbotsdk_error_code_t enhance_document(scanbotsdk_image_t *image) {
     );
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "document_straightening_parameters_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
-    ec = scanbotsdk_document_enhancer_create(&enhancer);
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "document_enhancer_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
+    ec = scanbotsdk_document_straightener_create(&straightener);
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "document_straightener_create: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
-    ec = scanbotsdk_document_enhancer_straighten(
-        enhancer,
+    ec = scanbotsdk_document_straightener_run(
+        straightener,
         image,
         straightening_params,
         NULL,
         0,
         &result
     );
-    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "document_enhancer_straighten: %d: %s\n", ec, error_message(ec)); goto cleanup; }
+    if (ec != SCANBOTSDK_OK) { fprintf(stderr, "document_straighten: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     ec = scanbotsdk_document_straightening_result_get_straightened_image(result, &straightened_image);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "document_straightening_result_get_straightened_image: %d: %s\n", ec, error_message(ec)); goto cleanup; }
@@ -57,7 +57,7 @@ scanbotsdk_error_code_t enhance_document(scanbotsdk_image_t *image) {
     /* straightened_image can be saved or processed further here */
 
 cleanup:
-    scanbotsdk_document_enhancer_free(enhancer);
+    scanbotsdk_document_straightener_free(straightener);
     scanbotsdk_document_straightening_result_free(result);
     scanbotsdk_document_straightening_parameters_free(straightening_params);
 

@@ -10,7 +10,7 @@ on:
     paths:
       - 'examples/**'
       - 'test-scripts/**'
-      - 'Dockerfile'
+      - 'test-scripts/linux/Dockerfile'
       - '.github/workflows/run-tests-ci.yml'
   # Run on pull requests to main branch
   pull_request:
@@ -18,7 +18,7 @@ on:
     paths:
       - 'examples/**'
       - 'test-scripts/**'
-      - 'Dockerfile'
+      - 'test-scripts/linux/Dockerfile'
       - '.github/workflows/run-tests-ci.yml'
   # Allow manual triggering with custom parameters
   workflow_dispatch:
@@ -41,7 +41,7 @@ on:
 
 # Global environment variables
 env:
-  SDK_VERSION: '9.0.0'
+  SDK_VERSION: '0.1000.3'
 
 jobs:
   test-x86_64:
@@ -58,10 +58,11 @@ jobs:
       - name: Build Docker image (x86_64)
         run: |
           docker build \
+            -f test-scripts/linux/Dockerfile \
             --build-arg SDK_VERSION=${{ inputs.sdk_version || env.SDK_VERSION }} \
             --build-arg ARCH=linux-x86_64 \
             --build-arg SCANBOT_LICENSE="${{ secrets.SCANBOT_LICENSE_KEY }}" \
-            --target all-tests \
+            --target sdk-verification \
             -t scanbot-linux-x86_64:latest .
 
       # Run the test suite with secure stdin approach

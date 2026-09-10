@@ -21,11 +21,11 @@ scanbotsdk_error_code_t print_barcodes_result(scanbotsdk_barcode_scanner_result_
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_barcodes: %d: %s\n", ec, error_message(ec));  goto cleanup; }
 
     for (size_t i = 0; i < count; ++i) {
-        const char *text = NULL;
+        scanbotsdk_u8string_ref_t text_ref = {0};
         scanbotsdk_generic_document_t *doc = NULL;
-        
-        scanbotsdk_barcode_item_get_text(barcodes[i], &text);
-        fprintf(stdout, "  %zu) %s\n", i + 1, text);
+        scanbotsdk_barcode_item_get_text(barcodes[i], &text_ref);
+        const char *text = scanbotsdk_u8string_ref_assume_cstring(text_ref);
+        fprintf(stdout, "  %zu) %s\n", i + 1, text ? text : "");
 
         scanbotsdk_barcode_item_get_extracted_document(barcodes[i], &doc);
         if(doc != NULL) { 
@@ -65,4 +65,3 @@ cleanup:
     scanbotsdk_barcode_scanner_configuration_free(config);
     return ec;
 }
-
