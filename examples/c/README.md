@@ -51,7 +51,7 @@ Requirements:
 
 In order to build all examples, run the following commands:
 
-* With ninja (recommended):
+* With Ninja (recommended):
     ```bash
     mkdir build
     cd build
@@ -60,7 +60,7 @@ In order to build all examples, run the following commands:
     ninja
     ```
 
-* With make:
+* With Unix Makefiles:
 
     ```bash
     mkdir build
@@ -70,7 +70,7 @@ In order to build all examples, run the following commands:
     make
     ```
 
-* With MS Visual Studio (Windows-only):
+* With Visual Studio (Windows-only):
 
     ```powershell
     mkdir build

@@ -10,7 +10,7 @@ on:
     paths:
       - 'examples/**'
       - 'test-scripts/**'
-      - 'Dockerfile'
+      - 'test-scripts/linux/Dockerfile'
       - '.github/workflows/run-tests-ci.yml'
   # Run on pull requests to main branch
   pull_request:
@@ -18,7 +18,7 @@ on:
     paths:
       - 'examples/**'
       - 'test-scripts/**'
-      - 'Dockerfile'
+      - 'test-scripts/linux/Dockerfile'
       - '.github/workflows/run-tests-ci.yml'
   # Allow manual triggering with custom parameters
   workflow_dispatch:
