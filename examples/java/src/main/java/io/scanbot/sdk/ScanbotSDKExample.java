@@ -74,7 +74,7 @@ public class ScanbotSDKExample {
                 }
                 break;
             }
-            case "enhance": {
+            case "straighten": {
                 if (file == null && resource == null) { ExampleUsage.print(); return; }
                 try (ImageRef image = Utils.createImageRef(file, resource)) {
                     switch (subcommand) {

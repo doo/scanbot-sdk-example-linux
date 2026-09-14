@@ -1,7 +1,7 @@
 import sys
 import scanbotsdk
 
-from snippets.enhancer.document_enhancer import enhance_document
+from snippets.straightener.document_straightener import straighten_document
 from snippets.document.analyze_multi_page import analyze_multi_page
 from snippets.document.crop_and_analyze import crop_and_analyze
 from snippets.barcode.barcode_document_parser import parse_barcode_document
@@ -67,10 +67,10 @@ def main():
             elif subcommand == "vin":                 scan_vin(image)
             else: print_usage()
     
-    elif category == "enhance":
+    elif category == "straighten":
         if not file_path: print_usage(); return
         with create_image_ref(file_path) as image:
-            if subcommand == "document":              enhance_document(image)
+            if subcommand == "document":              straighten_document(image)
             else: print_usage()
 
     elif category == "analyze":

@@ -90,7 +90,7 @@ void print_usage(const char *prog) {
     printf("Usage:\n");
     printf("  %s scan <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
-    printf("  %s enhance <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
+    printf("  %s straighten <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
     printf("  %s analyze <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
@@ -102,7 +102,7 @@ void print_usage(const char *prog) {
     printf("  barcode | document | check | credit_card | document_data_extractor |\n");
     printf("  medical_certificate | mrz | ocr | text_pattern | vin\n\n");
 
-    printf("Available enhance commands:\n");
+    printf("Available straighten commands:\n");
     printf("  document \n\n");
 
     printf("Available analyze commands:\n");

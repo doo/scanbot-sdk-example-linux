@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <snippets/enhancer/document_enhancer.h>
+#include <snippets/straightener/document_straightener.h>
 #include <utils/utils.h>
 
-scanbotsdk_error_code_t enhance_document(scanbotsdk_image_t *image) {
+scanbotsdk_error_code_t straighten_document(scanbotsdk_image_t *image) {
     scanbotsdk_error_code_t ec = SCANBOTSDK_OK;
 
     scanbotsdk_document_straightening_result_t *result = NULL;

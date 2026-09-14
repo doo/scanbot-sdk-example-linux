@@ -78,7 +78,7 @@ $commands = @(
     @{ Name = 'OCR scan'; Args = @('scan', 'ocr', '--file', '../../test-scripts/test-images/Document.jpeg', '--license', $env:SCANBOT_LICENSE) },
     @{ Name = 'Text pattern scan'; Args = @('scan', 'text_pattern', '--file', '../../test-scripts/test-images/Document.jpeg', '--license', $env:SCANBOT_LICENSE) },
     @{ Name = 'VIN scan'; Args = @('scan', 'vin', '--file', '../../test-scripts/test-images/VIN.jpeg', '--license', $env:SCANBOT_LICENSE) },
-    @{ Name = 'Document enhance'; Args = @('enhance', 'document', '--file', '../../test-scripts/test-images/Document.jpeg', '--license', $env:SCANBOT_LICENSE) },
+    @{ Name = 'Document straighten'; Args = @('straighten', 'document', '--file', '../../test-scripts/test-images/Document.jpeg', '--license', $env:SCANBOT_LICENSE) },
     @{ Name = 'Multi-page analyze'; Args = @('analyze', 'analyze_multi_page', '--file', '../../test-scripts/test-images/multi_page_document.pdf', '--license', $env:SCANBOT_LICENSE) },
     @{ Name = 'Crop analyze'; Args = @('analyze', 'crop_analyze', '--file', '../../test-scripts/test-images/Document.jpeg', '--license', $env:SCANBOT_LICENSE) },
     @{ Name = 'MRZ parse'; Args = @('parse', 'mrz', '--text', 'P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<L898902C36UTO7408122F1204159ZE184226B<<<<<10', '--license', $env:SCANBOT_LICENSE) },
@@ -99,4 +99,3 @@ foreach ($entry in $commands) {
 }
 
 Write-Host 'PASS: C tests PASSED'
-

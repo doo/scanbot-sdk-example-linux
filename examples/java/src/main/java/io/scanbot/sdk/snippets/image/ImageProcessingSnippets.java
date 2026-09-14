@@ -12,6 +12,7 @@ import io.scanbot.sdk.image.ImageRotation;
 import io.scanbot.sdk.image.SaveImageOptions;
 import io.scanbot.sdk.imageprocessing.BinarizationFilterPreset;
 import io.scanbot.sdk.imageprocessing.CustomBinarizationFilter;
+import io.scanbot.sdk.imageprocessing.DocumentCropOptimization;
 import io.scanbot.sdk.imageprocessing.ImageProcessor;
 
 public class ImageProcessingSnippets {
@@ -73,7 +74,11 @@ public class ImageProcessingSnippets {
             System.out.println("Detection status: " + detectionResult.getStatus());
             System.out.println("Detected points: " + detectionResult.getPoints().size());
 
-            try (ImageRef cropped = processor.crop(image, detectionResult.getPointsNormalized(), null)) {
+            try (ImageRef cropped = processor.crop(
+                    image,
+                    detectionResult.getPointsNormalized(),
+                    DocumentCropOptimization.NONE
+            )) {
                 ImageInfo croppedInfo = cropped.imageInfo();
                 System.out.println("Cropped WxH: " + croppedInfo.getWidth() + "x" + croppedInfo.getHeight());
             }

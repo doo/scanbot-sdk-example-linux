@@ -16,7 +16,7 @@ import { MrzParserSnippet } from "./snippets/datacapture/mrz-parser";
 import { ParseBarcodeDocumentSnippet } from "./snippets/barcode/parse-barcode-document";
 import { AnalyzeMultiPageSnippet } from "./snippets/document/analyze-multipage";
 import { CropAndAnalyzeSnippet } from "./snippets/document/crop-analyze";
-import { DocumentEnhancerSnippet } from "./snippets/enhancer/document-enhancer";
+import { DocumentStraightenerSnippet } from "./snippets/straightener/document-straightener";
 
 async function awaitPromise(promise: Promise<void>, maxAwaitTimeMs: number = 60 * 1000): Promise<void> {
   const timer = setTimeout(() => {
@@ -95,12 +95,12 @@ async function main(): Promise<void> {
         break;
       }
       
-      case "enhance": {
+      case "straighten": {
         if (!file) { printUsage(); return; }
         const image = await ScanbotSDK.ImageRef.fromPath(file);
 
         switch (subcommand) {
-          case "document":            await DocumentEnhancerSnippet.run(image); break;
+          case "document":            await DocumentStraightenerSnippet.run(image); break;
           default: printUsage();
         }
         break;

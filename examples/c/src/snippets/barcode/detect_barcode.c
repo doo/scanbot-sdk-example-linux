@@ -25,7 +25,7 @@ scanbotsdk_error_code_t print_barcodes_result(scanbotsdk_barcode_scanner_result_
         scanbotsdk_generic_document_t *doc = NULL;
         scanbotsdk_barcode_item_get_text(barcodes[i], &text_ref);
         const char *text = scanbotsdk_u8string_ref_assume_cstring(text_ref);
-        fprintf(stdout, "  %zu) %s\n", i + 1, text ? text : "");
+        fprintf(stdout, "  %zu) %s\n", i + 1, text);
 
         scanbotsdk_barcode_item_get_extracted_document(barcodes[i], &doc);
         if(doc != NULL) { 

@@ -1,7 +1,7 @@
 import * as ScanbotSDK from "scanbotsdk";
 import { AspectRatio } from "scanbotsdk";
 
-export class DocumentEnhancerSnippet {
+export class DocumentStraightenerSnippet {
   public static async run(image: ScanbotSDK.ImageRef): Promise<void> {
     var params = new ScanbotSDK.DocumentStraighteningParameters();
     params.straighteningMode = "STRAIGHTEN";

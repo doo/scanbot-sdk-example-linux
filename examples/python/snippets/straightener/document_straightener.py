@@ -1,6 +1,6 @@
 from scanbotsdk import *
 
-def enhance_document(image: ImageRef):
+def straighten_document(image: ImageRef):
     params = DocumentStraighteningParameters()
     params.straightening_mode = DocumentStraighteningMode.STRAIGHTEN
     params.aspect_ratios = [
