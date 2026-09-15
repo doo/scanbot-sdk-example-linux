@@ -9,13 +9,13 @@ def SCANBOTSDK_VERSION = "<SCANBOTSDK_VERSION>" // e.g., 9.0.0
 ```  
 
 ## Usage
-The example supports four commands: **scan**, **analyze**, **straighten**, and **parse**.
+The example supports four commands: **scan**, **analyze**, **enhance**, and **parse**.
 ```bash
 ./gradlew run --args='scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]'
 ./gradlew run --args='scan <subcommand> --resource <path/to/resource.jpg> [--license <KEY>]'
-./gradlew run --args='analyze <subcommand> --file <path/to/file.jpg> --save <out.jpg> [--license <KEY>]'
-./gradlew run --args='analyze <subcommand> --resource <path/to/resource.jpg> --save <out.jpg> [--license <KEY>]'
-./gradlew run --args='straighten <subcommand> --file <path/to/file.jpg> [--license <KEY>]'
+./gradlew run --args='analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]'
+./gradlew run --args='analyze <subcommand> --resource <path/to/resource.jpg> [--save <out.jpg>] [--license <KEY>]'
+./gradlew run --args='enhance <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--mask <path/to/mask.jpg>] [--mask-resource <path/to/mask-resource.jpg>] [--license <KEY>]'
 ./gradlew run --args='parse <subcommand> --text "<input>" [--license <KEY>]'
 ```
 
@@ -24,7 +24,8 @@ The example supports four commands: **scan**, **analyze**, **straighten**, and *
 ./gradlew run --args='scan barcode --file images/example.jpg --license <KEY>'
 ./gradlew run --args='analyze analyze_multi_page --resource files/doc.pdf --license <KEY>'
 ./gradlew run --args='analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>'
-./gradlew run --args='straighten document --file images/doc.jpg --license <KEY>'
+./gradlew run --args='enhance straighten_document --file images/doc.jpg --license <KEY>'
+./gradlew run --args='enhance cleanup_document --file images/credit_card.png --mask images/credit_card_mask.png --save out/cleaned.jpg --license <KEY>'
 ./gradlew run --args='parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>'
 ```
 

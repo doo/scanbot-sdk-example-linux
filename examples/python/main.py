@@ -4,6 +4,7 @@ import scanbotsdk
 from snippets.straightener.document_straightener import straighten_document
 from snippets.document.analyze_multi_page import analyze_multi_page
 from snippets.document.crop_and_analyze import crop_and_analyze
+from snippets.document.document_cleanup import cleanup_document
 from snippets.barcode.barcode_document_parser import parse_barcode_document
 from snippets.datacapture.mrz_parser import parse_mrz
 from snippets.datacapture.vin import scan_vin
@@ -47,6 +48,7 @@ def main():
 
     file_path     = flags.get("--file")
     save_path     = flags.get("--save")
+    mask_path     = flags.get("--mask")
     text_input    = flags.get("--text")
     device_input  = flags.get("--device") # live only
     show_preview  = "--preview" in flags # live only
@@ -67,11 +69,15 @@ def main():
             elif subcommand == "vin":                 scan_vin(image)
             else: print_usage()
     
-    elif category == "straighten":
+    elif category == "enhance":
         if not file_path: print_usage(); return
-        with create_image_ref(file_path) as image:
-            if subcommand == "document":              straighten_document(image)
-            else: print_usage()
+        if subcommand == "straighten_document":
+            with create_image_ref(file_path) as image:
+                straighten_document(image)
+        elif subcommand == "cleanup_document":
+            if not mask_path: print_usage(); return
+            cleanup_document(file_path, mask_path, save_path)
+        else: print_usage()
 
     elif category == "analyze":
         if not file_path: print_usage(); return

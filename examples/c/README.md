@@ -83,11 +83,11 @@ In order to build all examples, run the following commands:
 
 
 ## Usage
-The example supports five modes: **scan**, **analyze**, **straighten**, **parse**, and **live**.
+The example supports five modes: **scan**, **analyze**, **enhance**, **parse**, and **live**.
 ```bash
 ./scanbotsdk_example scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 ./scanbotsdk_example analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
-./scanbotsdk_example straighten <subcommand> --file <path/to/file.jpg> [--license <KEY>]
+./scanbotsdk_example enhance <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--mask <path/to/mask.jpg>] [--license <KEY>]
 ./scanbotsdk_example parse <subcommand> --text "<input>" [--license <KEY>]
 ./scanbotsdk_example live <subcommand> --file <path/to/file.jpg> [--license <KEY>] [--use_tensorrt]
 ```
@@ -97,7 +97,8 @@ The example supports five modes: **scan**, **analyze**, **straighten**, **parse*
 ./scanbotsdk_example scan barcode --file images/example.jpg --license <KEY>
 ./scanbotsdk_example analyze analyze_multi_page --file files/doc.pdf --license <KEY>
 ./scanbotsdk_example analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
-./scanbotsdk_example straighten document --file images/doc.jpg --license <KEY>
+./scanbotsdk_example enhance straighten_document --file images/doc.jpg --license <KEY>
+./scanbotsdk_example enhance cleanup_document --file images/credit_card.png --mask images/credit_card_mask.png --save out/cleaned.jpg --license <KEY>
 ./scanbotsdk_example parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
 ./scanbotsdk_example live barcode --file images/example.jpg --license <KEY>
 ```

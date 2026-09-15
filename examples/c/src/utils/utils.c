@@ -90,9 +90,9 @@ void print_usage(const char *prog) {
     printf("Usage:\n");
     printf("  %s scan <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
-    printf("  %s straighten <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
+    printf("  %s enhance <command> --file <path/to/file.jpg> [--save <path/to/save.jpg>] [--mask <path/to/mask.jpg>] [--license <KEY>]\n", prog);
     printf("or\n");
-    printf("  %s analyze <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]\n", prog);
+    printf("  %s analyze <command> --file <path/to/file.jpg> [--save <path/to/save.jpg>] [--license <KEY>]\n", prog);
     printf("or\n");
     printf("  %s parse <command> --text \"<input>\" [--license <KEY>]\n\n", prog);
     printf("or\n");
@@ -102,8 +102,8 @@ void print_usage(const char *prog) {
     printf("  barcode | document | check | credit_card | document_data_extractor |\n");
     printf("  medical_certificate | mrz | ocr | text_pattern | vin\n\n");
 
-    printf("Available straighten commands:\n");
-    printf("  document \n\n");
+    printf("Available enhance commands:\n");
+    printf("  straighten_document | cleanup_document\n\n");
 
     printf("Available analyze commands:\n");
     printf("  analyze_multi_page | crop_analyze\n\n");
@@ -122,7 +122,8 @@ void print_usage(const char *prog) {
         "to an actual camera or live video feed.\n");
 
     printf("Note:\n");
-    printf("  The --save argument is optional and only used with analyze/crop_analyze.\n");
+    printf("  The --save argument is optional and used with analyze/crop_analyze and enhance/cleanup_document.\n");
+    printf("  The --mask argument is required for enhance/cleanup_document.\n");
     printf("  The --license argument is optional. If not provided, the program will\n");
     printf("  \tcheck the placeholder <SCANBOTSDK-LICENSE> in main.c\n");
 
@@ -130,6 +131,8 @@ void print_usage(const char *prog) {
     printf("  %s scan barcode --file images/example.jpg --license <KEY>\n", prog);
     printf("  %s analyze analyze_multi_page --file files/doc.pdf --license <KEY>\n", prog);
     printf("  %s analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>\n", prog);
+    printf("  %s enhance straighten_document --file images/doc.jpg --license <KEY>\n", prog);
+    printf("  %s enhance cleanup_document --file images/credit_card.png --mask images/credit_card_mask.png --save out/cleaned.jpg --license <KEY>\n", prog);
     printf("  %s parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\" --license <KEY>\n", prog);
     printf("  %s live barcode --file images/example.jpg --license <KEY>\n", prog);
     printf("\n");

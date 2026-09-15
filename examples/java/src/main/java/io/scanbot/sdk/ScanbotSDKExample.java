@@ -28,6 +28,8 @@ public class ScanbotSDKExample {
         final String file     = f.get("--file");
         final String resource = f.get("--resource");
         final String save     = f.get("--save");
+        final String mask     = f.get("--mask");
+        final String maskResource = f.get("--mask-resource");
         final String text     = f.get("--text");
         final String license  = f.get("--license");
 
@@ -74,15 +76,22 @@ public class ScanbotSDKExample {
                 }
                 break;
             }
-            case "straighten": {
+            case "enhance": {
                 if (file == null && resource == null) { ExampleUsage.print(); return; }
-                try (ImageRef image = Utils.createImageRef(file, resource)) {
-                    switch (subcommand) {
-                        case "document":  DocumentStraightenerSnippet.run(image); break;
-                        default: ExampleUsage.print();
-                    }
-                    break;
+                switch (subcommand) {
+                    case "straighten_document":
+                        try (ImageRef image = Utils.createImageRef(file, resource)) {
+                            DocumentStraightenerSnippet.run(image);
+                        }
+                        break;
+                    case "cleanup_document":
+                        if (mask == null && maskResource == null) { ExampleUsage.print(); return; }
+                        DocumentCleanupSnippet.run(file, resource, mask, maskResource, save);
+                        break;
+                    default:
+                        ExampleUsage.print();
                 }
+                break;
             }
             case "parse": {
                 if (text == null || text.trim().isEmpty()) { ExampleUsage.print(); return; }
