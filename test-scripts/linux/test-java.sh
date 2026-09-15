@@ -1,28 +1,15 @@
 #!/bin/bash
 set -e
 
-echo "=== C SDK Command Tests ==="
+echo "=== Java SDK Command Tests ==="
 
 # Find the project root directory
-if [[ -d "/workspaces/scanbot-sdk-example-linux/examples/c" ]]; then
-    cd /workspaces/scanbot-sdk-example-linux/examples/c
-elif [[ -d "examples/c" ]]; then
-    cd examples/c
+if [[ -d "/workspaces/scanbot-sdk-example-linux/examples/java" ]]; then
+    cd /workspaces/scanbot-sdk-example-linux/examples/java
+elif [[ -d "examples/java" ]]; then
+    cd examples/java
 else
-    echo "ERROR: Cannot find C examples directory"
-    exit 1
-fi
-
-echo "Testing executable exists..."
-if [[ -x "./build/scanbotsdk_example" ]]; then
-    echo "PASS: C executable: EXISTS"
-    ls -la build/scanbotsdk_example
-else
-    echo "FAIL: C executable: NOT FOUND"
-    echo "Looking for executable in current directory:"
-    ls -la
-    echo "Looking for executable in build directory:"
-    ls -la build/ || echo "Build directory not found"
+    echo "ERROR: Cannot find Java examples directory"
     exit 1
 fi
 
@@ -34,7 +21,7 @@ if [[ -z "${SCANBOT_LICENSE}" ]]; then
     exit 1
 fi
 
-echo "Testing SCAN commands..."
+echo "Testing JAVA commands..."
 commands=(
     "scan barcode --file ../../test-scripts/test-images/qrcode.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
@@ -46,11 +33,13 @@ commands=(
     "scan ocr --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan text_pattern --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
     "scan vin --file ../../test-scripts/test-images/VIN.jpeg --license \"${SCANBOT_LICENSE}\""
-    "enhance document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
-    "analyze analyze_multi_page --file ../../test-scripts/test-images/multi_page_document.pdf --license \"${SCANBOT_LICENSE}\""
-    "analyze crop_analyze --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
+    "enhance straighten_document --file ../../test-scripts/test-images/Document.jpeg --license \"${SCANBOT_LICENSE}\""
+    "analyze analyze_multi_page --file ../../test-scripts/test-images/multi_page_document.pdf --save /tmp/out.pdf --license \"${SCANBOT_LICENSE}\""
+    "analyze crop_analyze --file ../../test-scripts/test-images/Document.jpeg --save /tmp/crop.jpeg --license \"${SCANBOT_LICENSE}\""
+    "enhance cleanup_document --file ../../test-scripts/test-images/highlighted.png --mask ../../test-scripts/test-images/highlighted_mask_001.png --save /tmp/highlighted_cleaned.png --license \"${SCANBOT_LICENSE}\""
+    "enhance cleanup_document --file ../../test-scripts/test-images/finger_corner.jpeg --mask ../../test-scripts/test-images/finger_corner_mask_001.png --save /tmp/finger_corner_cleaned.png --license \"${SCANBOT_LICENSE}\""
     # TODO: Fix C SDK parse test,which currently returns success 0 only in tests
-    "parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<L898902C36UTO7408122F1204159ZE184226B<<<<<10\" --license \"${SCANBOT_LICENSE}\""     
+    "parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<L898902C36UTO7408122F1204159ZE184226B<<<<<10\" --license \"${SCANBOT_LICENSE}\""
     "parse barcode_doc --text \"(01)03453120000011(17)191125(10)ABCD1234\" --license \"${SCANBOT_LICENSE}\""
 )
 
@@ -65,18 +54,21 @@ command_names=(
     "OCR scan"
     "Text pattern scan"
     "VIN scan"
-    "Document enhance"
+    "Document straighten enhance"
     "Multi-page analyze"
     "Crop analyze"
+    "Document cleanup (highlighted)"
+    "Document cleanup (finger corner)"
     "MRZ parse"
     "Barcode document parse"
 )
+
 
 for i in "${!commands[@]}"; do
     cmd="${commands[$i]}"
     name="${command_names[$i]}"
     
-    if timeout 30 ./build/scanbotsdk_example $cmd; then
+    if timeout 30 ./gradlew run --no-daemon --args="$cmd"; then
         echo "PASS: $name: PASSED"
     elif [[ $? -eq 124 ]]; then
         echo "FAIL: $name: TIMEOUT"
@@ -87,5 +79,4 @@ for i in "${!commands[@]}"; do
     fi
 done
 
-echo "PASS: C tests PASSED"
-
+echo "PASS: Java tests PASSED"

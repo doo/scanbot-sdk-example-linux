@@ -5,8 +5,9 @@
 #include <utils/utils.h>
 
 static void print_ocr_element_text(scanbotsdk_ocr_element_t *el, const char *label, int indent) {
-    const char *text = NULL;
-    scanbotsdk_ocr_element_get_text(el, &text);
+    scanbotsdk_u8string_ref_t text_ref = {0};
+    scanbotsdk_ocr_element_get_text(el, &text_ref);
+    const char *text = scanbotsdk_u8string_ref_assume_cstring(text_ref);
 
     for (int i = 0; i < indent; i++) printf(" ");
     printf("%s: \"%s\"\n", label, text ? text : "");

@@ -21,7 +21,8 @@
 #include <snippets/document/detect_document.h>    
 #include <snippets/document/analyze_multi_page.h>
 #include <snippets/document/crop_and_analyze.h>
-#include <snippets/enhancer/document_enhancer.h>
+#include <snippets/document/document_cleanup.h>
+#include <snippets/straightener/document_straightener.h>
 
 #include <snippets/live/live_barcode.h>
 
@@ -35,6 +36,7 @@ int main(int argc, char *argv[]) {
     char *command    = argv[2];
     const char *file_path  = get_flag(argc, argv, "--file");
     const char *save_path  = get_flag(argc, argv, "--save");
+    const char *mask_path  = get_flag(argc, argv, "--mask");
     const char *text_input = get_flag(argc, argv, "--text");
     const char *license_arg = get_flag(argc, argv, "--license");
     bool use_tensor_rt = get_flag(argc, argv, "--use_tensorrt") != NULL; // live only, tensor rt accelerator
@@ -47,6 +49,7 @@ int main(int argc, char *argv[]) {
     params.writeable_path = ".";
 
     scanbotsdk_image_t *image = NULL;
+    scanbotsdk_image_t *mask_image = NULL;
 
     scanbotsdk_error_code_t ec = scanbotsdk_initialize(&params);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "initialize: %d: %s\n", ec, error_message(ec)); goto cleanup; }
@@ -72,10 +75,23 @@ int main(int argc, char *argv[]) {
     else if (strcmp(category, "enhance") == 0) {
         if (!file_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
 
-        ec = load_image_from_path(file_path, &image);
-        if (ec != SCANBOTSDK_OK) goto cleanup;
+        if (strcmp(command, "straighten_document") == 0) {
+            ec = load_image_from_path(file_path, &image);
+            if (ec != SCANBOTSDK_OK) goto cleanup;
 
-        if      (strcmp(command, "document") == 0) ec = enhance_document(image);
+            ec = straighten_document(image);
+        }
+        else if (strcmp(command, "cleanup_document") == 0) {
+            if (!mask_path) { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; goto cleanup; }
+
+            ec = load_image_from_path(file_path, &image);
+            if (ec != SCANBOTSDK_OK) goto cleanup;
+
+            ec = load_image_from_path(mask_path, &mask_image);
+            if (ec != SCANBOTSDK_OK) goto cleanup;
+
+            ec = document_cleanup(image, mask_image, save_path);
+        }
         else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
     }
     else if (strcmp(category, "analyze") == 0) {
@@ -107,6 +123,7 @@ int main(int argc, char *argv[]) {
     else { print_usage(argv[0]); ec = SCANBOTSDK_ERROR_INVALID_ARGUMENT; }
 
 cleanup:
+    scanbotsdk_image_free(mask_image);
     scanbotsdk_image_free(image);
     return (ec == SCANBOTSDK_OK) ? 0 : 1;
 }

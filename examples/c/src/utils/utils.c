@@ -34,13 +34,15 @@ scanbotsdk_error_code_t print_generic_document_fields(scanbotsdk_generic_documen
         scanbotsdk_field_type_t *field_type = NULL;
         scanbotsdk_field_get_type(fields[i], &field_type);
 
-        const char *type_name = NULL;
-        scanbotsdk_field_type_get_name(field_type, &type_name);
+        scanbotsdk_u8string_ref_t type_name_ref = {0};
+        scanbotsdk_field_type_get_name(field_type, &type_name_ref);
+        const char *type_name = scanbotsdk_u8string_ref_assume_cstring(type_name_ref);
 
       scanbotsdk_ocr_result_t *ocr_result = NULL;
         if (scanbotsdk_field_get_value(fields[i], &ocr_result) == SCANBOTSDK_OK && ocr_result) {
-            const char *text = NULL;
-            scanbotsdk_ocr_result_get_text(ocr_result, &text);
+            scanbotsdk_u8string_ref_t text_ref = {0};
+            scanbotsdk_ocr_result_get_text(ocr_result, &text_ref);
+            const char *text = scanbotsdk_u8string_ref_assume_cstring(text_ref);
             printf("Field[%zu]: type=%s, value=\"%s\"\n",
                 i, type_name, text ? text : "text value n/a");
         } else {
@@ -88,9 +90,9 @@ void print_usage(const char *prog) {
     printf("Usage:\n");
     printf("  %s scan <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
     printf("or\n");
-    printf("  %s enhance <command> --file <path/to/file.jpg> [--license <KEY>]\n", prog);
+    printf("  %s enhance <command> --file <path/to/file.jpg> [--save <path/to/save.jpg>] [--mask <path/to/mask.jpg>] [--license <KEY>]\n", prog);
     printf("or\n");
-    printf("  %s analyze <command> --file <path/to/file.jpg> --save <path/to/save.jpg> [--license <KEY>]\n", prog);
+    printf("  %s analyze <command> --file <path/to/file.jpg> [--save <path/to/save.jpg>] [--license <KEY>]\n", prog);
     printf("or\n");
     printf("  %s parse <command> --text \"<input>\" [--license <KEY>]\n\n", prog);
     printf("or\n");
@@ -101,7 +103,7 @@ void print_usage(const char *prog) {
     printf("  medical_certificate | mrz | ocr | text_pattern | vin\n\n");
 
     printf("Available enhance commands:\n");
-    printf("  document \n\n");
+    printf("  straighten_document | cleanup_document\n\n");
 
     printf("Available analyze commands:\n");
     printf("  analyze_multi_page | crop_analyze\n\n");
@@ -120,7 +122,8 @@ void print_usage(const char *prog) {
         "to an actual camera or live video feed.\n");
 
     printf("Note:\n");
-    printf("  The --save argument is optional and only used with analyze/crop_analyze.\n");
+    printf("  The --save argument is optional and used with analyze/crop_analyze and enhance/cleanup_document.\n");
+    printf("  The --mask argument is required for enhance/cleanup_document.\n");
     printf("  The --license argument is optional. If not provided, the program will\n");
     printf("  \tcheck the placeholder <SCANBOTSDK-LICENSE> in main.c\n");
 
@@ -128,6 +131,8 @@ void print_usage(const char *prog) {
     printf("  %s scan barcode --file images/example.jpg --license <KEY>\n", prog);
     printf("  %s analyze analyze_multi_page --file files/doc.pdf --license <KEY>\n", prog);
     printf("  %s analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>\n", prog);
+    printf("  %s enhance straighten_document --file images/doc.jpg --license <KEY>\n", prog);
+    printf("  %s enhance cleanup_document --file images/credit_card.png --mask images/credit_card_mask.png --save out/cleaned.jpg --license <KEY>\n", prog);
     printf("  %s parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\" --license <KEY>\n", prog);
     printf("  %s live barcode --file images/example.jpg --license <KEY>\n", prog);
     printf("\n");
