@@ -78,6 +78,7 @@ $commands = @(
     @{ Name = 'Text pattern scan'; Args = @('main.py', 'scan', 'text_pattern', '--file', '../../test-scripts/test-images/Document.jpeg', '--license', $env:SCANBOT_LICENSE) },
     @{ Name = 'VIN scan'; Args = @('main.py', 'scan', 'vin', '--file', '../../test-scripts/test-images/VIN.jpeg', '--license', $env:SCANBOT_LICENSE) },
     @{ Name = 'Document straighten enhance'; Args = @('main.py', 'enhance', 'straighten_document', '--file', '../../test-scripts/test-images/Document.jpeg', '--license', $env:SCANBOT_LICENSE) },
+    @{ Name = 'Document cleanup (highlighted)'; Args = @('main.py', 'enhance', 'cleanup_document', '--file', '../../test-scripts/test-images/highlighted.png', '--mask', '../../test-scripts/test-images/highlighted_mask_001.png', '--save', '/tmp/highlighted_cleaned.png', '--license', $env:SCANBOT_LICENSE) },
     @{ Name = 'Multi-page analyze'; Args = @('main.py', 'analyze', 'analyze_multi_page', '--file', '../../test-scripts/test-images/multi_page_document.pdf', '--license', $env:SCANBOT_LICENSE) },
     @{ Name = 'Crop analyze'; Args = @('main.py', 'analyze', 'crop_analyze', '--file', '../../test-scripts/test-images/Document.jpeg', '--license', $env:SCANBOT_LICENSE) },
     @{ Name = 'MRZ parse'; Args = @('main.py', 'parse', 'mrz', '--text', 'P<UTOERIKSSON<<ANNA<MARIA<<<<<<<<<<<<<<<<<<<L898902C36UTO7408122F1204159ZE184226B<<<<<10', '--license', $env:SCANBOT_LICENSE) },

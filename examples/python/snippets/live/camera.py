@@ -1,4 +1,5 @@
 import sys
+from typing import Tuple
 
 import cv2 as cv
 
@@ -31,7 +32,7 @@ def _gst_pipeline(device: str) -> str:
     raise ValueError(f"Invalid GStreamer device: {device!r}")
 
 
-def _backends_for_index() -> tuple[int, ...]:
+def _backends_for_index() -> Tuple[int, ...]:
     if sys.platform.startswith("win"):
         return (cv.CAP_MSMF, cv.CAP_DSHOW)
 

@@ -27,9 +27,13 @@ RUN $ErrorActionPreference = 'Stop'; \
   $pythonExe = $env:PYTHON_EXE; \
   if (-not (Test-Path $pythonExe)) { throw ('Expected Python executable not found: ' + $pythonExe) }; \
     & $pythonExe --version; \
+    if ($LASTEXITCODE -ne 0) { throw ('Python version check failed with exit code ' + $LASTEXITCODE) }; \
     & $pythonExe -m pip install --upgrade pip setuptools wheel; \
+    if ($LASTEXITCODE -ne 0) { throw ('pip bootstrap install failed with exit code ' + $LASTEXITCODE) }; \
     & $pythonExe -m pip install --no-cache-dir --no-deps 'opencv-python-headless==4.5.5.64'; \
-    & $pythonExe -m pip install --no-cache-dir 'numpy==1.26.4' pillow;
+    if ($LASTEXITCODE -ne 0) { throw ('OpenCV dependency install failed with exit code ' + $LASTEXITCODE) }; \
+    & $pythonExe -m pip install --no-cache-dir 'numpy==1.26.4' pillow; \
+    if ($LASTEXITCODE -ne 0) { throw ('NumPy/Pillow dependency install failed with exit code ' + $LASTEXITCODE) };
 
 # Set workspace path (source is copied later to improve layer caching)
 WORKDIR C:/workspaces/scanbot-sdk-example-linux
@@ -46,6 +50,7 @@ RUN $ErrorActionPreference = 'Stop'; \
     }; \
     Write-Host ('Installing Python SDK from: {0}' -f $wheelUrl); \
     & $pythonExe -m pip install $wheelUrl; \
+    if ($LASTEXITCODE -ne 0) { throw ('Python SDK install failed with exit code ' + $LASTEXITCODE) }; \
     Write-Host 'Python SDK installed successfully'
 
 RUN $ErrorActionPreference = 'Stop'; \
@@ -114,7 +119,7 @@ RUN $ErrorActionPreference = 'Stop'; \
     if (-not (Test-Path (Join-Path $cSdkRoot 'scanbotsdk\include\ScanbotSDK.h'))) { throw 'C SDK header not found' }; \
     if (-not (Test-Path (Join-Path $cSdkRoot 'scanbotsdk\lib'))) { throw 'C SDK lib directory not found' }; \
     $exePath = 'C:\workspaces\scanbot-sdk-example-linux\examples\c\build\Release\scanbotsdk_example.exe'; \
-    if ([string]::IsNullOrWhiteSpace($exePath)) { throw 'C example executable not found in build outputs' }; \
+    if (-not (Test-Path $exePath)) { throw ('C example executable not found in build outputs: ' + $exePath) }; \
     Write-Host ('C SDK: Verified executable at {0}' -f $exePath)
 
 # Python tests stage (PowerShell-only, no bash)
