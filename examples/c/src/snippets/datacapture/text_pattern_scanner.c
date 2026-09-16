@@ -6,11 +6,12 @@
 
 scanbotsdk_error_code_t print_text_pattern_result(scanbotsdk_text_pattern_scanner_result_t *result) {
     scanbotsdk_error_code_t ec;
-    const char* raw_text;
+    scanbotsdk_u8string_ref_t raw_text_ref = {0};
+    const char *raw_text = NULL;
 
-    ec = scanbotsdk_text_pattern_scanner_result_get_raw_text(result, &raw_text);
+    ec = scanbotsdk_text_pattern_scanner_result_get_raw_text(result, &raw_text_ref);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "get_raw_text: %d\n", ec); return ec; }
-
+    raw_text = scanbotsdk_u8string_ref_assume_cstring(raw_text_ref);
     printf("Raw Text: %s\n", raw_text);
     return ec;
 }

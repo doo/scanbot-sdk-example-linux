@@ -15,11 +15,18 @@ These test scripts validate the Scanbot SDK integration across all supported lan
 
 ```
 test-scripts/
-├── test-python.sh     # Python SDK tests
-├── test-java.sh       # Java SDK tests  
-├── test-nodejs.sh     # Node.js SDK tests
-├── test-c.sh          # C SDK tests
-├── run-all-tests.sh   # Run all tests
+├── linux/
+│   ├── test-python.sh     # Python SDK tests
+│   ├── test-java.sh       # Java SDK tests
+│   ├── test-nodejs.sh     # Node.js SDK tests
+│   ├── test-c.sh          # C SDK tests
+│   ├── run-all-tests.sh   # Run all tests
+│   └── Dockerfile         # Linux CI/test image
+├── windows/
+│   ├── test-python.ps1    # Python SDK tests
+│   ├── test-c.ps1         # C SDK tests
+│   ├── run-all-tests.ps1  # Run all tests
+│   └── Dockerfile         # Windows CI/test image
 └── test-images/       # Test image files
 ```
 
@@ -29,13 +36,14 @@ test-scripts/
 
 ```bash
 export SCANBOT_LICENSE="your-license-key-here"
-export SDK_VERSION=9.0.0
+export SDK_VERSION=0.1000.3
 ```
 
 ### 2. Build Test Container
 
 ```bash
 docker build \
+    -f test-scripts/linux/Dockerfile \
     --build-arg SDK_VERSION=$SDK_VERSION \
     --build-arg ARCH=linux-aarch64 \
     --build-arg SCANBOT_LICENSE=$SCANBOT_LICENSE \

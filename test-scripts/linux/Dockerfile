@@ -106,7 +106,7 @@ RUN echo "Installing Java and C SDKs for architecture: ${ARCH}" && \
     echo "All SDKs installed successfully"
 
 # Copy test scripts
-COPY test-scripts/ /tests/
+COPY test-scripts/linux/ /tests/
 RUN chmod +x /tests/*.sh
 
 # SDK Verification Stage
