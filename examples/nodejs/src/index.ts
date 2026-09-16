@@ -17,7 +17,7 @@ import { ParseBarcodeDocumentSnippet } from "./snippets/barcode/parse-barcode-do
 import { AnalyzeMultiPageSnippet } from "./snippets/document/analyze-multipage";
 import { CropAndAnalyzeSnippet } from "./snippets/document/crop-analyze";
 import { DocumentCleanupSnippet } from "./snippets/document/document-cleanup";
-import { DocumentStraightenerSnippet } from "./snippets/straightener/document-straightener";
+import { DocumentStraightenerSnippet } from "./snippets/document/document-straightener";
 
 async function awaitPromise(promise: Promise<void>, maxAwaitTimeMs: number = 60 * 1000): Promise<void> {
   const timer = setTimeout(() => {

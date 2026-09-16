@@ -7,7 +7,6 @@ import io.scanbot.sdk.licensing.LicenseInfo;
 import io.scanbot.sdk.snippets.barcode.*;
 import io.scanbot.sdk.snippets.datacapture.*;
 import io.scanbot.sdk.snippets.document.*;
-import io.scanbot.sdk.snippets.straightener.DocumentStraightenerSnippet;
 import io.scanbot.sdk.utils.*;
 
 import java.util.Arrays;

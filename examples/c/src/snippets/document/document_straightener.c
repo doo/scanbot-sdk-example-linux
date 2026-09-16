@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <snippets/straightener/document_straightener.h>
+#include <snippets/document/document_straightener.h>
 #include <utils/utils.h>
 
 scanbotsdk_error_code_t straighten_document(scanbotsdk_image_t *image) {

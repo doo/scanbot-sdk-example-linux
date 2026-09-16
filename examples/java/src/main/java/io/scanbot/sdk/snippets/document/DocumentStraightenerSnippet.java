@@ -1,4 +1,4 @@
-package io.scanbot.sdk.snippets.straightener;
+package io.scanbot.sdk.snippets.document;
 import java.util.List;
 
 import io.scanbot.sdk.documentscanner.DocumentStraightener;

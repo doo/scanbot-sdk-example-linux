@@ -22,7 +22,7 @@
 #include <snippets/document/analyze_multi_page.h>
 #include <snippets/document/crop_and_analyze.h>
 #include <snippets/document/document_cleanup.h>
-#include <snippets/straightener/document_straightener.h>
+#include <snippets/document/document_straightener.h>
 
 #include <snippets/live/live_barcode.h>
 

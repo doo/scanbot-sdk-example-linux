@@ -1,7 +1,7 @@
 import sys
 import scanbotsdk
 
-from snippets.straightener.document_straightener import straighten_document
+from snippets.document.document_straightener import straighten_document
 from snippets.document.analyze_multi_page import analyze_multi_page
 from snippets.document.crop_and_analyze import crop_and_analyze
 from snippets.document.document_cleanup import cleanup_document
