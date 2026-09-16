@@ -86,7 +86,7 @@ def print_usage():
     print("  python main.py analyze analyze_multi_page --file files/doc.pdf --license <KEY>")
     print("  python main.py analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>")
     print("  python main.py enhance straighten_document --file images/doc.jpg --license <KEY>")
-    print("  python main.py enhance cleanup_document --file images/credit_card.png --mask images/credit_card_mask.png --save out/cleaned.jpg --license <KEY>")
+    print("  python main.py enhance cleanup_document --file ../../test-scripts/test-images/highlighted.png --mask ../../test-scripts/test-images/highlighted_mask_001.png --save out/cleaned.jpg --license <KEY>")
     print("  python main.py parse mrz --text \"P<UTOERIKSSON<<ANNA<MARIA<<<<<<\" --license <KEY>")
     print("  python main.py live barcode --device jetson_csi --license <KEY>")
     print()

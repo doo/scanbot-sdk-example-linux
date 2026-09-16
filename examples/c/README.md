@@ -98,7 +98,7 @@ The example supports five modes: **scan**, **analyze**, **enhance**, **parse**, 
 ./scanbotsdk_example analyze analyze_multi_page --file files/doc.pdf --license <KEY>
 ./scanbotsdk_example analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
 ./scanbotsdk_example enhance straighten_document --file images/doc.jpg --license <KEY>
-./scanbotsdk_example enhance cleanup_document --file images/credit_card.png --mask images/credit_card_mask.png --save out/cleaned.jpg --license <KEY>
+./scanbotsdk_example enhance cleanup_document --file ../../test-scripts/test-images/highlighted.png --mask ../../test-scripts/test-images/highlighted_mask_001.png --save out/cleaned.jpg --license <KEY>
 ./scanbotsdk_example parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
 ./scanbotsdk_example live barcode --file images/example.jpg --license <KEY>
 ```

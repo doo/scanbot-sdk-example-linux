@@ -77,7 +77,7 @@ public class ImageProcessingSnippets {
             try (ImageRef cropped = processor.crop(
                     image,
                     detectionResult.getPointsNormalized(),
-                    DocumentCropOptimization.NONE
+                    DocumentCropOptimization.OPTIMIZE_QUAD
             )) {
                 ImageInfo croppedInfo = cropped.imageInfo();
                 System.out.println("Cropped WxH: " + croppedInfo.getWidth() + "x" + croppedInfo.getHeight());
