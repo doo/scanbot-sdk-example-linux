@@ -30,7 +30,8 @@ scanbotsdk_error_code_t parse_barcode_document(const char* raw_string) {
     ec = scanbotsdk_barcode_document_parser_create(formats, formats_count, &parser);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "create_parser: %d: %s\n", ec, error_message(ec)); goto cleanup; }
     
-    ec = scanbotsdk_barcode_document_parser_parse(parser, raw_string, &result);
+    scanbotsdk_u8string_ref_t raw_ref = scanbotsdk_u8string_ref_from_cstring(raw_string);
+    ec = scanbotsdk_barcode_document_parser_parse(parser, raw_ref, &result);
     if (ec != SCANBOTSDK_OK) { fprintf(stderr, "parser_parse: %d: %s\n", ec, error_message(ec)); goto cleanup; }
 
     ec = scanbotsdk_barcode_document_parser_result_get_parsed_document(result, &parsed_doc);
@@ -49,4 +50,3 @@ cleanup:
     scanbotsdk_barcode_document_parser_free(parser);
     return ec;
 }
-

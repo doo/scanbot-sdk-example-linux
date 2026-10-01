@@ -128,8 +128,9 @@ scanbotsdk_error_code_t process_frame(scanbotsdk_barcode_scanner_t *scanner, fra
         scanbotsdk_barcode_scanner_result_get_barcodes(result, barcodes, count);
         for (size_t i = 0; i < count; i++)
         {
-            const char *text = NULL;
-            scanbotsdk_barcode_item_get_text(barcodes[i], &text);
+            scanbotsdk_u8string_ref_t text_ref = {0};
+            scanbotsdk_barcode_item_get_text(barcodes[i], &text_ref);
+            const char *text = scanbotsdk_u8string_ref_assume_cstring(text_ref);
             fprintf(stdout, "  Barcode %zu: %s\n", i, text);
         }
         free(barcodes);
@@ -185,7 +186,8 @@ scanbotsdk_error_code_t create_barcode_scanner(bool use_tensor_rt, scanbotsdk_ba
     if (use_tensor_rt)
     {
         scanbotsdk_tensor_rt_accelerator_t *trt = NULL;
-        ec = scanbotsdk_tensor_rt_accelerator_create("./", &trt);
+        scanbotsdk_u8string_ref_t trt_dir = scanbotsdk_u8string_ref_from_cstring("./");
+        ec = scanbotsdk_tensor_rt_accelerator_create(trt_dir, &trt);
         if (ec == SCANBOTSDK_OK)
         {
             scanbotsdk_tensor_rt_accelerator_as_scanbotsdk_accelerator(trt, &accelerator);

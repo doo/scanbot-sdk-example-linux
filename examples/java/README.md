@@ -13,9 +13,9 @@ The example supports four commands: **scan**, **analyze**, **enhance**, and **pa
 ```bash
 ./gradlew run --args='scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]'
 ./gradlew run --args='scan <subcommand> --resource <path/to/resource.jpg> [--license <KEY>]'
-./gradlew run --args='analyze <subcommand> --file <path/to/file.jpg> --save <out.jpg> [--license <KEY>]'
-./gradlew run --args='analyze <subcommand> --resource <path/to/resource.jpg> --save <out.jpg> [--license <KEY>]'
-./gradlew run --args='enhance <subcommand> --file <path/to/file.jpg> [--license <KEY>]'
+./gradlew run --args='analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]'
+./gradlew run --args='analyze <subcommand> --resource <path/to/resource.jpg> [--save <out.jpg>] [--license <KEY>]'
+./gradlew run --args='enhance <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--mask <path/to/mask.jpg>] [--mask-resource <path/to/mask-resource.jpg>] [--license <KEY>]'
 ./gradlew run --args='parse <subcommand> --text "<input>" [--license <KEY>]'
 ```
 
@@ -24,7 +24,8 @@ The example supports four commands: **scan**, **analyze**, **enhance**, and **pa
 ./gradlew run --args='scan barcode --file images/example.jpg --license <KEY>'
 ./gradlew run --args='analyze analyze_multi_page --resource files/doc.pdf --license <KEY>'
 ./gradlew run --args='analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>'
-./gradlew run --args='enhance document --file images/doc.jpg --license <KEY>'
+./gradlew run --args='enhance straighten_document --file images/doc.jpg --license <KEY>'
+./gradlew run --args='enhance cleanup_document --file ../../test-scripts/test-images/highlighted.png --mask ../../test-scripts/test-images/highlighted_mask_001.png --save out/cleaned.jpg --license <KEY>'
 ./gradlew run --args='parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>'
 ```
 

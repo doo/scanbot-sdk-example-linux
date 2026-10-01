@@ -1,6 +1,6 @@
 from scanbotsdk import *
 
-def enhance_document(image: ImageRef):
+def straighten_document(image: ImageRef):
     params = DocumentStraighteningParameters()
     params.straightening_mode = DocumentStraighteningMode.STRAIGHTEN
     params.aspect_ratios = [
@@ -10,7 +10,7 @@ def enhance_document(image: ImageRef):
         AspectRatio(width=3.0, height=4.0)
     ]
 
-    enhancer = DocumentEnhancer()
-    result: DocumentStraighteningResult = enhancer.straighten(image=image, parameters=params)
+    straightener = DocumentStraightener()
+    result: DocumentStraighteningResult = straightener.run(image=image, parameters=params)
 
     # The straightened image can be accessed via result.straightened_image and saved or further processed as needed.

@@ -4,10 +4,10 @@
 
 > Scanbot SDK requires Jetpack 6.1, CUDA 12.6 and TensorRT 10.3 to run with GPU acceleration.
 
-* Install a C compiler, CMake and wget:
+* Install a C compiler and CMake:
 
 ```bash
-sudo apt install -y cmake build-essential wget
+sudo apt install -y cmake build-essential
 ```
 
 * Optionally, install CUDA and TensorRT for GPU acceleration. Make sure that you're running a supported Jetpack version.
@@ -29,36 +29,65 @@ sudo jetson_clocks --restore
 
 * You're now ready to run the examples.
 
-----
-
 ### Raspberry Pi OS, Ubuntu, Debian
 
-* Install a C compiler, CMake and wget:
+* Install a C compiler and CMake:
 
 ```bash
-sudo apt install -y cmake build-essential wget
+sudo apt install -y cmake build-essential
 ```
 
 * You're now ready to build the examples.
+
+### Windows
+
+Requirements:
+
+* Visual Studio C++ Build Tools
+* CMake 3.10+
+* Recommended: ninja
 
 ## Building the Examples
 
 In order to build all examples, run the following commands:
 
-```bash
-mkdir build
-cd build
-# Replace `<SCANBOTSDK_VERSION>` with the actual version number of the SDK you want to install.
-cmake -DSCANBOTSDK_VERSION=<SCANBOTSDK_VERSION> ..
-make
-```
+* With Ninja (recommended):
+    ```bash
+    mkdir build
+    cd build
+    # Replace `<SCANBOTSDK_VERSION>` with the actual version number of the SDK you want to install.
+    cmake -GNinja -DSCANBOTSDK_VERSION=<SCANBOTSDK_VERSION> ..
+    ninja
+    ```
+
+* With Unix Makefiles:
+
+    ```bash
+    mkdir build
+    cd build
+    # Replace `<SCANBOTSDK_VERSION>` with the actual version number of the SDK you want to install.
+    cmake -DSCANBOTSDK_VERSION=<SCANBOTSDK_VERSION> ..
+    make
+    ```
+
+* With Visual Studio (Windows-only):
+
+    ```powershell
+    mkdir build
+    cd build
+    # Replace `<SCANBOTSDK_VERSION>` with the actual version number of the SDK you want to install.
+    cmake "-DSCANBOTSDK_VERSION=<SCANBOTSDK_VERSION>" ..
+    msbuild scanbotsdk_c_example.sln
+    # scanbotsdk_example.exe will be created under Debug\
+    ```
+
 
 ## Usage
 The example supports five modes: **scan**, **analyze**, **enhance**, **parse**, and **live**.
 ```bash
 ./scanbotsdk_example scan <subcommand> --file <path/to/file.jpg> [--license <KEY>]
 ./scanbotsdk_example analyze <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--license <KEY>]
-./scanbotsdk_example enhance <subcommand> --file <path/to/file.jpg> [--license <KEY>]
+./scanbotsdk_example enhance <subcommand> --file <path/to/file.jpg> [--save <out.jpg>] [--mask <path/to/mask.jpg>] [--license <KEY>]
 ./scanbotsdk_example parse <subcommand> --text "<input>" [--license <KEY>]
 ./scanbotsdk_example live <subcommand> --file <path/to/file.jpg> [--license <KEY>] [--use_tensorrt]
 ```
@@ -68,7 +97,8 @@ The example supports five modes: **scan**, **analyze**, **enhance**, **parse**, 
 ./scanbotsdk_example scan barcode --file images/example.jpg --license <KEY>
 ./scanbotsdk_example analyze analyze_multi_page --file files/doc.pdf --license <KEY>
 ./scanbotsdk_example analyze crop_analyze --file images/doc.jpg --save out/crop.jpg --license <KEY>
-./scanbotsdk_example enhance document --file images/doc.jpg --license <KEY>
+./scanbotsdk_example enhance straighten_document --file images/doc.jpg --license <KEY>
+./scanbotsdk_example enhance cleanup_document --file ../../test-scripts/test-images/highlighted.png --mask ../../test-scripts/test-images/highlighted_mask_001.png --save out/cleaned.jpg --license <KEY>
 ./scanbotsdk_example parse mrz --text "P<UTOERIKSSON<<ANNA<MARIA<<<<<<" --license <KEY>
 ./scanbotsdk_example live barcode --file images/example.jpg --license <KEY>
 ```
